@@ -1,0 +1,15 @@
+integration_name: com.newrelic.redis
+
+instances:
+  - name: redis-metrics
+    command: metrics
+    arguments:
+      hostname: localhost
+      port: 6379
+      keys: {"0":["<KEY_1>"],"1":["<KEY_2>"]}
+
+  - name: redis-inventory
+    command: inventory
+    arguments:
+      hostname: localhost
+      port: 6379
