@@ -16,33 +16,33 @@ import (
 )
 
 var expectedRawInfoFromSample = map[string]interface{}{
-	"active_defrag_hits":           0,
-	"active_defrag_key_hits":       0,
-	"active_defrag_key_misses":     0,
-	"active_defrag_misses":         0,
-	"active_defrag_running":        0,
-	"aof_current_rewrite_time_sec": -1,
-	"aof_enabled":                  0,
-	"aof_last_bgrewrite_status":    "ok",
-	"aof_last_cow_size":            0,
-	"aof_last_rewrite_time_sec":    -1,
-	"aof_last_write_status":        "ok",
-	"aof_rewrite_in_progress":      0,
-	"aof_rewrite_scheduled":        0,
-	"arch_bits":                    64,
-	"atomicvar_api":                "atomic-builtin",
-	"blocked_clients":              0,
-	"client_biggest_input_buf":     0,
-	"client_longest_output_list":   0,
-	"cluster_enabled":              0,
-	"config_file":                  "",
-	"connected_clients":            1,
-	"connected_slaves":             0,
-	"evicted_keys":                 0,
-	"executable":                   "/Users/newrelic/redis-server",
-	"expired_keys":                 0,
-	"gcc_version":                  "4.2.1",
-	"hz":                           10,
+	"active_defrag_hits":             0,
+	"active_defrag_key_hits":         0,
+	"active_defrag_key_misses":       0,
+	"active_defrag_misses":           0,
+	"active_defrag_running":          0,
+	"aof_current_rewrite_time_sec":   -1,
+	"aof_enabled":                    0,
+	"aof_last_bgrewrite_status":      "ok",
+	"aof_last_cow_size":              0,
+	"aof_last_rewrite_time_sec":      -1,
+	"aof_last_write_status":          "ok",
+	"aof_rewrite_in_progress":        0,
+	"aof_rewrite_scheduled":          0,
+	"arch_bits":                      64,
+	"atomicvar_api":                  "atomic-builtin",
+	"blocked_clients":                0,
+	"client_biggest_input_buf":       0,
+	"client_longest_output_list":     0,
+	"cluster_enabled":                0,
+	"config_file":                    "",
+	"connected_clients":              1,
+	"connected_slaves":               0,
+	"evicted_keys":                   0,
+	"executable":                     "/Users/newrelic/redis-server",
+	"expired_keys":                   0,
+	"gcc_version":                    "4.2.1",
+	"hz":                             10,
 	"instantaneous_input_kbps":       0.00,
 	"instantaneous_ops_per_sec":      0,
 	"instantaneous_output_kbps":      0.00,
@@ -116,6 +116,7 @@ var expectedRawInfoFromSample = map[string]interface{}{
 	"used_memory_rss_human":          "2.16M",
 	"used_memory_startup":            963200,
 	"rdb_last_cow_size":              0,
+	"server.name":                    "test_instance",
 }
 
 var expectedMetricSetFromSample = metric.MetricSet{
@@ -161,6 +162,7 @@ var expectedMetricSetFromSample = metric.MetricSet{
 	"system.usedMemoryPeakBytes":             1032128,
 	"system.usedMemoryRssBytes":              2260992,
 	"system.memFragmentationRatio":           2.23,
+	"server.name":                            "testInstance",
 }
 
 var expectedRawKeyspaceInfoFromSample = map[string]map[string]interface{}{
@@ -237,7 +239,7 @@ func TestPopulateMetrics(t *testing.T) {
 	integration := sdk.Integration{}
 	ms := integration.NewMetricSet("metricsTestSample")
 
-	err = populateMetrics(ms, rawMetrics, metricsDefinition)
+	err = populateMetrics(ms, "test instance", rawMetrics, metricsDefinition)
 	if err != nil {
 		t.Error(err)
 	}
@@ -248,7 +250,7 @@ func TestPopulateMetrics(t *testing.T) {
 
 	for db, keyspaceMetrics := range rawKeyspace {
 		ms = integration.NewMetricSet(fmt.Sprintf("keyspaceTestSample_%s", db))
-		err = populateMetrics(ms, keyspaceMetrics, keyspaceMetricsDefinition)
+		err = populateMetrics(ms, "testInstance", keyspaceMetrics, keyspaceMetricsDefinition)
 		if err != nil {
 			t.Error(err)
 		}

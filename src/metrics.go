@@ -73,8 +73,9 @@ var keyspaceMetricsDefinition = map[string][]interface{}{
 
 type manipulator func(map[string]interface{}) (interface{}, bool)
 
-func populateMetrics(sample *metric.MetricSet, metrics map[string]interface{}, definition map[string][]interface{}) error {
+func populateMetrics(sample *metric.MetricSet, instanceName string, metrics map[string]interface{}, definition map[string][]interface{}) error {
 	notFoundMetric := make([]string, 0)
+	sample.SetMetric("server.name", strings.Replace(instanceName, " ", "_", -1), metric.ATTRIBUTE)
 
 	for metricName, metricInfo := range definition {
 		rawSource := metricInfo[0]

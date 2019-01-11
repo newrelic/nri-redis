@@ -14,6 +14,7 @@ type argumentList struct {
 	Keys           sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
 	KeysLimit      int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
 	Password       string       `help:"Password to use when connecting to the Redis server."`
+	InstanceName   string       `default:"" help:"Friendly identifier of a Redis instance."`
 }
 
 const (
@@ -45,7 +46,7 @@ func main() {
 	if args.All || args.Metrics {
 		fatalIfErr(metricsErr)
 		ms := integration.NewMetricSet("RedisSample")
-		fatalIfErr(populateMetrics(ms, rawMetrics, metricsDefinition))
+		fatalIfErr(populateMetrics(ms, args.InstanceName, rawMetrics, metricsDefinition))
 
 		var rawCustomKeysMetric map[string]map[string]keyInfo
 		keysFlagPresent := args.Keys.Get() != nil
@@ -66,7 +67,7 @@ func main() {
 
 		for db, keyspaceMetrics := range rawKeyspaceMetrics {
 			ms = integration.NewMetricSet("RedisKeyspaceSample")
-			fatalIfErr(populateMetrics(ms, keyspaceMetrics, keyspaceMetricsDefinition))
+			fatalIfErr(populateMetrics(ms, args.InstanceName, keyspaceMetrics, keyspaceMetricsDefinition))
 
 			if _, ok := rawCustomKeysMetric[db]; ok && keysFlagPresent {
 				populateCustomKeysMetric(ms, rawCustomKeysMetric[db])
