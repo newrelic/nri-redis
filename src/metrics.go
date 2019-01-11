@@ -17,6 +17,7 @@ var metricsDefinition = map[string][]interface{}{
 	// Server
 	"software.uptimeMilliseconds": {secondsToMilliseconds("uptime_in_seconds"), metric.GAUGE},
 	"software.version":            {"redis_version", metric.ATTRIBUTE},
+	"software.port":               {"tcp_port", metric.ATTRIBUTE},
 	// Clients
 	"net.connectedClients":           {"connected_clients", metric.GAUGE},
 	"net.clientLongestOutputList":    {"client_longest_output_list", metric.GAUGE},
@@ -161,7 +162,11 @@ func getRawMetrics(info string) (map[string]interface{}, map[string]map[string]i
 			}
 		} else {
 			value := strings.TrimSuffix(parts[1], "\r\n")
-			metrics[parts[0]] = asValue(value)
+			if parts[0] == "tcp_port" {
+				metrics[parts[0]] = value
+			} else {
+				metrics[parts[0]] = asValue(value)
+			}
 		}
 	}
 
