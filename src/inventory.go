@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/newrelic/infra-integrations-sdk/data/inventory"
 	"regexp"
 	"strings"
 
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/infra-integrations-sdk/sdk"
 )
 
 func getRawInventory(config map[string]string, metrics map[string]interface{}) map[string]interface{} {
@@ -33,7 +33,7 @@ func getRawInventory(config map[string]string, metrics map[string]interface{}) m
 	return inventory
 }
 
-func populateInventory(inventory sdk.Inventory, rawInventory map[string]interface{}) {
+func populateInventory(inventory inventory.Inventory, rawInventory map[string]interface{}) {
 	re, _ := regexp.Compile("(?i)requirepass")
 
 	for key, value := range rawInventory {
@@ -47,10 +47,10 @@ func populateInventory(inventory sdk.Inventory, rawInventory map[string]interfac
 	setInventorySaveValue(inventory)
 }
 
-func setInventorySaveValue(inventory sdk.Inventory) {
-	if save, ok := inventory["save"]["value"]; ok {
+func setInventorySaveValue(inventory inventory.Inventory) {
+	if save, ok := inventory.Items()["save"]["value"]; ok {
 		if save != "" {
-			delete(inventory["save"], "value")
+			delete(inventory.Items()["save"], "value")
 			inventory.SetItem("save", "raw-value", save)
 			saveSplited := strings.Split(save.(string), " ")
 			for i := 0; i <= len(saveSplited)-1; i += 2 {
@@ -62,9 +62,9 @@ func setInventorySaveValue(inventory sdk.Inventory) {
 	}
 }
 
-func setInventoryClientBufferValue(inventory sdk.Inventory) {
-	if clientBuffer, ok := inventory["client-output-buffer-limit"]["value"]; ok {
-		delete(inventory["client-output-buffer-limit"], "value")
+func setInventoryClientBufferValue(inventory inventory.Inventory) {
+	if clientBuffer, ok := inventory.Items()["client-output-buffer-limit"]["value"]; ok {
+		delete(inventory.Items()["client-output-buffer-limit"], "value")
 		inventory.SetItem("client-output-buffer-limit", "raw-value", clientBuffer)
 
 		clientBufferSplited := strings.Split(clientBuffer.(string), " ")

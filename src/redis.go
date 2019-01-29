@@ -2,8 +2,9 @@ package main
 
 import (
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
+	"github.com/newrelic/infra-integrations-sdk/data/inventory"
+	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/infra-integrations-sdk/sdk"
 )
 
 type argumentList struct {
@@ -24,7 +25,9 @@ const (
 var args argumentList
 
 func main() {
-	integration, err := sdk.NewIntegration(integrationName, integrationVersion, &args)
+	integration, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
+	fatalIfErr(err)
+	entity, err := integration.Entity(integrationName, args.Hostname)
 	fatalIfErr(err)
 
 	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password)
@@ -36,15 +39,16 @@ func main() {
 	fatalIfErr(err)
 
 	rawMetrics, rawKeyspaceMetrics, metricsErr := getRawMetrics(info)
+	log.Error("mail: metricsErr: %+v", metricsErr)
 
-	if args.All || args.Inventory {
+	if args.All() || args.Inventory {
 		rawInventory := getRawInventory(config, rawMetrics)
-		populateInventory(integration.Inventory, rawInventory)
+		populateInventory(*inventory.New(), rawInventory)
 	}
 
-	if args.All || args.Metrics {
+	if args.All() || args.Metrics {
 		fatalIfErr(metricsErr)
-		ms := integration.NewMetricSet("RedisSample")
+		ms := entity.NewMetricSet("RedisSample")
 		fatalIfErr(populateMetrics(ms, rawMetrics, metricsDefinition))
 
 		var rawCustomKeysMetric map[string]map[string]keyInfo
@@ -65,7 +69,7 @@ func main() {
 		}
 
 		for db, keyspaceMetrics := range rawKeyspaceMetrics {
-			ms = integration.NewMetricSet("RedisKeyspaceSample")
+			ms = entity.NewMetricSet("RedisKeyspaceSample")
 			fatalIfErr(populateMetrics(ms, keyspaceMetrics, keyspaceMetricsDefinition))
 
 			if _, ok := rawCustomKeysMetric[db]; ok && keysFlagPresent {

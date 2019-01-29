@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
+	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/infra-integrations-sdk/metric"
 )
 
 var metricsDefinition = map[string][]interface{}{
@@ -73,7 +73,7 @@ var keyspaceMetricsDefinition = map[string][]interface{}{
 
 type manipulator func(map[string]interface{}) (interface{}, bool)
 
-func populateMetrics(sample *metric.MetricSet, metrics map[string]interface{}, definition map[string][]interface{}) error {
+func populateMetrics(sample *metric.Set, metrics map[string]interface{}, definition map[string][]interface{}) error {
 	notFoundMetric := make([]string, 0)
 
 	for metricName, metricInfo := range definition {
@@ -100,7 +100,7 @@ func populateMetrics(sample *metric.MetricSet, metrics map[string]interface{}, d
 		err := sample.SetMetric(metricName, rawMetric, metricType)
 
 		if err != nil {
-			log.Warn("Error setting value: %s", err)
+			log.Warn("Error setting value: %s name: %s metric: %+v type: %+v", err, metricName, rawMetric, metricType)
 			continue
 		}
 	}
@@ -193,7 +193,7 @@ func parseKeyspaceMetrics(dbName string, keyspace string) (map[string]interface{
 	return metric, nil
 }
 
-func populateCustomKeysMetric(sample *metric.MetricSet, rawCustomKeys map[string]keyInfo) {
+func populateCustomKeysMetric(sample *metric.Set, rawCustomKeys map[string]keyInfo) {
 	for key, value := range rawCustomKeys {
 		err := sample.SetMetric(fmt.Sprintf("db.keyLength.%s.%s", value.keyType, key), value.keyLength, metric.GAUGE)
 		if err != nil {

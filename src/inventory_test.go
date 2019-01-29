@@ -1,9 +1,8 @@
 package main
 
 import (
+	"github.com/newrelic/infra-integrations-sdk/data/inventory"
 	"testing"
-
-	"github.com/newrelic/infra-integrations-sdk/sdk"
 )
 
 func TestGetRawInventory(t *testing.T) {
@@ -52,7 +51,7 @@ func TestGetRawInventoryEmpty(t *testing.T) {
 }
 
 func TestPopulateInventory(t *testing.T) {
-	inventory := make(sdk.Inventory)
+	inventory := *inventory.New()
 	rawInventory := map[string]interface{}{
 		"redis_version": "3.2.3",
 		"requirepass":   "",
@@ -66,25 +65,25 @@ func TestPopulateInventory(t *testing.T) {
 	expectedBufferItemsLength := 10
 
 	populateInventory(inventory, rawInventory)
-	if len(inventory) != expectedLength {
-		t.Errorf("Not all values processed, got %d length of the Inventory, expected: %d", len(inventory), expectedLength)
+	if len(inventory.Items()) != expectedLength {
+		t.Errorf("Not all values processed, got %d length of the Inventory, expected: %d", len(inventory.Items()), expectedLength)
 	}
-	if len(inventory["save"]) != expectedSaveItemsLength {
-		t.Errorf("Not all values processed for Inventory Save, got %d, expected: %d", len(inventory["save"]), expectedSaveItemsLength)
+	if len(inventory.Items()["save"]) != expectedSaveItemsLength {
+		t.Errorf("Not all values processed for Inventory Save, got %d, expected: %d", len(inventory.Items()["save"]), expectedSaveItemsLength)
 	}
-	if len(inventory["client-output-buffer-limit"]) != expectedBufferItemsLength {
-		t.Errorf("Not all values processed for Inventory buffer, got %d, expected: %d", len(inventory["client-output-buffer-limit"]), expectedBufferItemsLength)
+	if len(inventory.Items()["client-output-buffer-limit"]) != expectedBufferItemsLength {
+		t.Errorf("Not all values processed for Inventory buffer, got %d, expected: %d", len(inventory.Items()["client-output-buffer-limit"]), expectedBufferItemsLength)
 	}
-	if inventory["redis_version"]["value"] != expectedRedisVersion {
-		t.Errorf("For key \"redis_version\" wrong value returned, got: %s, expected: %s", inventory["redis_version"]["value"], expectedRedisVersion)
+	if inventory.Items()["redis_version"]["value"] != expectedRedisVersion {
+		t.Errorf("For key \"redis_version\" wrong value returned, got: %s, expected: %s", inventory.Items()["redis_version"]["value"], expectedRedisVersion)
 	}
-	if inventory["requirepass"]["value"] != expectedRequirePass {
-		t.Errorf("For key \"requirepass\" wrong value returned, got: %s, expected: %s", inventory["requirepass"]["value"], expectedRequirePass)
+	if inventory.Items()["requirepass"]["value"] != expectedRequirePass {
+		t.Errorf("For key \"requirepass\" wrong value returned, got: %s, expected: %s", inventory.Items()["requirepass"]["value"], expectedRequirePass)
 	}
 }
 
 func TestPopulateInventorySaveEmptyAndBuffer(t *testing.T) {
-	inventory := make(sdk.Inventory)
+	inventory := *inventory.New()
 	rawInventory := map[string]interface{}{
 		"save": "",
 	}
@@ -92,21 +91,20 @@ func TestPopulateInventorySaveEmptyAndBuffer(t *testing.T) {
 	expectedLength := 1
 
 	populateInventory(inventory, rawInventory)
-	if len(inventory) != expectedLength {
+	if len(inventory.Items()) != expectedLength {
 		t.Error()
 	}
-	if len(inventory["save"]) != 1 {
+	if len(inventory.Items()["save"]) != 1 {
 		t.Error()
 	}
-	if inventory["save"]["value"] != expectedSave {
-		t.Errorf("For key \"save\" wrong value returned, got: %s, expected: %s", inventory["save"]["value"], expectedSave)
+	if inventory.Items()["save"]["value"] != expectedSave {
+		t.Errorf("For key \"save\" wrong value returned, got: %s, expected: %s", inventory.Items()["save"]["value"], expectedSave)
 	}
 }
 
 func TestSetInventorySaveValue(t *testing.T) {
-	inventory := sdk.Inventory{
-		"save": {"value": "900 1 300 10 60 10000"},
-	}
+	inventory := inventory.New()
+	inventory.SetItem("save", "value", "900 1 300 10 60 10000")
 
 	expectedLength := 1
 	expectedItemsLength := 4
@@ -115,52 +113,50 @@ func TestSetInventorySaveValue(t *testing.T) {
 	expectedAfter300Seconds := "at-least-10-key-changes"
 	expectedAfter60Seconds := "at-least-10000-key-changes"
 
-	setInventorySaveValue(inventory)
-	if len(inventory) != expectedLength {
+	setInventorySaveValue(*inventory)
+	if len(inventory.Items()) != expectedLength {
 		t.Error()
 	}
-	if len(inventory["save"]) != expectedItemsLength {
+	if len(inventory.Items()["save"]) != expectedItemsLength {
 		t.Error()
 	}
-	if inventory["save"]["raw-value"] != expectedRawValue {
-		t.Errorf("For key [\"save\"][\"raw-value\"] wrong value returned, got: %s, expected: %s", inventory["save"]["raw-value"], expectedRawValue)
+	if inventory.Items()["save"]["raw-value"] != expectedRawValue {
+		t.Errorf("For key [\"save\"][\"raw-value\"] wrong value returned, got: %s, expected: %s", inventory.Items()["save"]["raw-value"], expectedRawValue)
 	}
-	if inventory["save"]["after-900-seconds"] != expectedAfter900Seconds {
-		t.Errorf("For key [\"save\"][\"after-900-seconds\"] wrong value returned, got: %s, expected: %s", inventory["save"]["after-900-seconds"], expectedAfter900Seconds)
+	if inventory.Items()["save"]["after-900-seconds"] != expectedAfter900Seconds {
+		t.Errorf("For key [\"save\"][\"after-900-seconds\"] wrong value returned, got: %s, expected: %s", inventory.Items()["save"]["after-900-seconds"], expectedAfter900Seconds)
 	}
-	if inventory["save"]["after-300-seconds"] != expectedAfter300Seconds {
-		t.Errorf("For key [\"save\"][\"after-300-seconds\"] wrong value returned, got: %s, expected: %s", inventory["save"]["after-300-seconds"], expectedAfter300Seconds)
+	if inventory.Items()["save"]["after-300-seconds"] != expectedAfter300Seconds {
+		t.Errorf("For key [\"save\"][\"after-300-seconds\"] wrong value returned, got: %s, expected: %s", inventory.Items()["save"]["after-300-seconds"], expectedAfter300Seconds)
 	}
-	if inventory["save"]["after-60-seconds"] != expectedAfter60Seconds {
-		t.Errorf("For key [\"save\"][\"after-60-seconds\"] wrong value returned, got: %s, expected: %s", inventory["save"]["after-60-seconds"], expectedAfter60Seconds)
+	if inventory.Items()["save"]["after-60-seconds"] != expectedAfter60Seconds {
+		t.Errorf("For key [\"save\"][\"after-60-seconds\"] wrong value returned, got: %s, expected: %s", inventory.Items()["save"]["after-60-seconds"], expectedAfter60Seconds)
 	}
 }
 
 func TestSetInventorySaveEmptyValue(t *testing.T) {
-	inventory := sdk.Inventory{
-		"save": {"value": ""},
-	}
+	inventory := inventory.New()
+	inventory.SetItem("save", "value", "")
 
 	expectedLength := 1
 	expectedItemsLength := 1
 	expectedSave := ""
 
-	setInventorySaveValue(inventory)
-	if len(inventory) != expectedLength {
+	setInventorySaveValue(*inventory)
+	if len(inventory.Items()) != expectedLength {
 		t.Error()
 	}
-	if len(inventory["save"]) != expectedItemsLength {
+	if len(inventory.Items()["save"]) != expectedItemsLength {
 		t.Error()
 	}
-	if inventory["save"]["value"] != expectedSave {
-		t.Errorf("For key \"save\" wrong value returned, got: %s, expected: %s", inventory["save"]["value"], expectedSave)
+	if inventory.Items()["save"]["value"] != expectedSave {
+		t.Errorf("For key \"save\" wrong value returned, got: %s, expected: %s", inventory.Items()["save"]["value"], expectedSave)
 	}
 }
 
 func TestSetInventoryClientBufferValue(t *testing.T) {
-	inventory := sdk.Inventory{
-		"client-output-buffer-limit": {"value": "normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60"},
-	}
+	inventory := inventory.New()
+	inventory.SetItem("client-output-buffer-limit", "value", "normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60")
 
 	expectedLength := 1
 	expectedItemsLength := 10
@@ -169,38 +165,37 @@ func TestSetInventoryClientBufferValue(t *testing.T) {
 	expectedNormalSoftLimit := "0"
 	expectedNormalSoftSeconds := "0"
 
-	setInventoryClientBufferValue(inventory)
-	if len(inventory) != expectedLength {
+	setInventoryClientBufferValue(*inventory)
+	if len(inventory.Items()) != expectedLength {
 		t.Error()
 	}
-	if len(inventory["client-output-buffer-limit"]) != expectedItemsLength {
+	if len(inventory.Items()["client-output-buffer-limit"]) != expectedItemsLength {
 		t.Error()
 	}
-	if _, ok := inventory["client-output-buffer-limit"]["value"]; ok {
+	if _, ok := inventory.Items()["client-output-buffer-limit"]["value"]; ok {
 		t.Error()
 	}
-	if inventory["client-output-buffer-limit"]["raw-value"] != expectedRawValue {
-		t.Errorf("For key [\"client-output-buffer-limit\"][\"raw-value\"] wrong value returned, got: %s, expected: %s", inventory["client-output-buffer-limit"]["raw-value"], expectedRawValue)
+	if inventory.Items()["client-output-buffer-limit"]["raw-value"] != expectedRawValue {
+		t.Errorf("For key [\"client-output-buffer-limit\"][\"raw-value\"] wrong value returned, got: %s, expected: %s", inventory.Items()["client-output-buffer-limit"]["raw-value"], expectedRawValue)
 	}
-	if inventory["client-output-buffer-limit"]["normal-hard-limit"] != expectedNormalHardLimit {
-		t.Errorf("For key [\"client-output-buffer-limit\"][\"normal-hard-limit\"] wrong value returned, got: %s, expected: %s", inventory["client-output-buffer-limit"]["normal-hard-limit"], expectedNormalHardLimit)
+	if inventory.Items()["client-output-buffer-limit"]["normal-hard-limit"] != expectedNormalHardLimit {
+		t.Errorf("For key [\"client-output-buffer-limit\"][\"normal-hard-limit\"] wrong value returned, got: %s, expected: %s", inventory.Items()["client-output-buffer-limit"]["normal-hard-limit"], expectedNormalHardLimit)
 	}
-	if inventory["client-output-buffer-limit"]["normal-soft-limit"] != expectedNormalSoftLimit {
-		t.Errorf("For key [\"client-output-buffer-limit\"][\"normal-soft-limit\"] wrong value returned, got: %s, expected: %s", inventory["client-output-buffer-limit"]["normal-soft-limit"], expectedNormalSoftLimit)
+	if inventory.Items()["client-output-buffer-limit"]["normal-soft-limit"] != expectedNormalSoftLimit {
+		t.Errorf("For key [\"client-output-buffer-limit\"][\"normal-soft-limit\"] wrong value returned, got: %s, expected: %s", inventory.Items()["client-output-buffer-limit"]["normal-soft-limit"], expectedNormalSoftLimit)
 	}
-	if inventory["client-output-buffer-limit"]["normal-soft-seconds"] != expectedNormalSoftSeconds {
-		t.Errorf("For key [\"client-output-buffer-limit\"][\"normal-soft-seconds\"] wrong value returned, got: %s, expected: %s", inventory["client-output-buffer-limit"]["normal-soft-seconds"], expectedNormalSoftSeconds)
+	if inventory.Items()["client-output-buffer-limit"]["normal-soft-seconds"] != expectedNormalSoftSeconds {
+		t.Errorf("For key [\"client-output-buffer-limit\"][\"normal-soft-seconds\"] wrong value returned, got: %s, expected: %s", inventory.Items()["client-output-buffer-limit"]["normal-soft-seconds"], expectedNormalSoftSeconds)
 	}
 }
 
 func TestSetInventoryClientBufferNotPresent(t *testing.T) {
-	inventory := sdk.Inventory{
-		"other-key": {"value": "normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60"},
-	}
+	inventory := inventory.New()
+	inventory.SetItem("other-key", "value", "normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60")
 	expectedItemsLength := 0
 
-	setInventoryClientBufferValue(inventory)
-	if len(inventory["client-output-buffer-limit"]) != expectedItemsLength {
+	setInventoryClientBufferValue(*inventory)
+	if len(inventory.Items()["client-output-buffer-limit"]) != expectedItemsLength {
 		t.Error()
 	}
 }

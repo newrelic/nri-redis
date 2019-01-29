@@ -1,3 +1,6 @@
+# Don't assume PATH settings
+export PATH := $(PATH):$(GOPATH)/bin
+
 INTEGRATION     := redis
 BINARY_NAME      = nr-$(INTEGRATION)
 SRC_DIR          = ./src/
