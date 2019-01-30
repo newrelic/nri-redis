@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fmt"
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
-	"github.com/newrelic/infra-integrations-sdk/data/inventory"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
@@ -43,7 +43,8 @@ func main() {
 
 	if args.All() || args.Inventory {
 		rawInventory := getRawInventory(config, rawMetrics)
-		populateInventory(*inventory.New(), rawInventory)
+		fmt.Printf("rawInventory: %+v\n", rawInventory)
+		populateInventory(entity.Inventory, rawInventory)
 	}
 
 	if args.All() || args.Metrics {

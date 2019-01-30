@@ -51,7 +51,7 @@ func TestGetRawInventoryEmpty(t *testing.T) {
 }
 
 func TestPopulateInventory(t *testing.T) {
-	inventory := *inventory.New()
+	inventory := inventory.New()
 	rawInventory := map[string]interface{}{
 		"redis_version": "3.2.3",
 		"requirepass":   "",
@@ -83,7 +83,7 @@ func TestPopulateInventory(t *testing.T) {
 }
 
 func TestPopulateInventorySaveEmptyAndBuffer(t *testing.T) {
-	inventory := *inventory.New()
+	inventory := inventory.New()
 	rawInventory := map[string]interface{}{
 		"save": "",
 	}
@@ -113,7 +113,7 @@ func TestSetInventorySaveValue(t *testing.T) {
 	expectedAfter300Seconds := "at-least-10-key-changes"
 	expectedAfter60Seconds := "at-least-10000-key-changes"
 
-	setInventorySaveValue(*inventory)
+	setInventorySaveValue(inventory)
 	if len(inventory.Items()) != expectedLength {
 		t.Error()
 	}
@@ -142,7 +142,7 @@ func TestSetInventorySaveEmptyValue(t *testing.T) {
 	expectedItemsLength := 1
 	expectedSave := ""
 
-	setInventorySaveValue(*inventory)
+	setInventorySaveValue(inventory)
 	if len(inventory.Items()) != expectedLength {
 		t.Error()
 	}
@@ -165,7 +165,7 @@ func TestSetInventoryClientBufferValue(t *testing.T) {
 	expectedNormalSoftLimit := "0"
 	expectedNormalSoftSeconds := "0"
 
-	setInventoryClientBufferValue(*inventory)
+	setInventoryClientBufferValue(inventory)
 	if len(inventory.Items()) != expectedLength {
 		t.Error()
 	}
@@ -194,7 +194,7 @@ func TestSetInventoryClientBufferNotPresent(t *testing.T) {
 	inventory.SetItem("other-key", "value", "normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60")
 	expectedItemsLength := 0
 
-	setInventoryClientBufferValue(*inventory)
+	setInventoryClientBufferValue(inventory)
 	if len(inventory.Items()["client-output-buffer-limit"]) != expectedItemsLength {
 		t.Error()
 	}

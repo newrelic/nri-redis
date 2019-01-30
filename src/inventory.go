@@ -33,7 +33,7 @@ func getRawInventory(config map[string]string, metrics map[string]interface{}) m
 	return inventory
 }
 
-func populateInventory(inventory inventory.Inventory, rawInventory map[string]interface{}) {
+func populateInventory(inventory *inventory.Inventory, rawInventory map[string]interface{}) {
 	re, _ := regexp.Compile("(?i)requirepass")
 
 	for key, value := range rawInventory {
@@ -47,7 +47,7 @@ func populateInventory(inventory inventory.Inventory, rawInventory map[string]in
 	setInventorySaveValue(inventory)
 }
 
-func setInventorySaveValue(inventory inventory.Inventory) {
+func setInventorySaveValue(inventory *inventory.Inventory) {
 	if save, ok := inventory.Items()["save"]["value"]; ok {
 		if save != "" {
 			delete(inventory.Items()["save"], "value")
@@ -62,7 +62,7 @@ func setInventorySaveValue(inventory inventory.Inventory) {
 	}
 }
 
-func setInventoryClientBufferValue(inventory inventory.Inventory) {
+func setInventoryClientBufferValue(inventory *inventory.Inventory) {
 	if clientBuffer, ok := inventory.Items()["client-output-buffer-limit"]["value"]; ok {
 		delete(inventory.Items()["client-output-buffer-limit"], "value")
 		inventory.SetItem("client-output-buffer-limit", "raw-value", clientBuffer)
