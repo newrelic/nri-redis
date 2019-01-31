@@ -5,7 +5,6 @@ RUN go get -d github.com/newrelic/nri-redis/... && \
     strip ./bin/nr-redis
 
 FROM newrelic/infrastructure:latest
-COPY . .
 COPY --from=builder /go/src/github.com/newrelic/nri-redis/bin/nr-redis /var/db/newrelic-infra/newrelic-integrations/bin/nr-redis
 COPY --from=builder /go/src/github.com/newrelic/nri-redis/redis-definition.yml /var/db/newrelic-infra/newrelic-integrations/redis-definition.yml
 
