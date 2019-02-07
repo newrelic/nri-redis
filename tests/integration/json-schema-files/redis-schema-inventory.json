@@ -109,7 +109,6 @@
               "bind": {
                 "properties": {
                   "value": {
-                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -226,7 +225,6 @@
               "config-file": {
                 "properties": {
                   "value": {
-                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -382,7 +380,6 @@
               "logfile": {
                 "properties": {
                   "value": {
-                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -536,7 +533,6 @@
               "pidfile": {
                 "properties": {
                   "value": {
-                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -712,10 +708,6 @@
                     "minLength": 1,
                     "type": "string"
                   },
-                  "after-900-seconds": {
-                    "minLength": 1,
-                    "type": "string"
-                  },
                   "raw-value": {
                     "minLength": 1,
                     "type": "string"
@@ -724,7 +716,6 @@
                 "required": [
                   "after-300-seconds",
                   "after-60-seconds",
-                  "after-900-seconds",
                   "raw-value"
                 ],
                 "type": "object"
@@ -910,7 +901,6 @@
               "unixsocket": {
                 "properties": {
                   "value": {
-                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -976,15 +966,14 @@
               "properties": {},
               "required": []
             },
-            "maxItems": 0,
             "type": "array"
-          },
-          "required": [
-            "metrics",
-            "inventory",
-            "events"
-          ]
-        }
+          }
+        },
+        "required": [
+          "metrics",
+          "inventory",
+          "events"
+        ]
       }
     },
     "name": {

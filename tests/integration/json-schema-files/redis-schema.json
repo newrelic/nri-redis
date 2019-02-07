@@ -109,7 +109,6 @@
               "bind": {
                 "properties": {
                   "value": {
-                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -226,7 +225,6 @@
               "config-file": {
                 "properties": {
                   "value": {
-                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -382,7 +380,6 @@
               "logfile": {
                 "properties": {
                   "value": {
-                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -536,7 +533,6 @@
               "pidfile": {
                 "properties": {
                   "value": {
-                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -724,7 +720,6 @@
                 "required": [
                   "after-300-seconds",
                   "after-60-seconds",
-                  "after-900-seconds",
                   "raw-value"
                 ],
                 "type": "object"
@@ -1157,13 +1152,13 @@
             "minItems": 1,
             "type": "array",
             "uniqueItems": true
-          },
-          "required": [
-            "metrics",
-            "inventory",
-            "events"
-          ]
-        }
+          }
+        },
+        "required": [
+          "metrics",
+          "inventory",
+          "events"
+        ]
       }
     },
     "name": {

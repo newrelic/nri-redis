@@ -20,7 +20,6 @@
         "type": "object",
         "properties": {
           "inventory": {
-            "maxProperties": 0,
             "properties": {},
             "required": [],
             "type": "object"
@@ -212,13 +211,13 @@
             "minItems": 1,
             "type": "array",
             "uniqueItems": true
-          },
-          "required": [
-            "metrics",
-            "inventory",
-            "events"
-          ]
-        }
+          }
+        },
+        "required": [
+          "metrics",
+          "inventory",
+          "events"
+        ]
       }
     },
     "name": {
