@@ -11,7 +11,7 @@
     },
     "integration_version": {
       "minLength": 1,
-      "pattern": "^1.0.0$",
+      "pattern": "^1.2.0$",
       "type": "string"
     },
     "inventory": {
@@ -1160,7 +1160,7 @@
     },
     "protocol_version": {
       "minLength": 1,
-      "pattern": "^1$",
+      "pattern": "^2$",
       "type": "string"
     }
   },
@@ -1170,7 +1170,8 @@
     "integration_version",
     "metrics",
     "inventory",
-    "events"
+    "events",
+    "data"
   ],
   "type": "object"
 }
