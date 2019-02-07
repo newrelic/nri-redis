@@ -1,0 +1,17 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+  redis:
+    image: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    links:
+      - nri-redis
+
+  nri-redis:
+    build:
+      context: ../../
+      dockerfile: tests/integration/Dockerfile

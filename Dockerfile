@@ -1,4 +1,4 @@
-FROM golang:1.9 as builder
+FROM golang:1.10 as builder
 RUN go get -d github.com/newrelic/nri-redis/... && \
     cd /go/src/github.com/newrelic/nri-redis && \
     make && \
