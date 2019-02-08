@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
@@ -9,17 +10,19 @@ import (
 
 type argumentList struct {
 	sdkArgs.DefaultArgumentList
-	Hostname       string       `default:"localhost" help:"Hostname or IP where Redis server is running."`
-	Port           int          `default:"6379" help:"Port on which Redis server is listening."`
-	UnixSocketPath string       `default:"" help:"Unix socket path on which Redis server is listening."`
-	Keys           sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
-	KeysLimit      int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
-	Password       string       `help:"Password to use when connecting to the Redis server."`
+	Hostname         string       `default:"localhost" help:"Hostname or IP where Redis server is running."`
+	Port             int          `default:"6379" help:"Port on which Redis server is listening."`
+	UnixSocketPath   string       `default:"" help:"Unix socket path on which Redis server is listening."`
+	Keys             sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
+	KeysLimit        int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
+	Password         string       `help:"Password to use when connecting to the Redis server."`
+	RemoteMonitoring bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
 }
 
 const (
 	integrationName    = "com.newrelic.redis"
 	integrationVersion = "1.0.0"
+	entityRemoteType   = "redis"
 )
 
 var args argumentList
@@ -38,7 +41,9 @@ func main() {
 
 	rawMetrics, rawKeyspaceMetrics, metricsErr := getRawMetrics(info)
 
-	e := i.LocalEntity()
+	e, err := entity(i, &args)
+	fatalIfErr(err)
+
 	if args.HasInventory() {
 		rawInventory := getRawInventory(config, rawMetrics)
 		populateInventory(e.Inventory, rawInventory)
@@ -47,8 +52,7 @@ func main() {
 	if args.HasMetrics() {
 		fatalIfErr(metricsErr)
 
-		attr := metric.Attr("hostname", args.Hostname)
-		ms := e.NewMetricSet("RedisSample", attr)
+		ms := e.NewMetricSet("RedisSample", metric.Attr("hostname", args.Hostname))
 
 		fatalIfErr(populateMetrics(ms, rawMetrics, metricsDefinition))
 
@@ -70,7 +74,7 @@ func main() {
 		}
 
 		for db, keyspaceMetrics := range rawKeyspaceMetrics {
-			ms = e.NewMetricSet("RedisKeyspaceSample", attr)
+			ms = e.NewMetricSet("RedisKeyspaceSample", metric.Attr("hostname", args.Hostname))
 			fatalIfErr(populateMetrics(ms, keyspaceMetrics, keyspaceMetricsDefinition))
 
 			if _, ok := rawCustomKeysMetric[db]; ok && keysFlagPresent {
@@ -80,6 +84,15 @@ func main() {
 	}
 
 	fatalIfErr(i.Publish())
+}
+
+func entity(i *integration.Integration, args *argumentList) (*integration.Entity, error) {
+	if args.RemoteMonitoring {
+		n := fmt.Sprintf("%s:%d", args.Hostname, args.Port)
+		return i.Entity(n, entityRemoteType)
+	}
+
+	return i.LocalEntity(), nil
 }
 
 func fatalIfErr(err error) {
