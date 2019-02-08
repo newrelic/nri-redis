@@ -15,6 +15,12 @@
 			"versionExact": "v0.11.5"
 		},
 		{
+			"checksumSHA1": "0EhLvZ6Og9HYqJtCc2Dzs1EgM30=",
+			"path": "github.com/bitly/go-simplejson",
+			"revision": "9db4a59bd4d803ae0c173a7d8a538e056cd59d57",
+			"revisionTime": "2018-11-14T20:31:07Z"
+		},
+		{
 			"checksumSHA1": "CSPbwbyzqA6sfORicn4HFtIhF/c=",
 			"path": "github.com/davecgh/go-spew/spew",
 			"revision": "d8f796af33cc11cb798c1aaeb27a4ebc5099927d",
@@ -129,6 +135,24 @@
 			"path": "github.com/stretchr/testify/mock",
 			"revision": "363ebb24d041ccea8068222281c2e963e997b9dc",
 			"revisionTime": "2019-01-09T08:30:14Z"
+		},
+		{
+			"checksumSHA1": "+SLRfCdnZzt59tTsNUp6ie39zjo=",
+			"path": "github.com/xeipuuv/gojsonpointer",
+			"revision": "4e3ac2762d5f479393488629ee9370b50873b3a6",
+			"revisionTime": "2018-01-27T04:07:02Z"
+		},
+		{
+			"checksumSHA1": "cjCjdAbLpKV1bxMpMRzC5Fn4R34=",
+			"path": "github.com/xeipuuv/gojsonreference",
+			"revision": "bd5ef7bd5415a7ac448318e64f11a24cd21e594b",
+			"revisionTime": "2018-01-27T04:06:03Z"
+		},
+		{
+			"checksumSHA1": "iBtaaPC5g5BHnPbfIjfkoPojotc=",
+			"path": "github.com/xeipuuv/gojsonschema",
+			"revision": "f971f3cd73b2899de6923801c147f075263e0c50",
+			"revisionTime": "2018-12-19T16:01:44Z"
 		},
 		{
 			"checksumSHA1": "Dbw6GrXllNPecT0AnoOyAiv66EI=",

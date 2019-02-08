@@ -2,10 +2,13 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/infra-integrations-sdk/persist"
 )
 
 type argumentList struct {
@@ -21,14 +24,14 @@ type argumentList struct {
 
 const (
 	integrationName    = "com.newrelic.redis"
-	integrationVersion = "1.0.0"
+	integrationVersion = "1.2.0"
 	entityRemoteType   = "redis"
 )
 
 var args argumentList
 
 func main() {
-	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
+	i, err := createIntegration()
 	fatalIfErr(err)
 
 	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password)
@@ -84,6 +87,21 @@ func main() {
 	}
 
 	fatalIfErr(i.Publish())
+}
+
+func createIntegration() (*integration.Integration, error) {
+	cachePath := os.Getenv("NRIA_CACHE_PATH")
+	if cachePath == "" {
+		return integration.New(integrationName, integrationVersion, integration.Args(&args))
+	}
+
+	l := log.NewStdErr(args.Verbose)
+	s, err := persist.NewFileStore(cachePath, l, persist.DefaultTTL)
+	if err != nil {
+		return nil, err
+	}
+
+	return integration.New(integrationName, integrationVersion, integration.Args(&args), integration.Storer(s), integration.Logger(l))
 }
 
 func entity(i *integration.Integration, args *argumentList) (*integration.Entity, error) {
