@@ -1,0 +1,1194 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "properties": {
+    "events": {
+      "items": {
+        "properties": {},
+        "required": []
+      },
+      "type": "array"
+    },
+    "integration_version": {
+      "minLength": 1,
+      "pattern": "^1.2.0$",
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "entity": {
+            "minProperties": 2,
+            "properties": {
+              "name" : {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            }
+          },
+          "inventory": {
+            "minProperties": 1,
+            "properties": {
+              "activerehashing": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "aof-load-truncated": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "aof-rewrite-incremental-fsync": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "appendfsync": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "appendonly": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "auto-aof-rewrite-min-size": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "auto-aof-rewrite-percentage": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "bind": {
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "client-output-buffer-limit": {
+                "properties": {
+                  "normal-hard-limit": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "normal-soft-limit": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "normal-soft-seconds": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "pubsub-hard-limit": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "pubsub-soft-limit": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "pubsub-soft-seconds": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "raw-value": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "slave-hard-limit": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "slave-soft-limit": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "slave-soft-seconds": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "normal-hard-limit",
+                  "normal-soft-limit",
+                  "normal-soft-seconds",
+                  "pubsub-hard-limit",
+                  "pubsub-soft-limit",
+                  "pubsub-soft-seconds",
+                  "raw-value",
+                  "slave-hard-limit",
+                  "slave-soft-limit",
+                  "slave-soft-seconds"
+                ],
+                "type": "object"
+              },
+              "cluster-migration-barrier": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "cluster-node-timeout": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "cluster-require-full-coverage": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "cluster-slave-validity-factor": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "config-file": {
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "daemonize": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "databases": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "dbfilename": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "dir": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "executable": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "hash-max-ziplist-entries": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "hash-max-ziplist-value": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "hll-sparse-max-bytes": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "hz": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "latency-monitor-threshold": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "list-compress-depth": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "list-max-ziplist-size": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "logfile": {
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "loglevel": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "lua-time-limit": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "masterauth": {
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "maxclients": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "maxmemory": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "maxmemory-policy": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "maxmemory-samples": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "mem-allocator": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "min-slaves-max-lag": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "min-slaves-to-write": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "no-appendfsync-on-rewrite": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "notify-keyspace-events": {
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "pidfile": {
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "port": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "protected-mode": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "rdbchecksum": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "rdbcompression": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "redis_version": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "repl-backlog-size": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "repl-backlog-ttl": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "repl-disable-tcp-nodelay": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "repl-diskless-sync": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "repl-diskless-sync-delay": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "repl-ping-slave-period": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "repl-timeout": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "requirepass": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "pattern": "^\\(omitted value\\)$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "save": {
+                "properties": {
+                  "after-300-seconds": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "after-60-seconds": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "after-900-seconds": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "raw-value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "after-300-seconds",
+                  "after-60-seconds",
+                  "raw-value"
+                ],
+                "type": "object"
+              },
+              "set-max-intset-entries": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "slave-announce-ip": {
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "slave-announce-port": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "slave-priority": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "slave-read-only": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "slave-serve-stale-data": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "slaveof": {
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "slowlog-log-slower-than": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "slowlog-max-len": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "stop-writes-on-bgsave-error": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "supervised": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "syslog-facility": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "tcp-backlog": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "tcp-keepalive": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "timeout": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "unixsocket": {
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "unixsocketperm": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "watchdog-period": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "zset-max-ziplist-entries": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              },
+              "zset-max-ziplist-value": {
+                "properties": {
+                  "value": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [],
+            "type": "object"
+          },
+          "metrics": {
+            "items": [
+              {
+                "properties": {
+                  "cluster.connectedSlaves": {
+                    "type": "number"
+                  },
+                  "cluster.role": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "db.aofLastBgrewriteStatus": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "db.aofLastRewriteTimeMiliseconds": {
+                    "type": "number"
+                  },
+                  "db.aofLastWriteStatus": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "db.evictedKeysPerSecond": {
+                    "type": "number"
+                  },
+                  "db.expiredKeysPerSecond": {
+                    "type": "number"
+                  },
+                  "db.keyspaceHitsPerSecond": {
+                    "type": "number"
+                  },
+                  "db.keyspaceMissesPerSecond": {
+                    "type": "number"
+                  },
+                  "db.latestForkMilliseconds": {
+                    "type": "number"
+                  },
+                  "db.rdbBgsaveInProgress": {
+                    "type": "number"
+                  },
+                  "db.rdbChangesSinceLastSave": {
+                    "type": "number"
+                  },
+                  "db.rdbLastBgsaveStatus": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "db.rdbLastBgsaveTimeMilliseconds": {
+                    "type": "number"
+                  },
+                  "db.rdbLastSaveTime": {
+                    "type": "number"
+                  },
+                  "db.syncFull": {
+                    "type": "number"
+                  },
+                  "db.syncPartialErr": {
+                    "type": "number"
+                  },
+                  "db.syncPartialOk": {
+                    "type": "number"
+                  },
+                  "event_type": {
+                    "minLength": 1,
+                    "pattern": "^RedisSample$",
+                    "type": "string"
+                  },
+                  "net.blockedClients": {
+                    "type": "number"
+                  },
+                  "net.clientBiggestInputBufBytes": {
+                    "type": "number"
+                  },
+                  "net.clientLongestOutputList": {
+                    "type": "number"
+                  },
+                  "net.commandsProcessedPerSecond": {
+                    "type": "number"
+                  },
+                  "net.connectedClients": {
+                    "type": "number"
+                  },
+                  "net.connectionsReceivedPerSecond": {
+                    "type": "number"
+                  },
+                  "net.inputBytesPerSecond": {
+                    "type": "number"
+                  },
+                  "net.outputBytesPerSecond": {
+                    "type": "number"
+                  },
+                  "net.pubsubChannels": {
+                    "type": "number"
+                  },
+                  "net.pubsubPatterns": {
+                    "type": "number"
+                  },
+                  "net.rejectedConnectionsPerSecond": {
+                    "type": "number"
+                  },
+                  "software.uptimeMilliseconds": {
+                    "type": "number"
+                  },
+                  "software.version": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "system.memFragmentationRatio": {
+                    "type": "number"
+                  },
+                  "system.totalSystemMemoryBytes": {
+                    "type": "number"
+                  },
+                  "system.usedCpuSysChildrenMilliseconds": {
+                    "type": "number"
+                  },
+                  "system.usedCpuSysMilliseconds": {
+                    "type": "number"
+                  },
+                  "system.usedCpuUserChildrenMilliseconds": {
+                    "type": "number"
+                  },
+                  "system.usedCpuUserMilliseconds": {
+                    "type": "number"
+                  },
+                  "system.usedMemoryBytes": {
+                    "type": "number"
+                  },
+                  "system.usedMemoryLuaBytes": {
+                    "type": "number"
+                  },
+                  "system.usedMemoryPeakBytes": {
+                    "type": "number"
+                  },
+                  "system.usedMemoryRssBytes": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "cluster.connectedSlaves",
+                  "cluster.role",
+                  "db.aofLastBgrewriteStatus",
+                  "db.aofLastRewriteTimeMiliseconds",
+                  "db.aofLastWriteStatus",
+                  "db.evictedKeysPerSecond",
+                  "db.expiredKeysPerSecond",
+                  "db.keyspaceHitsPerSecond",
+                  "db.keyspaceMissesPerSecond",
+                  "db.latestForkMilliseconds",
+                  "db.rdbBgsaveInProgress",
+                  "db.rdbChangesSinceLastSave",
+                  "db.rdbLastBgsaveStatus",
+                  "db.rdbLastBgsaveTimeMilliseconds",
+                  "db.rdbLastSaveTime",
+                  "db.syncFull",
+                  "db.syncPartialErr",
+                  "db.syncPartialOk",
+                  "event_type",
+                  "net.blockedClients",
+                  "net.clientBiggestInputBufBytes",
+                  "net.clientLongestOutputList",
+                  "net.commandsProcessedPerSecond",
+                  "net.connectedClients",
+                  "net.connectionsReceivedPerSecond",
+                  "net.inputBytesPerSecond",
+                  "net.outputBytesPerSecond",
+                  "net.pubsubChannels",
+                  "net.pubsubPatterns",
+                  "net.rejectedConnectionsPerSecond",
+                  "software.uptimeMilliseconds",
+                  "software.version",
+                  "system.memFragmentationRatio",
+                  "system.totalSystemMemoryBytes",
+                  "system.usedCpuSysChildrenMilliseconds",
+                  "system.usedCpuSysMilliseconds",
+                  "system.usedCpuUserChildrenMilliseconds",
+                  "system.usedCpuUserMilliseconds",
+                  "system.usedMemoryBytes",
+                  "system.usedMemoryLuaBytes",
+                  "system.usedMemoryPeakBytes",
+                  "system.usedMemoryRssBytes"
+                ]
+              }
+            ],
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "metrics",
+          "inventory",
+          "events",
+          "entity"
+        ]
+      }
+    },
+    "name": {
+      "minLength": 1,
+      "pattern": "^com.newrelic.redis$",
+      "type": "string"
+    },
+    "protocol_version": {
+      "minLength": 1,
+      "pattern": "^2$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "protocol_version",
+    "integration_version",
+    "data"
+  ],
+  "type": "object"
+}

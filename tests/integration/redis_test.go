@@ -72,6 +72,18 @@ func TestRedisIntegration(t *testing.T) {
 	assert.NotNil(t, stderr, "unexpected stderr")
 }
 
+func TestRedisIntegration_WithRemoteEntity(t *testing.T) {
+	testName := helpers.GetTestName(t)
+	stdout, stderr := runIntegration(t, fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName), "REMOTE_MONITORING=true")
+
+	schemaPath := filepath.Join("json-schema-files", "redis-schema-remote-entity.json")
+
+	err := jsonschema.Validate(schemaPath, stdout)
+
+	assert.NoError(t, err, "The output of Redis integration doesn't have expected format")
+	assert.NotNil(t, stderr, "unexpected stderr")
+}
+
 func TestRedisIntegration_OnlyMetrics(t *testing.T) {
 	testName := helpers.GetTestName(t)
 
