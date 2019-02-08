@@ -2,13 +2,6 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "description": "",
   "properties": {
-    "events": {
-      "items": {
-        "properties": {},
-        "required": []
-      },
-      "type": "array"
-    },
     "integration_version": {
       "minLength": 1,
       "pattern": "^1.2.0$",
@@ -19,6 +12,13 @@
       "items": {
         "type": "object",
         "properties": {
+          "events": {
+            "items": {
+              "properties": {},
+              "required": []
+            },
+            "type": "array"
+          },
           "entity": {
             "minProperties": 2,
             "properties": {
@@ -28,7 +28,11 @@
               "type": {
                 "type": "string"
               }
-            }
+            },
+            "required": [
+              "name",
+              "type"
+            ]
           },
           "inventory": {
             "minProperties": 1,
