@@ -1,0 +1,47 @@
+integration,metric_name,metric_type,metric_enabled,metric_group,metric_description
+Redis,software.uptimeMilliseconds,Gauge,Server,true,uptime in seconds
+Redis,software.version,Attribute,true,Server,redis version
+Redis,net.connectedClients,Gauge,true,clients,Client longest output list
+Redis,net.clientLongestOutputList,Gauge,true,Clients,connected clients
+Redis,net.clientBiggestInputBufBytes,Gauge,true,Clients,client biggest input buf
+Redis,net.blockedClients,Gauge,true,Clients,blocked clients
+Redis,system.usedMemoryBytes,Gauge,true,Memory,used memory
+Redis,system.usedMemoryRssBytes,Gauge,true,Memory,used memory rss
+Redis,system.usedMemoryPeakBytes,Gauge,true,Memory,used memory peak
+Redis,system.usedMemoryLuaBytes,Gauge,true,Memory,used memory lua
+Redis,system.totalSystemMemoryBytes,Gauge,true,Memory,total system memory
+Redis,system.memFragmentationRatio,Gauge,true,Memory,mem fragmentation ratio
+Redis,db.rdbChangesSinceLastSave,Gauge,true,Persistence,rdb changes since last save
+Redis,db.rdbBgsaveInProgress,Gauge,true,Persistence,rdb bgsave in progress
+Redis,db.rdbLastSaveTime,Gauge,true,Persistence,rdb last save time
+Redis,db.rdbLastBgsaveStatus,ATTRIBUTE,true,Persistence,rdb last bgsave status
+Redis,db.rdbLastBgsaveTimeMilliseconds,Gauge,true,Persistence,rdb last bgsave time sec
+Redis,db.aofLastRewriteTimeMiliseconds,Gauge,true,Persistence,aof last rewrite time sec
+Redis,db.aofLastBgrewriteStatus,,true,Persistence,aof last bgrewrite status
+Redis,aofLastWriteStatus,Attribute,true,Persistence,aof last write status
+Redis,net.connectionsReceivedPerSecond,Rate,true,Stats,total connections received
+Redis,net.commandsProcessedPerSecond,Rate,true,Stats,total commands processed
+Redis,net.inputBytesPerSecond,Rate,true,Stats,total net input bytes
+Redis,net.outputBytesPerSecond,Rate,true,Stats,total net output bytes
+Redis,rejectedConnectionsPerSecond,Rate,true,rejected connections,
+Redis,db.syncFull,Gauge,true,Stats,sync full
+Redis,db.syncPartialOk,Gauge,true,Stats,sync partial ok
+Redis,db.syncPartialErr,Gauge,true,Stats,sync partial err
+Redis,db.expiredKeysPerSecond,Rate,true,Stats,expired keys
+Redis,db.syncPartialErr,Gauge,true,Stats,sync partial err
+Redis,db.evictedKeysPerSecond,Rate,true,Stats,evicted keys
+Redis,db.keyspaceHitsPerSecond,Rate,true,Stats,keyspace hits
+Redis,db.keyspaceMissesPerSecond,Rate,true,Stats,keyspace misses
+Redis,net.pubsubChannels,Gauge,true,Stats,pubsub channels
+Redis,net.pubsubPatterns,Gauge,true,Stats,pubsub patterns
+Redis,net.latestForkMilliseconds,Gauge,true,Stats,latest fork usec
+Redis,cluster.roles,Attribute,true,Replication,role
+Redis,cluster.connectedSlaves,Gauge,true,Replication,connected slaves
+Redis,system.usedCpuSysMilliseconds,Gauge,true,CPU,used cpu sys
+Redis,system.usedCpuUserMilliseconds,Gauge,true,CPU,used cpu user
+Redis,system.usedCpuSysChildrenMilliseconds,Gauge,true,CPU,used cpu sys children
+Redis,system.usedCpuUserChildrenMilliseconds,Gauge,true,CPU,used cpu user children
+Redis,db.keys,Gauge,true,Keys,keys
+Redis,db.expires,Gauge,true,Keys,expires
+Redis,db.avgTtlMilliseconds,Gauge,avgTtlMilliseconds,true,Keys,average ttl
+Redis,db.keyspace,Attribute,true,Keys,key space
