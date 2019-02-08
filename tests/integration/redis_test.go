@@ -1,4 +1,6 @@
-package main
+// +build integration
+
+package integration
 
 import (
 	"flag"
