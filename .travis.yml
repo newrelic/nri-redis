@@ -6,4 +6,4 @@ go:
 services:
   - docker
 
-script: make clean validate test
+script: make clean validate test integration-test
