@@ -20,7 +20,7 @@ type argumentList struct {
 	Keys             sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
 	KeysLimit        int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
 	Password         string       `help:"Password to use when connecting to the Redis server."`
-	RemoteMonitoring bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
+	RemoteMonitoring bool         `default:"true" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
 }
 
 const (

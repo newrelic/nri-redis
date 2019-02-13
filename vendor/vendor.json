@@ -137,6 +137,12 @@
 			"revisionTime": "2019-01-09T08:30:14Z"
 		},
 		{
+			"checksumSHA1": "3DvkGtpbJW8oXepRr3wYSs72LmQ=",
+			"path": "github.com/stretchr/testify/require",
+			"revision": "363ebb24d041ccea8068222281c2e963e997b9dc",
+			"revisionTime": "2019-01-09T08:30:14Z"
+		},
+		{
 			"checksumSHA1": "+SLRfCdnZzt59tTsNUp6ie39zjo=",
 			"path": "github.com/xeipuuv/gojsonpointer",
 			"revision": "4e3ac2762d5f479393488629ee9370b50873b3a6",
