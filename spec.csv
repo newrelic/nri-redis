@@ -1,5 +1,5 @@
 integration,metric_name,metric_type,metric_enabled,metric_group,metric_description
-Redis,software.uptimeMilliseconds,Gauge,Server,true,Number of milliseconds since Redis server start.
+Redis,software.uptimeMilliseconds,Gauge,true,Server,Number of milliseconds since Redis server start.
 Redis,software.version,Attribute,true,Server,The version of the Redis server. Example: 3.2.3
 Redis,net.connectedClients,Gauge,true,Clients,Number of client connections (excluding connections from slaves).
 Redis,net.clientLongestOutputList,Gauge,true,Clients, The longest output list among current client connections.
