@@ -4,36 +4,37 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/newrelic/infra-integrations-sdk/data/inventory"
+
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/infra-integrations-sdk/sdk"
 )
 
 func getRawInventory(config map[string]string, metrics map[string]interface{}) map[string]interface{} {
-	inventory := make(map[string]interface{})
+	rawInventory := make(map[string]interface{})
 	for key, value := range config {
-		inventory[key] = value
+		rawInventory[key] = value
 	}
 
 	if _, ok := metrics["redis_version"]; ok {
-		inventory["redis_version"] = metrics["redis_version"]
+		rawInventory["redis_version"] = metrics["redis_version"]
 	}
 	if _, ok := metrics["executable"]; ok {
-		inventory["executable"] = metrics["executable"]
+		rawInventory["executable"] = metrics["executable"]
 	}
 	if _, ok := metrics["config_file"]; ok {
-		inventory["config-file"] = metrics["config_file"]
+		rawInventory["config-file"] = metrics["config_file"]
 	}
 	if _, ok := metrics["mem_allocator"]; ok {
-		inventory["mem-allocator"] = metrics["mem_allocator"]
+		rawInventory["mem-allocator"] = metrics["mem_allocator"]
 	}
 
-	if len(inventory) == 0 {
+	if len(rawInventory) == 0 {
 		log.Debug("Empty result for inventory")
 	}
-	return inventory
+	return rawInventory
 }
 
-func populateInventory(inventory sdk.Inventory, rawInventory map[string]interface{}) {
+func populateInventory(inventory *inventory.Inventory, rawInventory map[string]interface{}) {
 	re, _ := regexp.Compile("(?i)requirepass")
 
 	for key, value := range rawInventory {
@@ -47,10 +48,10 @@ func populateInventory(inventory sdk.Inventory, rawInventory map[string]interfac
 	setInventorySaveValue(inventory)
 }
 
-func setInventorySaveValue(inventory sdk.Inventory) {
-	if save, ok := inventory["save"]["value"]; ok {
+func setInventorySaveValue(inventory *inventory.Inventory) {
+	if save, ok := inventory.Items()["save"]["value"]; ok {
 		if save != "" {
-			delete(inventory["save"], "value")
+			delete(inventory.Items()["save"], "value")
 			inventory.SetItem("save", "raw-value", save)
 			saveSplited := strings.Split(save.(string), " ")
 			for i := 0; i <= len(saveSplited)-1; i += 2 {
@@ -62,9 +63,9 @@ func setInventorySaveValue(inventory sdk.Inventory) {
 	}
 }
 
-func setInventoryClientBufferValue(inventory sdk.Inventory) {
-	if clientBuffer, ok := inventory["client-output-buffer-limit"]["value"]; ok {
-		delete(inventory["client-output-buffer-limit"], "value")
+func setInventoryClientBufferValue(inventory *inventory.Inventory) {
+	if clientBuffer, ok := inventory.Items()["client-output-buffer-limit"]["value"]; ok {
+		delete(inventory.Items()["client-output-buffer-limit"], "value")
 		inventory.SetItem("client-output-buffer-limit", "raw-value", clientBuffer)
 
 		clientBufferSplited := strings.Split(clientBuffer.(string), " ")

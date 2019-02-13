@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.2.0 (TBD)
+- Upgraded to SDKv3
+
 ## 1.0.1 (2018-09-07)
 ### Changed
 - Update Makefile

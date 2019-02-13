@@ -33,3 +33,5 @@ target/
 
 # Vim session
 Session.vim
+
+bin/

@@ -1,0 +1,241 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "properties": {
+    "integration_version": {
+      "minLength": 1,
+      "pattern": "^1.2.0$",
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "items": {
+              "properties": {},
+              "required": []
+            },
+            "type": "array"
+          },
+          "inventory": {
+            "properties": {},
+            "required": [],
+            "type": "object"
+          },
+          "metrics" : {
+            "items": [
+              {
+                "properties": {
+                  "cluster.connectedSlaves": {
+                    "type": "number"
+                  },
+                  "cluster.role": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "db.aofLastBgrewriteStatus": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "db.aofLastRewriteTimeMiliseconds": {
+                    "type": "number"
+                  },
+                  "db.aofLastWriteStatus": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "db.evictedKeysPerSecond": {
+                    "type": "number"
+                  },
+                  "db.expiredKeysPerSecond": {
+                    "type": "number"
+                  },
+                  "db.keyspaceHitsPerSecond": {
+                    "type": "number"
+                  },
+                  "db.keyspaceMissesPerSecond": {
+                    "type": "number"
+                  },
+                  "db.latestForkMilliseconds": {
+                    "type": "number"
+                  },
+                  "db.rdbBgsaveInProgress": {
+                    "type": "number"
+                  },
+                  "db.rdbChangesSinceLastSave": {
+                    "type": "number"
+                  },
+                  "db.rdbLastBgsaveStatus": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "db.rdbLastBgsaveTimeMilliseconds": {
+                    "type": "number"
+                  },
+                  "db.rdbLastSaveTime": {
+                    "type": "number"
+                  },
+                  "db.syncFull": {
+                    "type": "number"
+                  },
+                  "db.syncPartialErr": {
+                    "type": "number"
+                  },
+                  "db.syncPartialOk": {
+                    "type": "number"
+                  },
+                  "event_type": {
+                    "minLength": 1,
+                    "pattern": "^RedisSample$",
+                    "type": "string"
+                  },
+                  "net.blockedClients": {
+                    "type": "number"
+                  },
+                  "net.clientBiggestInputBufBytes": {
+                    "type": "number"
+                  },
+                  "net.clientLongestOutputList": {
+                    "type": "number"
+                  },
+                  "net.commandsProcessedPerSecond": {
+                    "type": "number"
+                  },
+                  "net.connectedClients": {
+                    "type": "number"
+                  },
+                  "net.connectionsReceivedPerSecond": {
+                    "type": "number"
+                  },
+                  "net.inputBytesPerSecond": {
+                    "type": "number"
+                  },
+                  "net.outputBytesPerSecond": {
+                    "type": "number"
+                  },
+                  "net.pubsubChannels": {
+                    "type": "number"
+                  },
+                  "net.pubsubPatterns": {
+                    "type": "number"
+                  },
+                  "net.rejectedConnectionsPerSecond": {
+                    "type": "number"
+                  },
+                  "software.uptimeMilliseconds": {
+                    "type": "number"
+                  },
+                  "software.version": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "system.memFragmentationRatio": {
+                    "type": "number"
+                  },
+                  "system.totalSystemMemoryBytes": {
+                    "type": "number"
+                  },
+                  "system.usedCpuSysChildrenMilliseconds": {
+                    "type": "number"
+                  },
+                  "system.usedCpuSysMilliseconds": {
+                    "type": "number"
+                  },
+                  "system.usedCpuUserChildrenMilliseconds": {
+                    "type": "number"
+                  },
+                  "system.usedCpuUserMilliseconds": {
+                    "type": "number"
+                  },
+                  "system.usedMemoryBytes": {
+                    "type": "number"
+                  },
+                  "system.usedMemoryLuaBytes": {
+                    "type": "number"
+                  },
+                  "system.usedMemoryPeakBytes": {
+                    "type": "number"
+                  },
+                  "system.usedMemoryRssBytes": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "cluster.connectedSlaves",
+                  "cluster.role",
+                  "db.aofLastBgrewriteStatus",
+                  "db.aofLastRewriteTimeMiliseconds",
+                  "db.aofLastWriteStatus",
+                  "db.evictedKeysPerSecond",
+                  "db.expiredKeysPerSecond",
+                  "db.keyspaceHitsPerSecond",
+                  "db.keyspaceMissesPerSecond",
+                  "db.latestForkMilliseconds",
+                  "db.rdbBgsaveInProgress",
+                  "db.rdbChangesSinceLastSave",
+                  "db.rdbLastBgsaveStatus",
+                  "db.rdbLastBgsaveTimeMilliseconds",
+                  "db.rdbLastSaveTime",
+                  "db.syncFull",
+                  "db.syncPartialErr",
+                  "db.syncPartialOk",
+                  "event_type",
+                  "net.blockedClients",
+                  "net.clientBiggestInputBufBytes",
+                  "net.clientLongestOutputList",
+                  "net.commandsProcessedPerSecond",
+                  "net.connectedClients",
+                  "net.connectionsReceivedPerSecond",
+                  "net.inputBytesPerSecond",
+                  "net.outputBytesPerSecond",
+                  "net.pubsubChannels",
+                  "net.pubsubPatterns",
+                  "net.rejectedConnectionsPerSecond",
+                  "software.uptimeMilliseconds",
+                  "software.version",
+                  "system.memFragmentationRatio",
+                  "system.totalSystemMemoryBytes",
+                  "system.usedCpuSysChildrenMilliseconds",
+                  "system.usedCpuSysMilliseconds",
+                  "system.usedCpuUserChildrenMilliseconds",
+                  "system.usedCpuUserMilliseconds",
+                  "system.usedMemoryBytes",
+                  "system.usedMemoryLuaBytes",
+                  "system.usedMemoryPeakBytes",
+                  "system.usedMemoryRssBytes"
+                ]
+              }
+            ],
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "metrics",
+          "inventory",
+          "events"
+        ]
+      }
+    },
+    "name": {
+      "minLength": 1,
+      "pattern": "^com.newrelic.redis$",
+      "type": "string"
+    },
+    "protocol_version": {
+      "minLength": 1,
+      "pattern": "^2$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "protocol_version",
+    "integration_version",
+    "data"
+  ],
+  "type": "object"
+}

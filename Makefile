@@ -13,7 +13,7 @@ TARGET_DIR       = $(WORKDIR)/$(TARGET)
 
 all: build
 
-build: clean validate compile test
+build: clean validate-deps validate compile test
 
 clean:
 	@echo "=== $(INTEGRATION) === [ clean ]: removing binaries and coverage file..."
@@ -24,6 +24,9 @@ validate-deps:
 	@go get -v $(VALIDATE_DEPS)
 
 validate-only:
+ifeq ($(strip $(GO_FILES)),)
+	@echo "=== $(INTEGRATION) === [ validate ]: no Go files found. Skipping validation."
+else
 	@printf "=== $(INTEGRATION) === [ validate ]: running gofmt... "
 # `gofmt` expects files instead of packages. `go fmt` works with
 # packages, but forces -l -w flags.
@@ -53,6 +56,7 @@ validate-only:
 		echo "$$OUTPUT" ;\
 		exit 1;\
 	fi
+endif
 
 validate: validate-deps validate-only
 
@@ -60,11 +64,11 @@ compile-deps:
 	@echo "=== $(INTEGRATION) === [ compile-deps ]: installing build dependencies..."
 	@go get -v -d -t ./...
 
-compile-only:
+bin/$(BINARY_NAME):
 	@echo "=== $(INTEGRATION) === [ compile ]: building $(BINARY_NAME)..."
-	@go build -o bin/$(BINARY_NAME) $(GO_FILES)
+	@go build -v -o bin/$(BINARY_NAME) $(GO_FILES)
 
-compile: compile-deps compile-only
+compile: compile-deps bin/$(BINARY_NAME)
 
 test-deps: compile-deps
 	@echo "=== $(INTEGRATION) === [ test-deps ]: installing testing dependencies..."
@@ -72,9 +76,15 @@ test-deps: compile-deps
 
 test-only:
 	@echo "=== $(INTEGRATION) === [ test ]: running unit tests..."
-	@gocov test $(SRC_DIR)/... | gocov-xml > coverage.xml
+	@gocov test ./... | gocov-xml > coverage.xml
 
 test: test-deps test-only
+
+integration-test: test-deps
+	@echo "=== $(INTEGRATION) === [ test ]: running integration tests..."
+	@docker-compose -f tests/integration/docker-compose.yml up -d --build
+	@go test -tags=integration ./tests/integration/. || (ret=$$?; docker-compose -f tests/integration/docker-compose.yml down && exit $$ret)
+	@docker-compose -f tests/integration/docker-compose.yml down
 
 install: bin/$(BINARY_NAME)
 	@echo "=== $(INTEGRATION) === [ install ]: installing bin/$(BINARY_NAME)..."
@@ -85,4 +95,4 @@ install: bin/$(BINARY_NAME)
 # Include thematic Makefiles
 include Makefile-*.mk
 
-.PHONY: all build clean validate-deps validate-only validate compile-deps compile-only compile test-deps test-only test
+.PHONY: all build clean validate-deps validate-only validate compile-deps compile test-deps test-only test integration-test install

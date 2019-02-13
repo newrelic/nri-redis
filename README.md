@@ -19,6 +19,27 @@ $ ./bin/nr-redis -help
 
 For managing external dependencies [govendor tool](https://github.com/kardianos/govendor) is used. It is required to lock all external dependencies to specific version (if possible) into vendor directory.
 
+## Agent configuration
+
+* First of all it's required to install the agent. Please have a look at the [agent installation documentation](https://docs.newrelic.com/docs/infrastructure/new-relic-infrastructure/installation/install-infrastructure-agent-linux)
+* You can also have a look at the [configuration documentation](https://docs.newrelic.com/docs/infrastructure/new-relic-infrastructure/configuration/configure-infrastructure-agent)
+* Before configuring the redis integration is also recommended to understand the [integration configuration file](https://docs.newrelic.com/docs/integrations/integrations-sdk/file-specifications/integration-configuration-file-specifications)
+
+### Redis Integration configuration
+
+You can find a configuration sample file called `redis-config.yml.sample` in this project. Use this file as a guide and create your own config file `redis-config.yml` with your own configuration parameters:
+- **hostname**: Hostname or IP where Redis server is running.
+- **port**: Port on which Redis server is listening.
+- **keys**: List of the keys for retrieving their lengths.
+- **remote_monitoring**: It allows to monitor multiple instances. New users should have this value enabled. `remote_monitoring: true`
+
+## Installation
+
+1. Download the Redis integration.
+2. Copy the `mysql-definition.yml` and `/bin` into `/var/db/newrelic-infra/newrelic-integrations`
+3. Add execute permissions for the binary file nr-redis (if required)
+4. Copy `redis-config.yml` into `/etc/newrelic-infra/integrations.d`
+
 ## Contributing Code
 
 We welcome code contributions (in the form of pull requests) from our user

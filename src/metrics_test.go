@@ -1,48 +1,49 @@
 package main
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"github.com/newrelic/infra-integrations-sdk/persist"
+	"github.com/stretchr/testify/assert"
 
 	"io/ioutil"
 	"os"
 
 	"reflect"
 
-	"fmt"
-
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
-	"github.com/newrelic/infra-integrations-sdk/metric"
-	"github.com/newrelic/infra-integrations-sdk/sdk"
 )
 
 var expectedRawInfoFromSample = map[string]interface{}{
-	"active_defrag_hits":           0,
-	"active_defrag_key_hits":       0,
-	"active_defrag_key_misses":     0,
-	"active_defrag_misses":         0,
-	"active_defrag_running":        0,
-	"aof_current_rewrite_time_sec": -1,
-	"aof_enabled":                  0,
-	"aof_last_bgrewrite_status":    "ok",
-	"aof_last_cow_size":            0,
-	"aof_last_rewrite_time_sec":    -1,
-	"aof_last_write_status":        "ok",
-	"aof_rewrite_in_progress":      0,
-	"aof_rewrite_scheduled":        0,
-	"arch_bits":                    64,
-	"atomicvar_api":                "atomic-builtin",
-	"blocked_clients":              0,
-	"client_biggest_input_buf":     0,
-	"client_longest_output_list":   0,
-	"cluster_enabled":              0,
-	"config_file":                  "",
-	"connected_clients":            1,
-	"connected_slaves":             0,
-	"evicted_keys":                 0,
-	"executable":                   "/Users/newrelic/redis-server",
-	"expired_keys":                 0,
-	"gcc_version":                  "4.2.1",
-	"hz":                           10,
+	"active_defrag_hits":             0,
+	"active_defrag_key_hits":         0,
+	"active_defrag_key_misses":       0,
+	"active_defrag_misses":           0,
+	"active_defrag_running":          0,
+	"aof_current_rewrite_time_sec":   -1,
+	"aof_enabled":                    0,
+	"aof_last_bgrewrite_status":      "ok",
+	"aof_last_cow_size":              0,
+	"aof_last_rewrite_time_sec":      -1,
+	"aof_last_write_status":          "ok",
+	"aof_rewrite_in_progress":        0,
+	"aof_rewrite_scheduled":          0,
+	"arch_bits":                      64,
+	"atomicvar_api":                  "atomic-builtin",
+	"blocked_clients":                0,
+	"client_biggest_input_buf":       0,
+	"client_longest_output_list":     0,
+	"cluster_enabled":                0,
+	"config_file":                    "",
+	"connected_clients":              1,
+	"connected_slaves":               0,
+	"evicted_keys":                   0,
+	"executable":                     "/Users/newrelic/redis-server",
+	"expired_keys":                   0,
+	"gcc_version":                    "4.2.1",
+	"hz":                             10,
 	"instantaneous_input_kbps":       0.00,
 	"instantaneous_ops_per_sec":      0,
 	"instantaneous_output_kbps":      0.00,
@@ -118,48 +119,48 @@ var expectedRawInfoFromSample = map[string]interface{}{
 	"rdb_last_cow_size":              0,
 }
 
-var expectedMetricSetFromSample = metric.MetricSet{
-	"cluster.connectedSlaves":                0,
+var expectedMetricSetFromSample = map[string]interface{}{
+	"cluster.connectedSlaves":                0.0,
 	"cluster.role":                           "master",
 	"db.aofLastBgrewriteStatus":              "ok",
-	"db.aofLastRewriteTimeMiliseconds":       -1,
+	"db.aofLastRewriteTimeMiliseconds":       -1.0,
 	"db.aofLastWriteStatus":                  "ok",
 	"db.evictedKeysPerSecond":                0.0,
 	"db.expiredKeysPerSecond":                0.0,
 	"db.keyspaceHitsPerSecond":               0.0,
 	"db.keyspaceMissesPerSecond":             0.0,
-	"db.latestForkMilliseconds":              0,
-	"db.rdbBgsaveInProgress":                 0,
-	"db.rdbChangesSinceLastSave":             0,
+	"db.latestForkMilliseconds":              0.0,
+	"db.rdbBgsaveInProgress":                 0.0,
+	"db.rdbChangesSinceLastSave":             0.0,
 	"db.rdbLastBgsaveStatus":                 "ok",
-	"db.rdbLastBgsaveTimeMilliseconds":       -1,
-	"db.rdbLastSaveTime":                     1510570985,
-	"db.syncFull":                            0,
-	"db.syncPartialErr":                      0,
-	"db.syncPartialOk":                       0,
+	"db.rdbLastBgsaveTimeMilliseconds":       -1.0,
+	"db.rdbLastSaveTime":                     1510570985.0,
+	"db.syncFull":                            0.0,
+	"db.syncPartialErr":                      0.0,
+	"db.syncPartialOk":                       0.0,
 	"event_type":                             "metricsTestSample",
-	"net.blockedClients":                     0,
-	"net.clientBiggestInputBufBytes":         0,
-	"net.clientLongestOutputList":            0,
+	"net.blockedClients":                     0.0,
+	"net.clientBiggestInputBufBytes":         0.0,
+	"net.clientLongestOutputList":            0.0,
 	"net.commandsProcessedPerSecond":         0.0,
-	"net.connectedClients":                   1,
+	"net.connectedClients":                   1.0,
 	"net.connectionsReceivedPerSecond":       0.0,
 	"net.inputBytesPerSecond":                0.0,
 	"net.outputBytesPerSecond":               0.0,
-	"net.pubsubChannels":                     0,
-	"net.pubsubPatterns":                     0,
+	"net.pubsubChannels":                     0.0,
+	"net.pubsubPatterns":                     0.0,
 	"net.rejectedConnectionsPerSecond":       0.0,
-	"software.uptimeMilliseconds":            1435000,
+	"software.uptimeMilliseconds":            1435000.0,
 	"software.version":                       "4.0.2",
-	"system.totalSystemMemoryBytes":          17179869184,
-	"system.usedCpuSysMilliseconds":          580,
-	"system.usedCpuSysChildrenMilliseconds":  0,
-	"system.usedCpuUserMilliseconds":         300,
-	"system.usedCpuUserChildrenMilliseconds": 0,
-	"system.usedMemoryBytes":                 1014816,
-	"system.usedMemoryLuaBytes":              37888,
-	"system.usedMemoryPeakBytes":             1032128,
-	"system.usedMemoryRssBytes":              2260992,
+	"system.totalSystemMemoryBytes":          17179869184.0,
+	"system.usedCpuSysMilliseconds":          580.0,
+	"system.usedCpuSysChildrenMilliseconds":  0.0,
+	"system.usedCpuUserMilliseconds":         300.0,
+	"system.usedCpuUserChildrenMilliseconds": 0.0,
+	"system.usedMemoryBytes":                 1014816.0,
+	"system.usedMemoryLuaBytes":              37888.0,
+	"system.usedMemoryPeakBytes":             1032128.0,
+	"system.usedMemoryRssBytes":              2260992.0,
 	"system.memFragmentationRatio":           2.23,
 }
 
@@ -172,10 +173,10 @@ var expectedRawKeyspaceInfoFromSample = map[string]map[string]interface{}{
 	},
 }
 
-var expectedKeyspaceMetricSetFromSample = metric.MetricSet{
-	"db.keys":               1,
-	"db.expires":            1,
-	"db.avgTtlMilliseconds": 7853,
+var expectedKeyspaceMetricSetFromSample = map[string]interface{}{
+	"db.keys":               1.0,
+	"db.expires":            1.0,
+	"db.avgTtlMilliseconds": 7853.0,
 	"db.keyspace":           "db0",
 	"event_type":            "keyspaceTestSample_db0",
 }
@@ -230,30 +231,30 @@ func TestAsValue(t *testing.T) {
 
 func TestPopulateMetrics(t *testing.T) {
 	rawMetrics, rawKeyspace, err := getRawMetrics(readInfoSample())
-	if err != nil {
-		t.Error(err)
-	}
+	assert.NoError(t, err)
 
-	integration := sdk.Integration{}
-	ms := integration.NewMetricSet("metricsTestSample")
+	attr := metric.Attr("metricsTestSample", "test")
+	ms := metric.NewSet("metricsTestSample", persist.NewInMemoryStore(), attr)
 
-	err = populateMetrics(ms, rawMetrics, metricsDefinition)
-	if err != nil {
-		t.Error(err)
-	}
+	assert.NoError(t, populateMetrics(ms, rawMetrics, metricsDefinition))
 
-	if !reflect.DeepEqual(expectedMetricSetFromSample, *ms) {
+	expectedMetricSetFromSample[attr.Key] = attr.Value
+	assert.Equal(t, len(ms.Metrics), len(expectedMetricSetFromSample))
+	if !reflect.DeepEqual(expectedMetricSetFromSample, ms.Metrics) {
 		t.Error("unexpected metric set")
+		for k, v := range ms.Metrics {
+			if v != expectedMetricSetFromSample[k] {
+				t.Errorf("key: %+v expected: %+v have: %+v", k, v, ms.Metrics[k])
+			}
+		}
 	}
 
-	for db, keyspaceMetrics := range rawKeyspace {
-		ms = integration.NewMetricSet(fmt.Sprintf("keyspaceTestSample_%s", db))
-		err = populateMetrics(ms, keyspaceMetrics, keyspaceMetricsDefinition)
-		if err != nil {
-			t.Error(err)
-		}
-		if !reflect.DeepEqual(expectedKeyspaceMetricSetFromSample, *ms) {
-			t.Errorf("unexpected keyspace metric set for %s", db)
+	for db, ks := range rawKeyspace {
+		ms = metric.NewSet(fmt.Sprintf("keyspaceTestSample_%s", db), persist.NewInMemoryStore())
+		assert.NoError(t, populateMetrics(ms, ks, keyspaceMetricsDefinition))
+
+		if !reflect.DeepEqual(expectedKeyspaceMetricSetFromSample, ms.Metrics) {
+			t.Errorf("unexpected keyspace metric set for %+v", ms.Metrics)
 		}
 	}
 }
@@ -283,9 +284,8 @@ func TestGetRawMetricsNotValidInput(t *testing.T) {
 	expectedKeyspaceMetrics := make(map[string]map[string]interface{})
 	metrics, keyspaceMetrics, err := getRawMetrics(info)
 
-	if err != nil {
-		t.Error()
-	}
+	assert.NoError(t, err)
+
 	if len(metrics) != expectedMetricsLength {
 		t.Error()
 	}
@@ -303,7 +303,7 @@ func TestGetRawMetricsNotValidInput(t *testing.T) {
 func TestParseKeyspaceMetrics(t *testing.T) {
 	dbName := "db0"
 	keyspace := "keys=3,expires=1,avg_ttl=354949"
-	metric, err := parseKeyspaceMetrics(dbName, keyspace)
+	m, err := parseKeyspaceMetrics(dbName, keyspace)
 	expectedLength := 4
 	expectedMetric := map[string]interface{}{
 		"keyspace": "db0",
@@ -312,13 +312,12 @@ func TestParseKeyspaceMetrics(t *testing.T) {
 		"avg_ttl":  354949,
 	}
 
-	if err != nil {
-		t.Errorf("Error %v returned ", err)
+	assert.NoError(t, err)
+
+	if len(m) != expectedLength {
+		t.Errorf("Not all values processed, got %d length of the rawInventory, expected: %d", len(m), expectedLength)
 	}
-	if len(metric) != expectedLength {
-		t.Errorf("Not all values processed, got %d length of the rawInventory, expected: %d", len(metric), expectedLength)
-	}
-	if !reflect.DeepEqual(metric, expectedMetric) {
+	if !reflect.DeepEqual(m, expectedMetric) {
 		t.Error()
 	}
 }
@@ -402,9 +401,8 @@ func TestValidateKeysFlag(t *testing.T) {
 	expectedKeysNumber := 3
 
 	keysNumber, err := validateKeysFlag(databaseKeys, keysLimit)
-	if err != nil {
-		t.Error()
-	}
+	assert.NoError(t, err)
+
 	if keysNumber != expectedKeysNumber {
 		t.Error()
 	}
@@ -434,20 +432,20 @@ func TestPopulateCustomKeysMetric(t *testing.T) {
 	}
 	expectedHashKeyName := "db.keyLength.hash.myhash"
 	expectedListKeyName := "db.keyLength.list.mylist"
-	expectedHashKeyLength := int64(1)
-	expectedListKeyLength := int64(5)
+	expectedHashKeyLength := float64(1)
+	expectedListKeyLength := float64(5)
 
-	var sample = metric.NewMetricSet("RedisKeyspaceSample")
-	populateCustomKeysMetric(&sample, rawCustomKeys)
+	sample := metric.NewSet("RedisKeyspaceSample", persist.NewInMemoryStore())
 
-	if sample[expectedHashKeyName] != expectedHashKeyLength {
+	populateCustomKeysMetric(sample, rawCustomKeys)
+
+	if sample.Metrics[expectedHashKeyName] != expectedHashKeyLength {
 		t.Error()
 	}
-	if sample[expectedListKeyName] != expectedListKeyLength {
+	if sample.Metrics[expectedListKeyName] != expectedListKeyLength {
 		t.Error()
 	}
-	if len(sample) != 3 {
+	if len(sample.Metrics) != 3 {
 		t.Error()
 	}
-
 }

@@ -1,30 +1,38 @@
 package main
 
 import (
+	"fmt"
+	"os"
+	"strconv"
+
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
+	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/infra-integrations-sdk/sdk"
+	"github.com/newrelic/infra-integrations-sdk/persist"
 )
 
 type argumentList struct {
 	sdkArgs.DefaultArgumentList
-	Hostname       string       `default:"localhost" help:"Hostname or IP where Redis server is running."`
-	Port           int          `default:"6379" help:"Port on which Redis server is listening."`
-	UnixSocketPath string       `default:"" help:"Unix socket path on which Redis server is listening."`
-	Keys           sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
-	KeysLimit      int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
-	Password       string       `help:"Password to use when connecting to the Redis server."`
+	Hostname         string       `default:"localhost" help:"Hostname or IP where Redis server is running."`
+	Port             int          `default:"6379" help:"Port on which Redis server is listening."`
+	UnixSocketPath   string       `default:"" help:"Unix socket path on which Redis server is listening."`
+	Keys             sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
+	KeysLimit        int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
+	Password         string       `help:"Password to use when connecting to the Redis server."`
+	RemoteMonitoring bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
 }
 
 const (
 	integrationName    = "com.newrelic.redis"
-	integrationVersion = "1.0.0"
+	integrationVersion = "1.2.0"
+	entityRemoteType   = "instance"
 )
 
 var args argumentList
 
 func main() {
-	integration, err := sdk.NewIntegration(integrationName, integrationVersion, &args)
+	i, err := createIntegration()
 	fatalIfErr(err)
 
 	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password)
@@ -37,14 +45,22 @@ func main() {
 
 	rawMetrics, rawKeyspaceMetrics, metricsErr := getRawMetrics(info)
 
-	if args.All || args.Inventory {
+	e, err := entity(i, &args)
+	fatalIfErr(err)
+
+	if args.HasInventory() {
 		rawInventory := getRawInventory(config, rawMetrics)
-		populateInventory(integration.Inventory, rawInventory)
+		populateInventory(e.Inventory, rawInventory)
 	}
 
-	if args.All || args.Metrics {
+	if args.HasMetrics() {
 		fatalIfErr(metricsErr)
-		ms := integration.NewMetricSet("RedisSample")
+
+		ms := e.NewMetricSet("RedisSample",
+			metric.Attr("hostname", args.Hostname),
+			metric.Attr("port", strconv.Itoa(args.Port)),
+		)
+
 		fatalIfErr(populateMetrics(ms, rawMetrics, metricsDefinition))
 
 		var rawCustomKeysMetric map[string]map[string]keyInfo
@@ -64,8 +80,12 @@ func main() {
 			}
 		}
 
+		ms = e.NewMetricSet(
+			"RedisKeyspaceSample",
+			metric.Attr("hostname", args.Hostname),
+			metric.Attr("port", strconv.Itoa(args.Port)),
+		)
 		for db, keyspaceMetrics := range rawKeyspaceMetrics {
-			ms = integration.NewMetricSet("RedisKeyspaceSample")
 			fatalIfErr(populateMetrics(ms, keyspaceMetrics, keyspaceMetricsDefinition))
 
 			if _, ok := rawCustomKeysMetric[db]; ok && keysFlagPresent {
@@ -74,7 +94,31 @@ func main() {
 		}
 	}
 
-	fatalIfErr(integration.Publish())
+	fatalIfErr(i.Publish())
+}
+
+func createIntegration() (*integration.Integration, error) {
+	cachePath := os.Getenv("NRIA_CACHE_PATH")
+	if cachePath == "" {
+		return integration.New(integrationName, integrationVersion, integration.Args(&args))
+	}
+
+	l := log.NewStdErr(args.Verbose)
+	s, err := persist.NewFileStore(cachePath, l, persist.DefaultTTL)
+	if err != nil {
+		return nil, err
+	}
+
+	return integration.New(integrationName, integrationVersion, integration.Args(&args), integration.Storer(s), integration.Logger(l))
+}
+
+func entity(i *integration.Integration, args *argumentList) (*integration.Entity, error) {
+	if args.RemoteMonitoring {
+		n := fmt.Sprintf("%s:%d", args.Hostname, args.Port)
+		return i.Entity(n, entityRemoteType)
+	}
+
+	return i.LocalEntity(), nil
 }
 
 func fatalIfErr(err error) {

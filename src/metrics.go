@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
+	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/infra-integrations-sdk/metric"
 )
 
 var metricsDefinition = map[string][]interface{}{
@@ -73,7 +73,7 @@ var keyspaceMetricsDefinition = map[string][]interface{}{
 
 type manipulator func(map[string]interface{}) (interface{}, bool)
 
-func populateMetrics(sample *metric.MetricSet, metrics map[string]interface{}, definition map[string][]interface{}) error {
+func populateMetrics(sample *metric.Set, metrics map[string]interface{}, definition map[string][]interface{}) error {
 	notFoundMetric := make([]string, 0)
 
 	for metricName, metricInfo := range definition {
@@ -176,24 +176,25 @@ func getRawMetrics(info string) (map[string]interface{}, map[string]map[string]i
 }
 
 func parseKeyspaceMetrics(dbName string, keyspace string) (map[string]interface{}, error) {
-	metric := make(map[string]interface{})
+	m := make(map[string]interface{})
 	re, err := regexp.Compile(`keys=(\d+),expires=(\d+),avg_ttl=(\d+\.*\d*)`)
 	if err != nil {
 		return nil, err
 	}
 	matches := re.FindStringSubmatch(keyspace)
 	if matches != nil {
-		metric["keyspace"] = asValue(dbName)
-		metric["keys"] = asValue(matches[1])
-		metric["expires"] = asValue(matches[2])
-		metric["avg_ttl"] = asValue(matches[3])
+		m["keyspace"] = asValue(dbName)
+		m["keys"] = asValue(matches[1])
+		m["expires"] = asValue(matches[2])
+		m["avg_ttl"] = asValue(matches[3])
 	} else {
 		log.Warn("Keyspace metrics cannot be parsed for %s", dbName)
 	}
-	return metric, nil
+
+	return m, nil
 }
 
-func populateCustomKeysMetric(sample *metric.MetricSet, rawCustomKeys map[string]keyInfo) {
+func populateCustomKeysMetric(sample *metric.Set, rawCustomKeys map[string]keyInfo) {
 	for key, value := range rawCustomKeys {
 		err := sample.SetMetric(fmt.Sprintf("db.keyLength.%s.%s", value.keyType, key), value.keyLength, metric.GAUGE)
 		if err != nil {
