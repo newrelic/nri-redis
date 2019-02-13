@@ -56,7 +56,10 @@ func main() {
 	if args.HasMetrics() {
 		fatalIfErr(metricsErr)
 
-		ms := e.NewMetricSet("RedisSample", metric.Attr("hostname", args.Hostname))
+		ms := e.NewMetricSet("RedisSample",
+			metric.Attr("hostname", args.Hostname),
+			metric.Attr("port", strconv.Itoa(args.Port)),
+		)
 
 		fatalIfErr(populateMetrics(ms, rawMetrics, metricsDefinition))
 
