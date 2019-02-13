@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
@@ -25,7 +26,7 @@ type argumentList struct {
 const (
 	integrationName    = "com.newrelic.redis"
 	integrationVersion = "1.2.0"
-	entityRemoteType   = "redis"
+	entityRemoteType   = "instance"
 )
 
 var args argumentList
@@ -76,8 +77,12 @@ func main() {
 			}
 		}
 
+		ms = e.NewMetricSet(
+			"RedisKeyspaceSample",
+			metric.Attr("hostname", args.Hostname),
+			metric.Attr("port", strconv.Itoa(args.Port)),
+		)
 		for db, keyspaceMetrics := range rawKeyspaceMetrics {
-			ms = e.NewMetricSet("RedisKeyspaceSample", metric.Attr("hostname", args.Hostname))
 			fatalIfErr(populateMetrics(ms, keyspaceMetrics, keyspaceMetricsDefinition))
 
 			if _, ok := rawCustomKeysMetric[db]; ok && keysFlagPresent {
