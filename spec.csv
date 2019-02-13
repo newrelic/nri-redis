@@ -1,0 +1,46 @@
+integration,metric_name,metric_type,metric_enabled,metric_group,metric_description
+Redis,software.uptimeMilliseconds,Gauge,true,Server,Number of milliseconds since Redis server start.
+Redis,software.version,Attribute,true,Server,The version of the Redis server. Example: 3.2.3
+Redis,net.connectedClients,Gauge,true,Clients,Number of client connections (excluding connections from slaves).
+Redis,net.clientLongestOutputList,Gauge,true,Clients, The longest output list among current client connections.
+Redis,net.clientBiggestInputBufBytes,Gauge,true,Clients,The biggest input buffer among current client connections.
+Redis,net.blockedClients,Gauge,true,Clients,Number of Clients pending on a blocking call (BLPOP BRPOP BRPOPLPUSH).
+Redis,system.usedMemoryBytes,Gauge,true,Memory,The total number of bytes allocated by Redis using its allocator (either standard libc jemalloc or an alternative allocator such as tcmalloc).
+Redis,system.usedMemoryRssBytes,Gauge,true,Memory, Number of bytes that Redis allocated as seen by the operating system (also known as resident set size). This is the number reported by tools such as top(1) and ps(1)
+Redis,system.usedMemoryPeakBytes,Gauge,true,Memory,The peak memory consumed by Redis in bytes.
+Redis,system.usedMemoryLuaBytes,Gauge,true,Memory,Number of bytes used by the Lua engine.
+Redis,system.totalSystemMemoryBytes,Gauge,true,Memory,The amount of memory in bytes available in the instance where Redis is running
+Redis,system.memFragmentationRatio,Gauge,true,Memory,Ratio between used_memory_rss and used_memory.
+Redis,db.rdbChangesSinceLastSave,Gauge,true,Persistence,Number of changes since the last dump.
+Redis,db.rdbBgsaveInProgress,Gauge,true,Persistence,A flag indicating a RDB save is ongoing.
+Redis,db.rdbLastSaveTime,Gauge,true,Persistence,Epoch-based timestamp of last successful RDB save in seconds.
+Redis,db.rdbLastBgsaveStatus,Attribute,true,Persistence,Boolean representing the status of the last RDB save operation.
+Redis,db.rdbLastBgsaveTimeMilliseconds,Gauge,true,Persistence,	Duration of the last RDB save operation in milliseconds.
+Redis,db.aofLastRewriteTimeMiliseconds,Gauge,true,Persistence,Boolean representing status of the last AOF write operation.
+Redis,db.aofLastBgrewriteStatus,Attribute,true,Persistence,Boolean representing status of the last AOF background rewrite operation.
+Redis,aofLastWriteStatus,Attribute,true,Persistence,aof last write status
+Redis,net.connectionsReceivedPerSecond,Rate,true,Stats,Number of connections accepted by the server per second.
+Redis,net.commandsProcessedPerSecond,Rate,true,Stats,Number of commands processed by the server per second.
+Redis,net.inputBytesPerSecond,Rate,true,Stats,Total number of bytes input per second.
+Redis,net.outputBytesPerSecond,Rate,true,Stats,Total number of bytes output per second.
+Redis,rejectedConnectionsPerSecond,Rate,true,Stats,Number of connections per second rejected because of maxclients limit.
+Redis,db.syncFull,Gauge,true,Stats,Count of the number times slaves have fully synchronized with this master.
+Redis,db.syncPartialOk,Gauge,true,Stats,Count of the number of times partial syncs have completed.
+Redis,db.syncPartialErr,Gauge,true,Stats,Count of the number of times partial syncs have failed to complete.
+Redis,db.expiredKeysPerSecond,Rate,true,Stats,Number of key expiration events per second.
+Redis,db.evictedKeysPerSecond,Rate,true,Stats,Number of evicted keys due to maxmemory limit per second.
+Redis,db.keyspaceHitsPerSecond,Rate,true,Stats,Number of successful lookups of keys in the main dictionary per second.
+Redis,db.keyspaceMissesPerSecond,Rate,true,Stats,Number of failed lookup of keys in the main dictionary per second.
+Redis,net.pubsubChannels,Gauge,true,Stats,Global number of pub/sub channels with client subscriptions
+Redis,net.pubsubPatterns,Gauge,true,Stats,Global number of pub/sub pattern with client subscriptions.
+Redis,net.latestForkMilliseconds,Gauge,true,Stats,Duration of the latest fork operation in milliseconds.
+Redis,cluster.roles,Attribute,true,Replication,Either master or slave depending on the role of the Redis node being monitored.
+Redis,cluster.connectedSlaves,Gauge,true,Replication, Number of connected slaves
+Redis,system.usedCpuSysMilliseconds,Gauge,true,CPU,System CPU consumed by the Redis server in milliseconds.
+Redis,system.usedCpuUserMilliseconds,Gauge,true,CPU,User CPU consumed by the Redis server in milliseconds.
+Redis,system.usedCpuSysChildrenMilliseconds,Gauge,true,CPU,System CPU consumed by the background processes in milliseconds.
+Redis,system.usedCpuUserChildrenMilliseconds,Gauge,true,CPU,User CPU consumed by the background processes in milliseconds.
+Redis,db.keys,Gauge,true,Keys,Number of keys in the database being reported on.
+Redis,db.expires,Gauge,true,Keys,Number of keys with an expiration in the database being reported on.
+Redis,db.avgTtlMilliseconds,Gauge,true,Keys,The average time to live (TTL) in milliseconds of keys that have an expiration set in the database being reported on.
+Redis,db.keyspace,Attribute,true,Keys,Redis database index which is the integer number (usually a number between 0 and 15). Format: db followed by the database index. For example: db0 db1 db2 etc.
