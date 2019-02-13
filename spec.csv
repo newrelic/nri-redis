@@ -43,4 +43,4 @@ Redis,system.usedCpuUserChildrenMilliseconds,Gauge,true,CPU,User CPU consumed by
 Redis,db.keys,Gauge,true,Keys,Number of keys in the database being reported on.
 Redis,db.expires,Gauge,true,Keys,Number of keys with an expiration in the database being reported on.
 Redis,db.avgTtlMilliseconds,Gauge,true,Keys,The average time to live (TTL) in milliseconds of keys that have an expiration set in the database being reported on.
-Redis,db.keyspace,Attribute,true,Keys,Redis database index, which is the integer number (usually a number between 0 and 15). Format: db followed by the database index. For example: db0 db1 db2 etc.
+Redis,db.keyspace,Attribute,true,Keys,Redis database index which is the integer number (usually a number between 0 and 15). Format: db followed by the database index. For example: db0 db1 db2 etc.
