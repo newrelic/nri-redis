@@ -36,7 +36,7 @@ You can find a configuration sample file called `redis-config.yml.sample` in thi
 ## Installation
 
 1. Download the Redis integration.
-2. Copy the `mysql-definition.yml` and `/bin` into `/var/db/newrelic-infra/newrelic-integrations`
+2. Copy the `redis-definition.yml` and `/bin` into `/var/db/newrelic-infra/newrelic-integrations`
 3. Add execute permissions for the binary file nr-redis (if required)
 4. Copy `redis-config.yml` into `/etc/newrelic-infra/integrations.d`
 

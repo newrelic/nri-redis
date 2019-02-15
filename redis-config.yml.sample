@@ -32,6 +32,6 @@ instances:
       # Please check the documentation to get more information about local
       # versus remote entities:
       # https://github.com/newrelic/infra-integrations-sdk/blob/master/docs/entity-definition.md
-      remote_monitoring: false
+      remote_monitoring: true
     labels:
       - environment: production
