@@ -17,7 +17,7 @@ instances:
       # https://github.com/newrelic/infra-integrations-sdk/blob/master/docs/entity-definition.md
       remote_monitoring: true
     labels:
-      - environment: production
+      environment: production
 
   - name: redis-inventory
     command: inventory
@@ -34,4 +34,4 @@ instances:
       # https://github.com/newrelic/infra-integrations-sdk/blob/master/docs/entity-definition.md
       remote_monitoring: true
     labels:
-      - environment: production
+      environment: production
