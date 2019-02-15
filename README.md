@@ -3,7 +3,7 @@ In order to know how the Redis integration works and how to run it with the Infr
 
 ## Integration Development usage
 
-Assuming that you have the source code and Go tool installed you can build and run the Redis Integration locally.
+Assuming that you have the source code and Go tool installed (go version 1.9) then you can build and run the Redis Integration locally. 
 * Go to the directory of the Redis integration and build it
 ```bash
 $ make
