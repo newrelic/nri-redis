@@ -56,11 +56,7 @@ func main() {
 	if args.HasMetrics() {
 		fatalIfErr(metricsErr)
 
-		ms := e.NewMetricSet("RedisSample",
-			metric.Attr("hostname", args.Hostname),
-			metric.Attr("port", strconv.Itoa(args.Port)),
-		)
-
+		ms := metricSet(e, "RedisSample")
 		fatalIfErr(populateMetrics(ms, rawMetrics, metricsDefinition))
 
 		var rawCustomKeysMetric map[string]map[string]keyInfo
@@ -80,14 +76,9 @@ func main() {
 			}
 		}
 
-		ms = e.NewMetricSet(
-			"RedisKeyspaceSample",
-			metric.Attr("hostname", args.Hostname),
-			metric.Attr("port", strconv.Itoa(args.Port)),
-		)
+		ms = metricSet(e, "RedisKeyspaceSample")
 		for db, keyspaceMetrics := range rawKeyspaceMetrics {
 			fatalIfErr(populateMetrics(ms, keyspaceMetrics, keyspaceMetricsDefinition))
-
 			if _, ok := rawCustomKeysMetric[db]; ok && keysFlagPresent {
 				populateCustomKeysMetric(ms, rawCustomKeysMetric[db])
 			}
@@ -95,6 +86,18 @@ func main() {
 	}
 
 	fatalIfErr(i.Publish())
+}
+
+func metricSet(e *integration.Entity, eventType string) *metric.Set {
+	if args.RemoteMonitoring {
+		return e.NewMetricSet(
+			eventType,
+			metric.Attr("hostname", args.Hostname),
+			metric.Attr("port", strconv.Itoa(args.Port)),
+		)
+	}
+
+	return e.NewMetricSet(eventType)
 }
 
 func createIntegration() (*integration.Integration, error) {
