@@ -56,7 +56,7 @@ func main() {
 	if args.HasMetrics() {
 		fatalIfErr(metricsErr)
 
-		ms := metricSet(e, "RedisSample", args.Hostname, args.Port)
+		ms := metricSet(e, "RedisSample", args.Hostname, args.Port, args.RemoteMonitoring)
 		fatalIfErr(populateMetrics(ms, rawMetrics, metricsDefinition))
 
 		var rawCustomKeysMetric map[string]map[string]keyInfo
@@ -76,7 +76,7 @@ func main() {
 			}
 		}
 
-		ms = metricSet(e, "RedisKeyspaceSample", args.Hostname, args.Port)
+		ms = metricSet(e, "RedisKeyspaceSample", args.Hostname, args.Port, args.RemoteMonitoring)
 		for db, keyspaceMetrics := range rawKeyspaceMetrics {
 			fatalIfErr(populateMetrics(ms, keyspaceMetrics, keyspaceMetricsDefinition))
 			if _, ok := rawCustomKeysMetric[db]; ok && keysFlagPresent {
@@ -88,9 +88,9 @@ func main() {
 	fatalIfErr(i.Publish())
 }
 
-func metricSet(e *integration.Entity, eventType, hostname string, port int) *metric.Set {
+func metricSet(e *integration.Entity, eventType, hostname string, port int, remote bool) *metric.Set {
 	strPort := strconv.Itoa(port)
-	if args.RemoteMonitoring {
+	if remote {
 		return e.NewMetricSet(
 			eventType,
 			metric.Attr("hostname", hostname),
