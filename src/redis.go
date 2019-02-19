@@ -97,7 +97,10 @@ func metricSet(e *integration.Entity, eventType string) *metric.Set {
 		)
 	}
 
-	return e.NewMetricSet(eventType)
+	return e.NewMetricSet(
+		eventType,
+		metric.Attr("port", strconv.Itoa(args.Port)),
+	)
 }
 
 func createIntegration() (*integration.Integration, error) {
