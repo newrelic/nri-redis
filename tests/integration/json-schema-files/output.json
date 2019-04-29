@@ -1,6 +1,6 @@
 {
   "name": "com.newrelic.redis",
-  "protocol_version": "2",
+  "protocol_version": "3",
   "integration_version": "1.2.0",
   "data": [
     {
