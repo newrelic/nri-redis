@@ -11,6 +11,7 @@ func TestGetRawInventory(t *testing.T) {
 	config := map[string]string{
 		"dbfilename":  "dump.rdb",
 		"requirepass": "",
+		"masterauth":  "",
 		"logfile":     "/var/log/redis/redis.log",
 	}
 
@@ -20,9 +21,10 @@ func TestGetRawInventory(t *testing.T) {
 		"config_file":   "/etc/redis.conf",
 		"mem_allocator": "jemalloc-3.6.0",
 	}
-	expectedLength := 7
+	expectedLength := 8
 	expectedDbfilename := "dump.rdb"
 	expectedRequirepass := ""
+	expectedMasterauth := ""
 	expectedMemAllocator := "jemalloc-3.6.0"
 	rawInventory := getRawInventory(config, metrics)
 
@@ -34,6 +36,9 @@ func TestGetRawInventory(t *testing.T) {
 	}
 	if rawInventory["requirepass"] != expectedRequirepass {
 		t.Errorf("For key \"requirepass\" wrong value returned, got: %s, expected: %s", rawInventory["requirepass"], expectedRequirepass)
+	}
+	if rawInventory["masterauth"] != expectedMasterauth {
+		t.Errorf("For key \"masterauth\" wrong value returned, got: %s, expected: %s", rawInventory["masterauth"], expectedMasterauth)
 	}
 	if rawInventory["mem-allocator"] != expectedMemAllocator {
 		t.Errorf("For key \"mem_allocator\" wrong value returned, got: %s, expected: %s", rawInventory["mem-allocator"], expectedMemAllocator)
@@ -55,14 +60,16 @@ func TestGetRawInventoryEmpty(t *testing.T) {
 func TestPopulateInventory(t *testing.T) {
 	i := inventory.New()
 	rawInventory := map[string]interface{}{
-		"redis_version": "3.2.3",
-		"requirepass":   "",
-		"save":          "900 1 300 10 60 10000",
+		"redis_version":              "3.2.3",
+		"requirepass":                "",
+		"masterauth":                 "",
+		"save":                       "900 1 300 10 60 10000",
 		"client-output-buffer-limit": "normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60",
 	}
 	expectedRedisVersion := "3.2.3"
 	expectedRequirePass := "(omitted value)"
-	expectedLength := 4
+	expectedMasterAuth := "(omitted value)"
+	expectedLength := 5
 	expectedSaveItemsLength := 4
 	expectedBufferItemsLength := 10
 
@@ -83,6 +90,9 @@ func TestPopulateInventory(t *testing.T) {
 	}
 	if items["requirepass"]["value"] != expectedRequirePass {
 		t.Errorf("For key \"requirepass\" wrong value returned, got: %s, expected: %s", items["requirepass"]["value"], expectedRequirePass)
+	}
+	if items["masterauth"]["value"] != expectedMasterAuth {
+		t.Errorf("For key \"masterauth\" wrong value returned, got: %s, expected: %s", items["masterauth"]["value"], expectedMasterAuth)
 	}
 }
 
