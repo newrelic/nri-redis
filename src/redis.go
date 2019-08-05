@@ -25,7 +25,7 @@ type argumentList struct {
 
 const (
 	integrationName    = "com.newrelic.redis"
-	integrationVersion = "1.2.0"
+	integrationVersion = "1.2.1"
 	entityRemoteType   = "instance"
 )
 

@@ -35,7 +35,7 @@ func getRawInventory(config map[string]string, metrics map[string]interface{}) m
 }
 
 func populateInventory(inventory *inventory.Inventory, rawInventory map[string]interface{}) {
-	re, _ := regexp.Compile("(?i)requirepass")
+	re, _ := regexp.Compile("(?i)(requirepass|masterauth)")
 
 	for key, value := range rawInventory {
 		if re.MatchString(key) {

@@ -5,7 +5,7 @@
 
     "integration_version": {
       "minLength": 1,
-      "pattern": "^1.2.0$",
+      "pattern": "^1.2.1$",
       "type": "string"
     },
     "data": {
@@ -416,6 +416,8 @@
               "masterauth": {
                 "properties": {
                   "value": {
+                    "minLength": 1,
+                    "pattern": "^\\(omitted value\\)$",
                     "type": "string"
                   }
                 },
