@@ -415,6 +415,8 @@
               "masterauth": {
                 "properties": {
                   "value": {
+                    "minLength": 1,
+                    "pattern": "^\\(omitted value\\)$",
                     "type": "string"
                   }
                 },

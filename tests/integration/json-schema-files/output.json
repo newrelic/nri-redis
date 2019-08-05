@@ -210,7 +210,7 @@
           "value": "5000"
         },
         "masterauth": {
-          "value": ""
+          "value": "(omitted value)"
         },
         "maxclients": {
           "value": "10000"
