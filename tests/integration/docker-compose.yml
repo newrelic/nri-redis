@@ -12,6 +12,7 @@ services:
       - nri-redis
 
   nri-redis:
+    container_name: integration_nri-redis_1
     build:
       context: ../../
       dockerfile: tests/integration/Dockerfile
