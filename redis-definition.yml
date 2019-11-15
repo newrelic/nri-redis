@@ -6,13 +6,13 @@ os: linux
 commands:
   metrics:
     command:
-      - ./bin/nr-redis
+      - ./bin/nri-redis
       - --metrics
     interval: 15
 
   inventory:
     command:
-      - ./bin/nr-redis
+      - ./bin/nri-redis
       - --inventory
     prefix: config/redis
     interval: 60

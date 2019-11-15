@@ -20,7 +20,7 @@ import (
 var (
 	//default values
 	defaultContainer = "integration_nri-redis_1"
-	defaultBinPath   = "/nr-redis"
+	defaultBinPath   = "/nri-redis"
 	defaultHost      = "redis"
 	defaultPort      = 6379
 

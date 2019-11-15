@@ -8,13 +8,13 @@ Assuming that you have the source code and Go tool installed (go version 1.9) th
 ```bash
 $ make
 ```
-* The command above will execute the tests for the Redis integration and build an executable file called `nr-redis` under `bin` directory. Run `nr-redis`:
+* The command above will execute the tests for the Redis integration and build an executable file called `nri-redis` under `bin` directory. Run `nri-redis`:
 ```bash
-$ ./bin/nr-redis
+$ ./bin/nri-redis
 ```
-* If you want to know more about usage of `./bin/nr-redis` check
+* If you want to know more about usage of `./bin/nri-redis` check
 ```bash
-$ ./bin/nr-redis -help
+$ ./bin/nri-redis -help
 ```
 
 For managing external dependencies [govendor tool](https://github.com/kardianos/govendor) is used. It is required to lock all external dependencies to specific version (if possible) into vendor directory.
@@ -37,7 +37,7 @@ You can find a configuration sample file called `redis-config.yml.sample` in thi
 
 1. Download the Redis integration.
 2. Copy the `redis-definition.yml` and `/bin` into `/var/db/newrelic-infra/newrelic-integrations`
-3. Add execute permissions for the binary file nr-redis (if required)
+3. Add execute permissions for the binary file nri-redis (if required)
 4. Copy `redis-config.yml` into `/etc/newrelic-infra/integrations.d`
 
 ## Contributing Code
