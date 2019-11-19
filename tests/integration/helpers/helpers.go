@@ -19,7 +19,7 @@ import (
 // checks if the integration files are placed in the proper directories.
 func CheckIntegrationIsInstalled(iName string) error {
 	iPaths := []string{
-		fmt.Sprintf("/var/db/newrelic-infra/newrelic-integrations/bin/nr-%s", iName),
+		fmt.Sprintf("/var/db/newrelic-infra/newrelic-integrations/bin/nri-%s", iName),
 		fmt.Sprintf("/var/db/newrelic-infra/newrelic-integrations/%s-definition.yml", iName),
 		fmt.Sprintf("/etc/newrelic-infra/integrations.d/%s-config.yml.sample", iName),
 	}

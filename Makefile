@@ -1,5 +1,5 @@
 INTEGRATION     := redis
-BINARY_NAME      = nr-$(INTEGRATION)
+BINARY_NAME      = nri-$(INTEGRATION)
 SRC_DIR          = ./src/
 GO_PKGS         := $(shell go list ./... | grep -v "/vendor/")
 VALIDATE_DEPS    = golang.org/x/lint/golint
