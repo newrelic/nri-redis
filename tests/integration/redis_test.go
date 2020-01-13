@@ -122,7 +122,7 @@ func TestRedisIntegration_SkipConfig(t *testing.T) {
 
 	stdout, _ := runIntegration(t,
 		fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName),
-		"CONFIG_INVENTORY=true")
+		"CONFIG_INVENTORY=false")
 
 	// Verify that the CONFIG inventory is NOT retrieved
 	inventory := extractInventory(t, stdout)
