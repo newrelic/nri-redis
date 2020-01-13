@@ -3,15 +3,17 @@
 package integration
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"os"
 	"path/filepath"
 	"strconv"
 	"testing"
+
+	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/newrelic/nri-redis/tests/integration/helpers"
 	"github.com/newrelic/nri-redis/tests/integration/jsonschema"
@@ -108,4 +110,42 @@ func TestRedisIntegration_OnlyInventory(t *testing.T) {
 
 	assert.NoError(t, err, "The output of Redis integration doesn't have expected format")
 	assert.NotNil(t, stderr, "unexpected stderr")
+
+	// Verify that the CONFIG inventory is retrieved
+	inventory := extractInventory(t, stdout)
+	removeCommonInventory(inventory)
+	require.NotZerof(t, len(inventory), "inventory should include CONFIG data. Was %#v", inventory)
+}
+
+func TestRedisIntegration_SkipConfig(t *testing.T) {
+	testName := helpers.GetTestName(t)
+
+	stdout, _ := runIntegration(t,
+		fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName),
+		"CONFIG_INVENTORY=true")
+
+	// Verify that the CONFIG inventory is NOT retrieved
+	inventory := extractInventory(t, stdout)
+	removeCommonInventory(inventory)
+	require.Zerof(t, len(inventory), "inventory should NOT include CONFIG data. Was %#v", inventory)
+}
+
+func extractInventory(t *testing.T, jsonOutput string) map[string]interface{} {
+	t.Helper()
+	jsonMap := map[string]interface{}{}
+	require.NoError(t, json.Unmarshal([]byte(jsonOutput), &jsonMap))
+	require.Contains(t, jsonMap, "data")
+	require.IsType(t, []interface{}{}, jsonMap["data"])
+	require.Len(t, jsonMap["data"], 1)
+	require.IsType(t, map[string]interface{}{}, jsonMap["data"].([]interface{})[0])
+	require.Contains(t, jsonMap["data"].([]interface{})[0].(map[string]interface{}), "inventory")
+	return jsonMap["data"].([]interface{})[0].(map[string]interface{})["inventory"].(map[string]interface{})
+}
+
+// removes inventory data that is not result of the CONFIG command
+func removeCommonInventory(inventory map[string]interface{}) {
+	delete(inventory, "redis_version")
+	delete(inventory, "executable")
+	delete(inventory, "config-file")
+	delete(inventory, "mem-allocator")
 }

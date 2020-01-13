@@ -21,6 +21,7 @@ type argumentList struct {
 	KeysLimit        int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
 	Password         string       `help:"Password to use when connecting to the Redis server."`
 	RemoteMonitoring bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
+	ConfigInventory  bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
 }
 
 const (
@@ -40,7 +41,8 @@ func main() {
 		log.Fatal(err)
 	}
 	defer conn.Close()
-	info, config, err := conn.GetData()
+
+	info, err := conn.GetInfo()
 	fatalIfErr(err)
 
 	rawMetrics, rawKeyspaceMetrics, metricsErr := getRawMetrics(info)
@@ -49,6 +51,13 @@ func main() {
 	fatalIfErr(err)
 
 	if args.HasInventory() {
+		var config map[string]string
+		if args.ConfigInventory {
+			config, err = conn.GetConfig()
+			if err != nil {
+				log.Warn("can't run Redis 'CONFIG' command. Inventory configuration data won't be reported. Got: %v", err)
+			}
+		}
 		rawInventory := getRawInventory(config, rawMetrics)
 		populateInventory(e.Inventory, rawInventory)
 	}
