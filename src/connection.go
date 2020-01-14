@@ -27,6 +27,14 @@ type keyInfo struct {
 	keyType   string
 }
 
+type configConnectionError struct {
+	cause error
+}
+
+func (c configConnectionError) Error() string {
+	return "can't execute redis 'CONFIG' command: " + c.cause.Error()
+}
+
 func newRedisCon(hostname string, port int, unixSocket string, password string) (conn, error) {
 
 	connectTimeout := redis.DialConnectTimeout(time.Second * 5)
@@ -69,10 +77,10 @@ func (r redisConn) GetInfo() (string, error) {
 
 func (r redisConn) GetConfig() (map[string]string, error) {
 	if err := r.c.Send("CONFIG", "GET", "*"); err != nil {
-		return nil, fmt.Errorf("can't write CONFIG Redis command: %v", err)
+		return nil, configConnectionError{cause: err}
 	}
 	if err := r.c.Flush(); err != nil {
-		return nil, fmt.Errorf("can't send CONFIG Redis command: %v", err)
+		return nil, configConnectionError{cause: err}
 	}
 	return redis.StringMap(r.c.Receive())
 }

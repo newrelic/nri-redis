@@ -55,7 +55,13 @@ func main() {
 		if args.ConfigInventory {
 			config, err = conn.GetConfig()
 			if err != nil {
-				log.Warn("can't run Redis 'CONFIG' command. Inventory configuration data won't be reported. Got: %v", err)
+				fmtStr := "%v. Configuration inventory won't be reported"
+				if _, ok := err.(configConnectionError); ok {
+					fmtStr += ". This may be expected If you are monitoring a managed " +
+						"Redis instance with limited permissions. " +
+						"Set the 'config_inventory' argument to 'false' to remove this message"
+				}
+				log.Warn(fmtStr, err)
 			}
 		}
 		rawInventory := getRawInventory(config, rawMetrics)
