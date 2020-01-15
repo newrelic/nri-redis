@@ -57,7 +57,7 @@ func main() {
 			if err != nil {
 				fmtStr := "%v. Configuration inventory won't be reported"
 				if _, ok := err.(configConnectionError); ok {
-					fmtStr += ". This may be expected If you are monitoring a managed " +
+					fmtStr += ". This may be expected if you are monitoring a managed " +
 						"Redis instance with limited permissions. " +
 						"Set the 'config_inventory' argument to 'false' to remove this message"
 				}
