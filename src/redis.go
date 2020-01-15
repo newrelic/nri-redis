@@ -21,6 +21,7 @@ type argumentList struct {
 	KeysLimit        int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
 	Password         string       `help:"Password to use when connecting to the Redis server."`
 	RemoteMonitoring bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
+	ConfigInventory  bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
 }
 
 const (
@@ -40,7 +41,8 @@ func main() {
 		log.Fatal(err)
 	}
 	defer conn.Close()
-	info, config, err := conn.GetData()
+
+	info, err := conn.GetInfo()
 	fatalIfErr(err)
 
 	rawMetrics, rawKeyspaceMetrics, metricsErr := getRawMetrics(info)
@@ -49,6 +51,19 @@ func main() {
 	fatalIfErr(err)
 
 	if args.HasInventory() {
+		var config map[string]string
+		if args.ConfigInventory {
+			config, err = conn.GetConfig()
+			if err != nil {
+				fmtStr := "%v. Configuration inventory won't be reported"
+				if _, ok := err.(configConnectionError); ok {
+					fmtStr += ". This may be expected if you are monitoring a managed " +
+						"Redis instance with limited permissions. " +
+						"Set the 'config_inventory' argument to 'false' to remove this message"
+				}
+				log.Warn(fmtStr, err)
+			}
+		}
 		rawInventory := getRawInventory(config, rawMetrics)
 		populateInventory(e.Inventory, rawInventory)
 	}

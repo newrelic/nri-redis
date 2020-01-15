@@ -10,7 +10,8 @@ import (
 )
 
 type conn interface {
-	GetData() (string, map[string]string, error)
+	GetInfo() (string, error)
+	GetConfig() (map[string]string, error)
 	setKeysType(string, []string, map[string]keyInfo) error
 	setKeysLength(string, []string, map[string]keyInfo) error
 	GetRawCustomKeys(map[string][]string) (map[string]map[string]keyInfo, error)
@@ -24,6 +25,14 @@ type redisConn struct {
 type keyInfo struct {
 	keyLength int64
 	keyType   string
+}
+
+type configConnectionError struct {
+	cause error
+}
+
+func (c configConnectionError) Error() string {
+	return "can't execute redis 'CONFIG' command: " + c.cause.Error()
 }
 
 func newRedisCon(hostname string, port int, unixSocket string, password string) (conn, error) {
@@ -56,27 +65,24 @@ func newRedisCon(hostname string, port int, unixSocket string, password string) 
 	return redisConn{c}, nil
 }
 
-func (r redisConn) GetData() (string, map[string]string, error) {
+func (r redisConn) GetInfo() (string, error) {
 	if err := r.c.Send("INFO"); err != nil {
-		return "", nil, fmt.Errorf("Failure when writing INFO Redis command, got error: %v", err)
-	}
-	if err := r.c.Send("CONFIG", "GET", "*"); err != nil {
-		return "", nil, fmt.Errorf("Failure when writing CONFIG Redis command, got error: %v", err)
+		return "", fmt.Errorf("can't write INFO Redis command: %v", err.Error())
 	}
 	if err := r.c.Flush(); err != nil {
-		return "", nil, fmt.Errorf("Failure sending INFO and CONFIG commands, got error: %v", err)
+		return "", fmt.Errorf("can't send INFO Redis command: %v", err.Error())
 	}
+	return redis.String(r.c.Receive())
+}
 
-	info, err := redis.String(r.c.Receive())
-	if err != nil {
-		return "", nil, fmt.Errorf("Failure when executing 'INFO' command, got error: %v", err)
+func (r redisConn) GetConfig() (map[string]string, error) {
+	if err := r.c.Send("CONFIG", "GET", "*"); err != nil {
+		return nil, configConnectionError{cause: err}
 	}
-	config, err := redis.StringMap(r.c.Receive())
-	if err != nil {
-		log.Warn("Failure when executing 'CONFIG' command, inventory configuration data will not be reported, got error: %v", err)
-
+	if err := r.c.Flush(); err != nil {
+		return nil, configConnectionError{cause: err}
 	}
-	return info, config, nil
+	return redis.StringMap(r.c.Receive())
 }
 
 func (r redisConn) Close() {

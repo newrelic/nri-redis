@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.4.0 (2020-01-13)
+### Added
+- `CONFIG_INVENTORY` configuration option (default: true). Set it to `false` to avoid invoking the Redis
+  `CONFIG` command when querying for inventory data. This option is useful in environments where the Redis
+  `CONFIG` command is prohibited (e.g. AWS ElastiCache).
+
+### Changed
+- Avoid invoking the `CONFIG` command if the Inventory data is skipped.
+
 ## 1.3.0 (2019-11-18)
 ### Changed
 - Renamed the integration executable from nr-redis to nri-redis in order to be consistent with the package naming. **Important Note:** if you have any security module rules (eg. SELinux), alerts or automation that depends on the name of this binary, these will have to be updated.
