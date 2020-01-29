@@ -1,5 +1,5 @@
   redis-config.yml: |
-    ----
+    ---
     # Run auto discovery to find pods with label "app=redis"
     # https://docs.newrelic.com/docs/integrations/host-integrations/installation/container-auto-discovery
     discovery:
