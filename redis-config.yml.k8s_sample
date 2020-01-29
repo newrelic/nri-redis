@@ -1,0 +1,21 @@
+  redis-config.yml: |
+    ----
+    # Run auto discovery to find pods with label "app=redis"
+    # https://docs.newrelic.com/docs/integrations/host-integrations/installation/container-auto-discovery
+    discovery:
+      command:
+        # Run NRI Discovery for Kubernetes
+        # https://github.com/newrelic/nri-discovery-kubernetes
+        exec: /var/db/newrelic-infra/nri-discovery-kubernetes
+        match:
+          label.app: redis
+    integrations:
+      - name: nri-redis
+        env:
+          # using the discovered IP as the hostname address
+          HOSTNAME: ${discovery.ip}
+          PORT: 6379
+          KEYS: '{"0":["<KEY_1>"],"1":["<KEY_2>"]}'
+          REMOTE_MONITORING: true
+        labels:
+          env: production
