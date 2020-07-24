@@ -1,71 +1,87 @@
-# New Relic Infrastructure Integration for Redis
-In order to know how the Redis integration works and how to run it with the Infrastructure agent please check [the documentation](https://docs.newrelic.com/docs/redis-integration-new-relic-infrastructure).
+[![Community Project header](https://github.com/newrelic/open-source-office/raw/master/examples/categories/images/Community_Project.png)](https://github.com/newrelic/open-source-office/blob/master/examples/categories/index.md#community-project)
 
-## Integration Development usage
+# New Relic infrastructure integration for Redis
 
-Assuming that you have the source code and Go tool installed (go version 1.9) then you can build and run the Redis Integration locally. 
-* Go to the directory of the Redis integration and build it
+Our Redis integration reports critical performance data from your Redis  server to New Relic products. You can view this metric data and inventory data in pre-built dashboards, create alert policies, and create custom queries and charts. You can also specify keys that are important to your application and get information about their length.
+
+## Installation and usage
+
+For installation and usage instructions, see our [documentation web site](https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/redis-monitoring-integration).
+
+## Building
+
+Golang is required to build the integration. We recommend Golang 1.11 or higher.
+
+After cloning this repository, go to the directory of the Redis integration and build it:
+
 ```bash
 $ make
 ```
-* The command above will execute the tests for the Redis integration and build an executable file called `nri-redis` under `bin` directory. Run `nri-redis`:
+
+The command above executes the tests for the Redis integration and builds an executable file called `nri-redis` under the `bin` directory. 
+
+To start the integration, run `nri-redis`:
+
 ```bash
 $ ./bin/nri-redis
 ```
-* If you want to know more about usage of `./bin/nri-redis` check
+
+If you want to know more about usage of `./bin/nri-redis`, pass the `-help` parameter:
+
 ```bash
 $ ./bin/nri-redis -help
 ```
 
-For managing external dependencies [govendor tool](https://github.com/kardianos/govendor) is used. It is required to lock all external dependencies to specific version (if possible) into vendor directory.
+External dependencies are managed through the [govendor tool](https://github.com/kardianos/govendor). Locking all external dependencies to a specific version (if possible) into the vendor directory is required.
 
-## Agent configuration
+## Testing
 
-* First of all it's required to install the agent. Please have a look at the [agent installation documentation](https://docs.newrelic.com/docs/infrastructure/new-relic-infrastructure/installation/install-infrastructure-agent-linux)
-* You can also have a look at the [configuration documentation](https://docs.newrelic.com/docs/infrastructure/new-relic-infrastructure/configuration/configure-infrastructure-agent)
-* Before configuring the redis integration is also recommended to understand the [integration configuration file](https://docs.newrelic.com/docs/integrations/integrations-sdk/file-specifications/integration-configuration-file-specifications)
+To run the tests execute:
 
-### Redis Integration configuration
-
-You can find a configuration sample file called `redis-config.yml.sample` in this project. Use this file as a guide and create your own config file `redis-config.yml` with your own configuration parameters:
-- **hostname**: Hostname or IP where Redis server is running.
-- **port**: Port on which Redis server is listening.
-- **keys**: List of the keys for retrieving their lengths.
-- **remote_monitoring**: It allows to monitor multiple instances. New users should have this value enabled. `remote_monitoring: true`
-
-## Installation
-
-1. Download the Redis integration.
-2. Copy the `redis-definition.yml` and `/bin` into `/var/db/newrelic-infra/newrelic-integrations`
-3. Add execute permissions for the binary file nri-redis (if required)
-4. Copy `redis-config.yml` into `/etc/newrelic-infra/integrations.d`
-
-## Contributing Code
-
-We welcome code contributions (in the form of pull requests) from our user
-community. Before submitting a pull request please review [these guidelines](https://github.com/newrelic/nri-redis/blob/master/CONTRIBUTING.md).
-
-Following these helps us efficiently review and incorporate your contribution
-and avoid breaking your code with future changes to the agent.
-
-## Custom Integrations
-
-To extend your monitoring solution with custom metrics, we offer the Integrations
-Golang SDK which can be found on [github](https://github.com/newrelic/infra-integrations-sdk).
-
-Refer to [our docs site](https://docs.newrelic.com/docs/infrastructure/integrations-sdk/get-started/intro-infrastructure-integrations-sdk)
-to get help on how to build your custom integrations.
+```bash
+$ make test
+```
 
 ## Support
 
-You can find more detailed documentation [on our website](http://newrelic.com/docs),
-and specifically in the [Infrastructure category](https://docs.newrelic.com/docs/infrastructure).
+Should you need assistance with New Relic products, you are in good hands with several support diagnostic tools and support channels.
 
-If you can't find what you're looking for there, reach out to us on our [support
-site](http://support.newrelic.com/) or our [community forum](http://forum.newrelic.com)
-and we'll be happy to help you.
+> This [troubleshooting framework](https://discuss.newrelic.com/t/troubleshooting-frameworks/108787) steps you through common troubleshooting questions.
 
-Find a bug? Contact us via [support.newrelic.com](http://support.newrelic.com/),
-or email support@newrelic.com.
+> New Relic offers NRDiag, [a client-side diagnostic utility](https://docs.newrelic.com/docs/using-new-relic/cross-product-functions/troubleshooting/new-relic-diagnostics) that automatically detects common problems with New Relic agents. If NRDiag detects a problem, it suggests troubleshooting steps. NRDiag can also automatically attach troubleshooting data to a New Relic Support ticket.
 
-New Relic, Inc.
+If the issue has been confirmed as a bug or is a Feature request, please file a Github issue.
+
+**Support Channels**
+
+* [New Relic Documentation](https://docs.newrelic.com): Comprehensive guidance for using our platform
+* [New Relic Community](https://discuss.newrelic.com): The best place to engage in troubleshooting questions
+* [New Relic Developer](https://developer.newrelic.com/): Resources for building a custom observability applications
+* [New Relic University](https://learn.newrelic.com/): A range of online training for New Relic users of every level
+
+## Privacy
+
+At New Relic we take your privacy and the security of your information seriously, and are committed to protecting your information. We must emphasize the importance of not sharing personal data in public forums, and ask all users to scrub logs and diagnostic information for sensitive information, whether personal, proprietary, or otherwise.
+
+We define “Personal Data” as any information relating to an identified or identifiable individual, including, for example, your name, phone number, post code or zip code, Device ID, IP address and email address.
+
+Review [New Relic’s General Data Privacy Notice](https://newrelic.com/termsandconditions/privacy) for more information.
+
+## Contributing
+
+We encourage your contributions to improve the Redis integration! Keep in mind when you submit your pull request, you'll need to sign the CLA via the click-through using CLA-Assistant. You only have to sign the CLA one time per project.
+
+If you have any questions, or to execute our corporate CLA, required if your contribution is on behalf of a company,  please drop us an email at opensource@newrelic.com.
+
+**A note about vulnerabilities**
+
+As noted in our [security policy](/SECURITY.md), New Relic is committed to the privacy and security of our customers and their data. We believe that providing coordinated disclosure by security researchers and engaging with the security community are important means to achieve our security goals.
+
+If you believe you have found a security vulnerability in this project or any of New Relic's products or websites, we welcome and greatly appreciate you reporting it to New Relic through [HackerOne](https://hackerone.com/newrelic).
+
+If you would like to contribute to this project, please review [these guidelines](./CONTRIBUTING.md).
+
+To all contributors, we thank you!  Without your contribution, this project would not be what it is today.
+
+## License
+nri-redis is licensed under the [Apache 2.0](http://apache.org/licenses/LICENSE-2.0.txt) License.
