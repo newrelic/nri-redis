@@ -1118,6 +1118,9 @@
                   },
                   "system.usedMemoryRssBytes": {
                     "type": "number"
+                  },
+                  "system.maxmemory": {
+                    "type": "number"
                   }
                 },
                 "required": [
@@ -1162,7 +1165,8 @@
                   "system.usedMemoryBytes",
                   "system.usedMemoryLuaBytes",
                   "system.usedMemoryPeakBytes",
-                  "system.usedMemoryRssBytes"
+                  "system.usedMemoryRssBytes",
+                  "system.maxmemory"
                 ]
               }
             ],
