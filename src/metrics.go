@@ -28,7 +28,7 @@ var metricsDefinition = map[string][]interface{}{
 	"system.usedMemoryPeakBytes":    {"used_memory_peak", metric.GAUGE},
 	"system.usedMemoryLuaBytes":     {"used_memory_lua", metric.GAUGE},
 	"system.totalSystemMemoryBytes": {"total_system_memory", metric.GAUGE},
-	"system.maxmemory":              {"maxmemory", metric.GAUGE},
+	"system.maxmemoryBytes":         {"maxmemory", metric.GAUGE},
 	"system.memFragmentationRatio":  {"mem_fragmentation_ratio", metric.GAUGE},
 	// Persistence
 	"db.rdbChangesSinceLastSave":       {"rdb_changes_since_last_save", metric.GAUGE},

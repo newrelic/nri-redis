@@ -161,7 +161,7 @@ var expectedMetricSetFromSample = map[string]interface{}{
 	"system.usedMemoryLuaBytes":              37888.0,
 	"system.usedMemoryPeakBytes":             1032128.0,
 	"system.usedMemoryRssBytes":              2260992.0,
-	"system.maxmemory":                       123.0,
+	"system.maxmemoryBytes":                  123.0,
 	"system.memFragmentationRatio":           2.23,
 }
 
