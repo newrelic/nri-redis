@@ -136,7 +136,12 @@ func createIntegration() (*integration.Integration, error) {
 
 func entity(i *integration.Integration, args *argumentList) (*integration.Entity, error) {
 	if args.RemoteMonitoring {
-		n := fmt.Sprintf("%s:%d", args.Hostname, args.Port)
+		var n string
+		if args.UnixSocketPath != "" {
+			n = fmt.Sprintf("%s:%s", args.Hostname, args.UnixSocketPath)
+		} else {
+			n = fmt.Sprintf("%s:%d", args.Hostname, args.Port)
+		}
 		return i.Entity(n, entityRemoteType)
 	}
 
