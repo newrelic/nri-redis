@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.5.0 (2020-08-10)
 ### Added
-- `USE_UNIX_SOCKET` configuration option (default: false). Flag to add the UnixSocketPath value to the entity. This will help to uniquely identify your entities when you're monitoring more than one Redis instance on the same host using Unix sockets.
+- `USE_UNIX_SOCKET` configuration option (default: `false`). Adds the `UnixSocketPath` value to the entity. This helps to uniquely identify your entities when you're monitoring more than one Redis instance on the same host using Unix sockets.
   
 ## 1.5.0 (2020-01-13)
 ### Added

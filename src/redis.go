@@ -20,7 +20,7 @@ type argumentList struct {
 	Keys             sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
 	KeysLimit        int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
 	Password         string       `help:"Password to use when connecting to the Redis server."`
-	UseUnixSocket    bool         `default:"false" help:"Flag to add the UnixSocketPath value to the entity. If you are monitoring more than one Redis instance on the same host using Unix sockets, then you should set it to true."`
+	UseUnixSocket    bool         `default:"false" help:"Adds the UnixSocketPath value to the entity. If you are monitoring more than one Redis instance on the same host using Unix sockets, then you should set it to true."`
 	RemoteMonitoring bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
 	ConfigInventory  bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
 }
