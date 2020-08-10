@@ -7,45 +7,43 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEntity_LocalEntity(t *testing.T) {
-	args := argumentList{
-		RemoteMonitoring: false,
+func TestEntity_Metadata(t *testing.T) {
+	tests := map[string]struct {
+		args         *argumentList
+		wantMetadata *integration.EntityMetadata
+	}{
+		"LocalEntity": {
+			&argumentList{RemoteMonitoring: false},
+			nil,
+		},
+		"RemoteEntity": {
+			&argumentList{Hostname: "localhost", Port: 8080, RemoteMonitoring: true},
+			&integration.EntityMetadata{Name: "localhost:8080", Namespace: entityRemoteType},
+		},
+		"RemoteEntityUnixSocket": {
+			&argumentList{Hostname: "localhost", Port: 8080, RemoteMonitoring: true, UnixSocketPath: "/socket/path"},
+			&integration.EntityMetadata{Name: "localhost:8080", Namespace: entityRemoteType},
+		},
+		"RemoteEntityUnixSocketAndUseUnixSocket": {
+			&argumentList{Hostname: "localhost", Port: 8080, RemoteMonitoring: true, UnixSocketPath: "/socket/path", UseUnixSocket: true},
+			&integration.EntityMetadata{Name: "localhost:/socket/path", Namespace: entityRemoteType},
+		},
 	}
-	i, err := integration.New("test", integrationVersion)
-	assert.NoError(t, err)
 
-	e, err := entity(i, &args)
-	assert.NoError(t, err)
-	assert.Nil(t, e.Metadata)
-}
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			i, err := integration.New(name, integrationVersion)
+			assert.NoError(t, err)
 
-func TestEntity_RemoteEntityPort(t *testing.T) {
-	args := argumentList{
-		Hostname:         "localhost",
-		Port:             8080,
-		RemoteMonitoring: true,
+			e, err := entity(i, tc.args)
+			assert.NoError(t, err)
+
+			if tc.wantMetadata == nil {
+				assert.Nil(t, e.Metadata)
+			} else {
+				assert.Equal(t, tc.wantMetadata.Name, e.Metadata.Name)
+				assert.Equal(t, tc.wantMetadata.Namespace, e.Metadata.Namespace)
+			}
+		})
 	}
-	i, err := integration.New("test", integrationVersion)
-	assert.NoError(t, err)
-
-	e, err := entity(i, &args)
-	assert.NoError(t, err)
-	assert.Equal(t, "localhost:8080", e.Metadata.Name)
-	assert.Equal(t, entityRemoteType, e.Metadata.Namespace)
-
-}
-func TestEntity_RemoteEntityUnixSocket(t *testing.T) {
-	args := argumentList{
-		Hostname:         "localhost",
-		Port:             8080,
-		RemoteMonitoring: true,
-		UnixSocketPath:   "/socket/path",
-	}
-	i, err := integration.New("test", integrationVersion)
-	assert.NoError(t, err)
-
-	e, err := entity(i, &args)
-	assert.NoError(t, err)
-	assert.Equal(t, "localhost:/socket/path", e.Metadata.Name)
-	assert.Equal(t, entityRemoteType, e.Metadata.Namespace)
 }
