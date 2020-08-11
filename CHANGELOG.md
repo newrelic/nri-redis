@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - `USE_UNIX_SOCKET` configuration option (default: `false`). Adds the `UnixSocketPath` value to the entity. This helps to uniquely identify your entities when you're monitoring more than one Redis instance on the same host using Unix sockets.
   
-## 1.5.0 (2020-01-13)
+## 1.4.0 (2020-01-13)
 ### Added
 - `CONFIG_INVENTORY` configuration option (default: true). Set it to `false` to avoid invoking the Redis
   `CONFIG` command when querying for inventory data. This option is useful in environments where the Redis
