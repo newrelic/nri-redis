@@ -16,6 +16,10 @@ instances:
       # versus remote entities:
       # https://github.com/newrelic/infra-integrations-sdk/blob/master/docs/entity-definition.md
       remote_monitoring: true
+
+      # New users should leave this property as `true`, to uniquely identify the monitored entities when using
+      # Unix sockets.
+      use_unix_socket: true
     labels:
       environment: production
 
@@ -33,5 +37,9 @@ instances:
       # versus remote entities:
       # https://github.com/newrelic/infra-integrations-sdk/blob/master/docs/entity-definition.md
       remote_monitoring: true
+
+      # New users should leave this property as `true`, to uniquely identify the monitored entities when using
+      # Unix sockets.
+      use_unix_socket: true
     labels:
       environment: production
