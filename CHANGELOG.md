@@ -5,10 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.5.0 (2020-08-17)
+## 1.6.0 (2020-08-17)
 ### Added
 - `maxmemoryBytes` metric. The maxmemory value in the Redis Info is set.
 
+## 1.5.0 (2020-08-10)
+### Added
+- `USE_UNIX_SOCKET` configuration option (default: `false`). Adds the `UnixSocketPath` value to the entity. This helps to uniquely identify your entities when you're monitoring more than one Redis instance on the same host using Unix sockets.
+  
 ## 1.4.0 (2020-01-13)
 ### Added
 - `CONFIG_INVENTORY` configuration option (default: true). Set it to `false` to avoid invoking the Redis
