@@ -56,8 +56,8 @@ var expectedRawInfoFromSample = map[string]interface{}{
 	"master_repl_offset":             0,
 	"master_replid":                  "f01929bda7bae06c4aaf8eb319ed04ec64e97965",
 	"master_replid2":                 "0000000000000000000000000000000000000000",
-	"maxmemory":                      0,
-	"maxmemory_human":                "0B",
+	"maxmemory":                      123,
+	"maxmemory_human":                "123B",
 	"maxmemory_policy":               "noeviction",
 	"mem_allocator":                  "libc",
 	"mem_fragmentation_ratio":        2.23,
@@ -161,6 +161,7 @@ var expectedMetricSetFromSample = map[string]interface{}{
 	"system.usedMemoryLuaBytes":              37888.0,
 	"system.usedMemoryPeakBytes":             1032128.0,
 	"system.usedMemoryRssBytes":              2260992.0,
+	"system.maxmemoryBytes":                  123.0,
 	"system.memFragmentationRatio":           2.23,
 }
 
@@ -239,12 +240,12 @@ func TestPopulateMetrics(t *testing.T) {
 	assert.NoError(t, populateMetrics(ms, rawMetrics, metricsDefinition))
 
 	expectedMetricSetFromSample[attr.Key] = attr.Value
-	assert.Equal(t, len(ms.Metrics), len(expectedMetricSetFromSample))
+	assert.Equal(t, len(expectedMetricSetFromSample), len(ms.Metrics))
 	if !reflect.DeepEqual(expectedMetricSetFromSample, ms.Metrics) {
 		t.Error("unexpected metric set")
 		for k, v := range ms.Metrics {
 			if v != expectedMetricSetFromSample[k] {
-				t.Errorf("key: %+v expected: %+v have: %+v", k, v, ms.Metrics[k])
+				t.Errorf("key: %+v expected: %+v have: %+v", k, expectedMetricSetFromSample[k], ms.Metrics[k])
 			}
 		}
 	}
