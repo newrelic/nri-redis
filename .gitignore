@@ -35,3 +35,4 @@ target/
 Session.vim
 
 bin/
+dist/

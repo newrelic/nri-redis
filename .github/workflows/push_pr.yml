@@ -1,0 +1,70 @@
+name: Push/PR pipelien
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!master'
+
+#env:
+
+jobs:
+
+  validate:
+    name: Validate code via linters
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Validate code
+        run: make ci/validate
+
+  test-linux:
+    name: Run unit tests on linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Unit tests
+        run: make ci/test
+
+  # can't run this step inside of container because of tests specific
+  test-integration-linux:
+    name: Run integration tests on linux
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/github.com/${{ github.event.repository.full_name }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          path: src/github.com/${{ github.event.repository.full_name }}
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.9.7'
+      - name: Integration test
+        env:
+          GOPATH: "${{ github.workspace }}"
+        run: make integration-test
+
+  build:
+    name: Build binary for all platforms:arch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build all platforms:arch
+        run: make ci/build
+
+  snyk:
+    name: Run security checks via snyk
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/golang@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+

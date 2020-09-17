@@ -1,0 +1,30 @@
+before:
+  hooks:
+  # You may remove this if you don't use go modules.
+  #- go mod download
+  # you may remove this if you don't need go generate
+  #- go generate ./...
+  #- make validate
+#
+#
+#  BUILDS
+#
+#
+builds:
+  - id: nri-redis
+    main: ./src
+    binary: nri-redis
+    #ldflags:
+    #  - -s -w -X github.com/newrelic/nri-flex/internal/load.IntegrationVersion={{.Version}}
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - 386
+      - amd64
+      - arm
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: 386
