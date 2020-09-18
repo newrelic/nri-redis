@@ -12,18 +12,35 @@ $(GORELEASER_BIN): bin
 	@(rm -f /tmp/goreleaser.tar.gz)
 	@echo "=== $(INTEGRATION) === [$(GORELEASER_BIN)] goreleaser downloaded"
 
+.PHONY : release/deps
 release/deps: $(GORELEASER_BIN)
 
-# TODO: rename it
+.PHONY : release
 release: release/deps
 ifeq ($(PRERELEASE), true)
 	@echo "pre-release"
-	@$(GORELEASER_BIN) release --config $(CURDIR)/build/.goreleaser.yml --snapshot --rm-dist
+	@$(GORELEASER_BIN) release --config $(CURDIR)/build/.goreleaser.yml --rm-dist
 else
 	@echo "build"
 	# this will just compile binaries
 	@$(GORELEASER_BIN) build --config $(CURDIR)/build/.goreleaser.yml --snapshot --rm-dist
 endif
+
+.PHONY : release/fix-archive
+release/fix-archive:
+	@echo "=== $(INTEGRATION) === [release/fix-archive] fixing archives internal structure"
+
+.PHONY : release/sign
+release/sign:
+	@echo "=== $(INTEGRATION) === [release/sign] signing packages"
+	@bash $(CURDIR)/build/sign.sh
+
+
+.PHONY : release/publish
+release/publish: release/fix-archive release/sign
+	@echo "=== $(INTEGRATION) === [release/publish] publishing artifacts"
+
+
 
 OS := $(shell uname -s)
 ifeq ($(OS), Darwin)

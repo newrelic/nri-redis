@@ -18,4 +18,19 @@ ci/build: ci/deps
 
 .PHONY : ci/prerelease
 ci/prerelease: ci/deps
-	@docker run --rm -t -v $(CURDIR):/go/src/github.com/newrelic/nri-redis -w /go/src/github.com/newrelic/nri-redis -e PRERELEASE=true $(BUILDER_TAG) make release
+	@docker run --rm -t \
+		-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
+		-w /go/src/github.com/newrelic/nri-redis \
+		$(BUILDER_TAG) make release
+
+.PHONY : ci/publish
+ci/publish:
+	@docker run --rm -t \
+		-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
+		-w /go/src/github.com/newrelic/nri-redis \
+		-e PRERELEASE=true \
+		-e GPG_MAIL=$(GPG_MAIL) \
+		-e GPG_PASSPHRASE=$(GPG_PASSPHRASE) \
+		-e GPG_PRIVATE_KEY=$(GPG_PRIVATE_KEY) \
+		$(BUILDER_TAG) make release/publish
+

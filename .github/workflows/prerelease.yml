@@ -62,6 +62,8 @@ jobs:
   release:
     name: Build binary for all platforms:arch and publish on GH Releases
     runs-on: ubuntu-latest
+    env:
+      # add secrets here
     steps:
       - uses: actions/checkout@v2
 

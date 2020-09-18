@@ -14,23 +14,24 @@ builds:
   - id: nri-redis
     main: ./src
     binary: nri-redis
+    gobinary: "go1.9.7"
     #ldflags:
     #  - -s -w -X github.com/newrelic/nri-flex/internal/load.IntegrationVersion={{.Version}}
     goos:
       - linux
-      - darwin
-      - windows
+#      - darwin
+#      - windows
     goarch:
-      - 386
+#      - 386
       - amd64
-      - arm
-      - arm64
+#      - arm
+#      - arm64
     ignore:
       - goos: darwin
         goarch: 386
 
 nfpms:
-  - file_name_template: "nri-redis_{{ .Env.TAG }}_{{ .Arch }}"
+  - file_name_template: "{{ .ProjectName }}_{{ .Version }}-1_{{ .Arch }}"
     vendor: "New Relic, Inc."
     homepage: "https://www.newrelic.com/infrastructure"
     maintainer: "New Relic Infrastructure Team <infrastructure-eng@newrelic.com>"
@@ -55,6 +56,15 @@ nfpms:
           amd64: x86_64
 
 archives:
+  -
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}"
+    files:
+      - redis-config.yml.sample
+      - redis-definition.yml
     format_overrides:
       - goos: windows
         format: zip
+
+# we use custom publisher for fixing archives and signing them
+release:
+  disable: true
