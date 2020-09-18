@@ -16,8 +16,14 @@ release/deps: $(GORELEASER_BIN)
 
 # TODO: rename it
 release: release/deps
+ifeq ($(PRERELEASE), true)
+	@echo "pre-release"
+	@$(GORELEASER_BIN) release --config $(CURDIR)/build/.goreleaser.yml --snapshot --rm-dist
+else
+	@echo "build"
 	# this will just compile binaries
 	@$(GORELEASER_BIN) build --config $(CURDIR)/build/.goreleaser.yml --snapshot --rm-dist
+endif
 
 OS := $(shell uname -s)
 ifeq ($(OS), Darwin)
