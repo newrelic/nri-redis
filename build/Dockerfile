@@ -7,4 +7,3 @@ RUN apt-get update \
         gnupg2 \
     && go get golang.org/dl/go1.9.7 \
     && /go/bin/go1.9.7 download
-
