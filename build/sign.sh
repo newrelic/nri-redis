@@ -20,7 +20,7 @@ echo "%__gpg_sign_cmd   %{__gpg} gpg --no-verbose --no-armor --batch --pinentry-
 echo "===> Importing GPG private key from GHA secrets..."
 printf %s ${GPG_PRIVATE_KEY} | base64 -d | gpg --batch --import -
 
-echo "===> Importing GPG signature, needed from Goreleaser to sign"
+echo "===> Importing GPG signature, needed from Goreleaser to verify signature"
 gpg --export -a ${GPG_MAIL} > /tmp/RPM-GPG-KEY-${GPG_MAIL}
 rpm --import /tmp/RPM-GPG-KEY-${GPG_MAIL}
 
