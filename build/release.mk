@@ -1,7 +1,7 @@
 BUILD_DIR    := ./bin/
 GORELEASER_VERSION := v0.143.0
 GORELEASER_BIN ?= bin/goreleaser
-TAG := $(git describe --exact-match --tags $(git log -n1 --pretty='%h'))
+export VERSION=$(shell git describe --exact-match --tags $(git log -n1 --pretty='%h'))
 
 bin:
 	@mkdir -p $(BUILD_DIR)
@@ -30,7 +30,7 @@ endif
 .PHONY : release/fix-archive
 release/fix-archive:
 	@echo "=== $(INTEGRATION) === [release/fix-archive] fixing archives internal structure"
-	@bash $(CURDIR)/build/fix_tarball.sh $(TAG) amd64
+	@bash $(CURDIR)/build/fix_tarball.sh '1.5.6' amd64
 
 .PHONY : release/sign
 release/sign:
