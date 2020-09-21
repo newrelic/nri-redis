@@ -37,7 +37,7 @@ release/sign:
 
 
 .PHONY : release/publish
-release/publish: release/fix-archive release/sign
+release/publish: release release/fix-archive release/sign
 	@echo "=== $(INTEGRATION) === [release/publish] publishing artifacts"
 
 
