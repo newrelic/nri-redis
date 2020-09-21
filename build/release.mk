@@ -1,7 +1,6 @@
 BUILD_DIR    := ./bin/
 GORELEASER_VERSION := v0.143.0
 GORELEASER_BIN ?= bin/goreleaser
-export VERSION=$(shell git describe --exact-match --tags $(git log -n1 --pretty='%h'))
 
 bin:
 	@mkdir -p $(BUILD_DIR)
