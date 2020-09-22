@@ -18,12 +18,17 @@ ci/build: ci/deps
 
 .PHONY : ci/prerelease
 ci/prerelease:
+ifdef TAG
 	@docker run --rm -t \
-		-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
-		-w /go/src/github.com/newrelic/nri-redis \
-		-e PRERELEASE=true \
-		-e GPG_MAIL=$(GPG_MAIL) \
-		-e GPG_PASSPHRASE=$(GPG_PASSPHRASE) \
-		-e GPG_PRIVATE_KEY=$(GPG_PRIVATE_KEY) \
-		$(BUILDER_TAG) make release
-
+			-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
+			-w /go/src/github.com/newrelic/nri-redis \
+			-e PRERELEASE=true \
+			-e GITHUB_TOKEN \
+			-e TAG \
+			-e GPG_MAIL \
+			-e GPG_PASSPHRASE \
+			-e GPG_PRIVATE_KEY \
+			$(BUILDER_TAG) make release
+else
+	@echo "TAG env variable expected to be set"
+endif

@@ -39,6 +39,7 @@ release/sign:
 .PHONY : release/publish
 release/publish:
 	@echo "=== $(INTEGRATION) === [release/publish] publishing artifacts"
+	@bash $(CURDIR)/build/upload_packages_gh.sh
 
 .PHONY : release
 release: release/compile release/fix-archive release/sign release/publish
