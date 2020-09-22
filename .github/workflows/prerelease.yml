@@ -66,4 +66,4 @@ jobs:
       # add secrets here
     steps:
       - uses: actions/checkout@v2
-
+        run: make ci/prerelease

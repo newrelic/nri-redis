@@ -2,24 +2,32 @@
 set -e
 #
 #
-# Gets dist/tarball_fix created by Goreleaser and reorganize inside files
+# Gets dist/tarball_dirty created by Goreleaser and reorganize inside files
 #
 #
-for tarball_fix in $(find dist -regex ".*\.\(tar.gz_fix\)");do
-  tarball=${tarball_fix:5:${#tarball_fix}-9} # Strips begining and end chars
-  TARBALL_PATH="dist/tarball_temp/${tarball}"
-  mkdir -p ${TARBALL_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/
-  mkdir -p ${TARBALL_PATH}/etc/newrelic-infra/integrations.d/
-  echo "===> Decompress ${tarball} in ${TARBALL_PATH}"
-  tar -xvf ${tarball_fix} -C ${TARBALL_PATH}
+
+PROJECT_PATH=$1
+
+for tarball_dirty in $(find dist -regex ".*\.\(tar.gz_dirty\)");do
+  tarball=${tarball_dirty:5:${#tarball_dirty}-11} # Strips begining and end chars
+  TARBALL_TMP="dist/tarball_temp"
+  TARBALL_CONTENT_PATH="${TARBALL_TMP}/${tarball}_content"
+  mkdir -p ${TARBALL_CONTENT_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/
+  mkdir -p ${TARBALL_CONTENT_PATH}/etc/newrelic-infra/integrations.d/
+  echo "===> Decompress ${tarball} in ${TARBALL_CONTENT_PATH}"
+  tar -xvf ${tarball_dirty} -C ${TARBALL_CONTENT_PATH}
 
   echo "===> Move files inside ${tarball}"
-  mv ${TARBALL_PATH}/nri-redis "${TARBALL_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/"
-  mv ${TARBALL_PATH}/redis-definition.yml ${TARBALL_PATH}/var/db/newrelic-infra/newrelic-integrations/
-  mv ${TARBALL_PATH}/redis-config.yml.sample ${TARBALL_PATH}/etc/newrelic-infra/integrations.d/
+  mv ${TARBALL_CONTENT_PATH}/nri-redis "${TARBALL_CONTENT_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/"
+  mv ${TARBALL_CONTENT_PATH}/redis-definition.yml ${TARBALL_CONTENT_PATH}/var/db/newrelic-infra/newrelic-integrations/
+  mv ${TARBALL_CONTENT_PATH}/redis-config.yml.sample ${TARBALL_CONTENT_PATH}/etc/newrelic-infra/integrations.d/
 
-  echo "===> Creating tarball_fix ${tarball}"
-  cd ${TARBALL_PATH}
-  tar -czvf ${tarball} .
-  mv ${tarball} ../../
+  echo "===> Creating tarball ${tarball}"
+  cd ${TARBALL_CONTENT_PATH}
+  tar -czvf ../${tarball} .
+  cd $PROJECT_PATH
+  echo "===> Moving tarball ${tarball}"
+  mv "${TARBALL_TMP}/${tarball}" dist/
+  echo "===> Cleaning dirty tarball ${tarball_dirty}"
+  rm ${tarball_dirty}
 done

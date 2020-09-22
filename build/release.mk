@@ -15,21 +15,20 @@ $(GORELEASER_BIN): bin
 .PHONY : release/deps
 release/deps: $(GORELEASER_BIN)
 
-.PHONY : release
-release: release/deps
+.PHONY : release/compile
+release/compile: release/deps
 ifeq ($(PRERELEASE), true)
-	@echo "pre-release"
+	@echo "=== $(INTEGRATION) === [release/compile] PRE-RELEASE compiling all binaries, creating packages, archives"
 	@$(GORELEASER_BIN) release --config $(CURDIR)/build/.goreleaser.yml --rm-dist
 else
-	@echo "build"
-	# this will just compile binaries
+	@echo "=== $(INTEGRATION) === [release/compile] build compiling all binaries"
 	@$(GORELEASER_BIN) build --config $(CURDIR)/build/.goreleaser.yml --snapshot --rm-dist
 endif
 
 .PHONY : release/fix-archive
 release/fix-archive:
 	@echo "=== $(INTEGRATION) === [release/fix-archive] fixing archives internal structure"
-	@bash $(CURDIR)/build/fix_tarball.sh
+	@bash $(CURDIR)/build/fix_tarball.sh $(CURDIR)
 
 .PHONY : release/sign
 release/sign:
@@ -38,10 +37,12 @@ release/sign:
 
 
 .PHONY : release/publish
-release/publish: release release/fix-archive release/sign
+release/publish:
 	@echo "=== $(INTEGRATION) === [release/publish] publishing artifacts"
 
-
+.PHONY : release
+release: release/compile release/fix-archive release/sign release/publish
+	@echo "=== $(INTEGRATION) === [release/publish] full pre-release cycle complete"
 
 OS := $(shell uname -s)
 ifeq ($(OS), Darwin)
