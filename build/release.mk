@@ -29,7 +29,7 @@ endif
 .PHONY : release/fix-archive
 release/fix-archive:
 	@echo "=== $(INTEGRATION) === [release/fix-archive] fixing archives internal structure"
-	@bash $(CURDIR)/build/fix_tarball.sh '1.5.6' amd64
+	@bash $(CURDIR)/build/fix_tarball.sh
 
 .PHONY : release/sign
 release/sign:
