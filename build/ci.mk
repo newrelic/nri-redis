@@ -23,7 +23,7 @@ ifdef TAG
 			-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
 			-w /go/src/github.com/newrelic/nri-redis \
 			-e PRERELEASE=true \
-			-e GITHUB_TOKEN:$(GH_TOKEN) \
+			-e GITHUB_TOKEN=$(GH_TOKEN) \
 			-e TAG \
 			-e GPG_MAIL \
 			-e GPG_PASSPHRASE \
