@@ -60,10 +60,10 @@ func TestGetRawInventoryEmpty(t *testing.T) {
 func TestPopulateInventory(t *testing.T) {
 	i := inventory.New()
 	rawInventory := map[string]interface{}{
-		"redis_version": "3.2.3",
-		"requirepass":   "",
-		"masterauth":    "",
-		"save":          "900 1 300 10 60 10000",
+		"redis_version":              "3.2.3",
+		"requirepass":                "",
+		"masterauth":                 "",
+		"save":                       "900 1 300 10 60 10000",
 		"client-output-buffer-limit": "normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60",
 	}
 	expectedRedisVersion := "3.2.3"
