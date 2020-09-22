@@ -22,8 +22,11 @@ ci/prerelease:
 		-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
 		-w /go/src/github.com/newrelic/nri-redis \
 		-e PRERELEASE=true \
-		-e GPG_MAIL=$(GPG_MAIL) \
-		-e GPG_PASSPHRASE=$(GPG_PASSPHRASE) \
-		-e GPG_PRIVATE_KEY=$(GPG_PRIVATE_KEY) \
+		-e GITHUB_TOKEN \
+		-e GPG_MAIL \
+		-e GPG_PASSPHRASE \
+		-e GPG_PRIVATE_KEY \
+		-e TAG \
 		$(BUILDER_TAG) make release
+
 
