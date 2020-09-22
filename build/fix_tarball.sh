@@ -2,24 +2,24 @@
 set -e
 #
 #
-# Creates Redis tarball and outputs it in repo root
+# Gets dist/tarball_fix created by Goreleaser and reorganize inside files
 #
 #
-VERSION=$1
-ARCH=$2
-TARBALL_PATH='dist/fix_tarball'
+for tarball_fix in $(find dist -regex ".*\.\(tar.gz_fix\)");do
+  tarball=${tarball_fix:5:${#tarball_fix}-9} # Strips begining and end chars
+  TARBALL_PATH="dist/tarball_temp/${tarball}"
+  mkdir -p ${TARBALL_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/
+  mkdir -p ${TARBALL_PATH}/etc/newrelic-infra/integrations.d/
+  echo "===> Decompress ${tarball} in ${TARBALL_PATH}"
+  tar -xvf ${tarball_fix} -C ${TARBALL_PATH}
 
-mkdir -p ${TARBALL_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/
-mkdir -p ${TARBALL_PATH}/etc/newrelic-infra/integrations.d/
+  echo "===> Move files inside ${tarball}"
+  mv ${TARBALL_PATH}/nri-redis "${TARBALL_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/"
+  mv ${TARBALL_PATH}/redis-definition.yml ${TARBALL_PATH}/var/db/newrelic-infra/newrelic-integrations/
+  mv ${TARBALL_PATH}/redis-config.yml.sample ${TARBALL_PATH}/etc/newrelic-infra/integrations.d/
 
-echo "Decompression dist/nri-redis_linux_${VERSION}_${ARCH}.tar.gz in ${TARBALL_PATH}"
-tar -xvf dist/nri-redis_linux_${VERSION}_${ARCH}.tar.gz -C ${TARBALL_PATH}
-
-
-mv ${TARBALL_PATH}/nri-redis "${TARBALL_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/"
-mv ${TARBALL_PATH}/redis-definition.yml ${TARBALL_PATH}/var/db/newrelic-infra/newrelic-integrations/
-mv ${TARBALL_PATH}/redis-config.yml.sample ${TARBALL_PATH}/etc/newrelic-infra/integrations.d/
-
-cd ${TARBALL_PATH}
-tar -czvf nri-redis_linux_$VERSION_$ARCH.tar.gz . -C ../${TARBALL_PATH}
-
+  echo "===> Creating tarball_fix ${tarball}"
+  cd ${TARBALL_PATH}
+  tar -czvf ${tarball} .
+  mv ${tarball} ../../
+done

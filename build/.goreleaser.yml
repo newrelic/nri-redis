@@ -22,7 +22,7 @@ builds:
 #      - darwin
 #      - windows
     goarch:
-#      - 386
+      - 386
       - amd64
 #      - arm
 #      - arm64
@@ -58,7 +58,7 @@ nfpms:
 
 archives:
   - id: nri-redis
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}"
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}_fix"
     files:
       - redis-config.yml.sample
       - redis-definition.yml
