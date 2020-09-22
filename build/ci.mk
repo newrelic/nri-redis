@@ -17,7 +17,7 @@ ci/build: ci/deps
 	@docker run --rm -t -v $(CURDIR):/go/src/github.com/newrelic/nri-redis -w /go/src/github.com/newrelic/nri-redis $(BUILDER_TAG) make release/compile
 
 .PHONY : ci/prerelease
-ci/prerelease:
+ci/prerelease: ci/deps
 ifdef TAG
 	@docker run --rm -t \
 			-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
