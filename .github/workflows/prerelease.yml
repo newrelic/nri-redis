@@ -66,4 +66,5 @@ jobs:
       TAG: ${{ github.event.release.tag_name }}
     steps:
       - uses: actions/checkout@v2
+      - name: Pre release
         run: make ci/prerelease
