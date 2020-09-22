@@ -64,10 +64,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TAG: ${{ github.event.release.tag_name }}
-      GH_TOKEN: ${{ secret.GH_TOKEN }}
-      GPG_MAIL: ${{ secret.GPG_MAIL }}
-      GPG_PASSPHRASE: ${{ secret.GPG_PASSPHRASE }}
-      GPG_PRIVATE_KEY: ${{ secret.GPG_PRIVATE_KEY }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      GPG_MAIL: ${{ secrets.GPG_MAIL }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Pre release
