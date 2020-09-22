@@ -22,7 +22,7 @@ builds:
 #      - darwin
 #      - windows
     goarch:
-#      - 386
+      - 386
       - amd64
 #      - arm
 #      - arm64
@@ -31,7 +31,8 @@ builds:
         goarch: 386
 
 nfpms:
-  - file_name_template: "{{ .ProjectName }}_{{ .Version }}-1_{{ .Arch }}"
+  - id: nri-redis
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}-1_{{ .Arch }}"
     vendor: "New Relic, Inc."
     homepage: "https://www.newrelic.com/infrastructure"
     maintainer: "New Relic Infrastructure Team <infrastructure-eng@newrelic.com>"
@@ -56,8 +57,8 @@ nfpms:
           amd64: x86_64
 
 archives:
-  -
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}"
+  - id: nri-redis
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}_fix"
     files:
       - redis-config.yml.sample
       - redis-definition.yml
