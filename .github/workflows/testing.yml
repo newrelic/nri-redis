@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - '**'
-#      - '!master'
     tags-ignore:
       - '**'
 
@@ -23,4 +22,5 @@ jobs:
         run: echo "Wow, such debugging ${{ toJson(github.event) }}"
       - name: Validate code
         run: echo "HELLOOOOOOO"
+
 
