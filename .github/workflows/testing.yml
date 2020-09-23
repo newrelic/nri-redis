@@ -6,6 +6,8 @@ on: push
 #      - '**'
 #      - '!master'
 
+env:
+  THE_GITHUB_CONTEXT: ${{ toJson(github) }}
 
 jobs:
 
@@ -14,5 +16,7 @@ jobs:
     if: github.event.action != 'prereleased'
     runs-on: ubuntu-latest
     steps:
+      - name: Print context
+          run: echo "Wow, such debugging ${{ toJson(github.event) }}"
       - name: Validate code
         run: echo "HELLOOOOOOO"
