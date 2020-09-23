@@ -77,7 +77,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: go/src/github.com
+          path: go/src/github.com/nri-redis
       - name: Install Go
         uses: actions/setup-go@v2
         with:
