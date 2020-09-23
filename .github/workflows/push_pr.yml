@@ -73,11 +73,12 @@ jobs:
     runs-on: windows-2019
     env:
       GOPATH: ${{ github.workspace }}/go/src
+    defaults:
+      run:
+        working-directory: src/github.com/newrelic/nri-redis
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          path: go/src/github.com/newrelic/nri-redis
       - name: Install Go
         uses: actions/setup-go@v2
         with:
@@ -85,5 +86,4 @@ jobs:
       - name: Running unit tests
         shell: pwsh
         run: |
-          cd .\go\src\github.com\newrelic\nri-redis
           .\win_build.ps1 -installer
