@@ -85,5 +85,5 @@ jobs:
       - name: Running unit tests
         shell: pwsh
         run: |
-          cd .\go\src\github.com\nri-redis
+          cd .\go\src\github.com\newrelic\nri-redis
           .\win_build.ps1 -installer
