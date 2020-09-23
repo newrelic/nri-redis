@@ -78,7 +78,7 @@ jobs:
       uses: actions/checkout@v1
       with:
         fetch-depth: 1
-        path: go/src/github.com/${{ github.event.repository.full_name }}
+        path: go/src/github.com
       - name: Install Go
         uses: actions/setup-go@v2
         with:
