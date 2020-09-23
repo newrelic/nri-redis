@@ -84,4 +84,6 @@ jobs:
           go-version: '1.9.7'
       - name: Running unit tests
         shell: pwsh
-        run:  .\go\src\github.com\nri-redis\win_build.ps1 -installer
+        run: |
+          cd .\go\src\github.com\nri-redis
+          win_build.ps1 -installer
