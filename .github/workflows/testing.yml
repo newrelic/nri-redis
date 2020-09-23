@@ -12,6 +12,7 @@ jobs:
 
   validate:
     name: run tests
+    if: github.event.action != 'prereleased'
     runs-on: ubuntu-latest
     steps:
       - name: Validate code
