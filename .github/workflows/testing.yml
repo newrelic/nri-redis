@@ -6,7 +6,7 @@ on:
       - '**'
 #      - '!master'
     tags-ignore:
-      - '*'
+      - '**'
 
 env:
   THE_GITHUB_CONTEXT: ${{ toJson(github) }}
