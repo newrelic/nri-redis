@@ -17,6 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print context
-          run: echo "Wow, such debugging ${{ toJson(github.event) }}"
+        run: echo "Wow, such debugging ${{ toJson(github.event) }}"
       - name: Validate code
         run: echo "HELLOOOOOOO"
