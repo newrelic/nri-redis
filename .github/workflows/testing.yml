@@ -1,6 +1,6 @@
 name: testing
 
-on:
+on: push
 #  push:
 #    branches:
 #      - '**'
