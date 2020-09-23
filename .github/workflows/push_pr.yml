@@ -1,10 +1,10 @@
 name: Push/PR pipelien
 
-on:
-  push:
-    branches:
-      - '**'
-      - '!master'
+on: push
+#  push:
+#    branches:
+#      - '**'
+#      - '!master'
 
 #env:
 
