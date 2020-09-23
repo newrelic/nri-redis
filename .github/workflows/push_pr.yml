@@ -74,11 +74,10 @@ jobs:
     env:
       GOPATH: ${{ github.workspace }}/go/src
     steps:
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
-        path: go/src/github.com
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: go/src/github.com
       - name: Install Go
         uses: actions/setup-go@v2
         with:
