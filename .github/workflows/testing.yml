@@ -10,7 +10,6 @@ env:
   THE_GITHUB_CONTEXT: ${{ toJson(github) }}
 
 jobs:
-
   validate:
     name: run tests
     if: github.event.action != 'prereleased'
