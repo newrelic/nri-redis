@@ -68,3 +68,15 @@ jobs:
         with:
           args: --severity-threshold=high
 
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.9.7'
+      - name: Download deps
+        run: go mod vendor
+      - name: Running unit tests
+        run: .\build\win_build.ps1
