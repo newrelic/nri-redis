@@ -86,4 +86,4 @@ jobs:
         shell: pwsh
         run: |
           cd .\go\src\github.com\nri-redis
-          win_build.ps1 -installer
+          .\win_build.ps1 -installer
