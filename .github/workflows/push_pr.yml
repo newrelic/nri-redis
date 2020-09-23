@@ -79,4 +79,4 @@ jobs:
           go-version: '1.9.7'
       - name: Running unit tests
         shell: pwsh
-        run: build\win_build.ps1 -installer
+        run: win_build.ps1 -installer
