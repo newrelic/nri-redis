@@ -72,9 +72,13 @@ jobs:
   build-windows:
     runs-on: windows-2019
     env:
-      GOPATH: ${{ github.workspace }}
+      GOPATH: ${{ github.workspace }}/go/src
     steps:
-      - uses: actions/checkout@v2
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+        path: go/src/github.com/${{ github.event.repository.full_name }}
       - name: Install Go
         uses: actions/setup-go@v2
         with:
