@@ -12,11 +12,11 @@ env:
 jobs:
   validate:
     name: run tests
-    if: github.event.action != 'prereleased'
+#    if: github.event.action != 'prereleased'
     runs-on: ubuntu-latest
     steps:
       - name: debug ation
-        uses: hmarr/debug-action
+        uses: hmarr/debug-action@master
       - name: Print context
         run: echo "Wow, such debugging ${{ toJson(github.event) }}"
       - name: Validate code
