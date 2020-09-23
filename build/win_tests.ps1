@@ -24,7 +24,7 @@ if (-not $?)
 if (-Not $skipTests) {
     echo "--- Running tests"
 
-    go test .\src\...
+    go test .\src\... .\internal\... .\test\...
     if (-not $?)
     {
         echo "Failed running tests"
