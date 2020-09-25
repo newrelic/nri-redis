@@ -84,7 +84,7 @@ jobs:
       GOPATH: ${{ github.workspace }}
     defaults:
       run:
-        working-directory: src/github.com/newrelic/nri-$INTEGRATION
+        working-directory: src/github.com/newrelic/nri-"$env:INTEGRATION"
     strategy:
       matrix:
         goarch: [amd64,386]
