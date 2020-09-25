@@ -6,7 +6,7 @@ param (
     # Target architecture: amd64 (default) or 386
     [ValidateSet("amd64", "386")]
     [string]$arch="amd64",
-    [string]$version="0.0.0",
+    [string]$tag="v0.0.0",
     # Creates a signed installer
     [switch]$installer=$false,
     # Skip tests
@@ -16,6 +16,8 @@ param (
 $integration = $(Split-Path -Leaf $PSScriptRoot)
 $integrationName = $integration.Replace("nri-", "")
 $executable = "nri-$integrationName.exe"
+
+$version=$tag.substring(1)
 
 # verifying version number format
 $v = $version.Split(".")
@@ -64,12 +66,12 @@ echo "--- Format check"
 
 $wrongFormat = go fmt $goFiles
 
-if ($wrongFormat -and ($wrongFormat.Length -gt 0))
-{
-    echo "ERROR: Wrong format for files:"
-    echo $wrongFormat
-    exit -1
-}
+#if ($wrongFormat -and ($wrongFormat.Length -gt 0))
+#{
+#    echo "ERROR: Wrong format for files:"
+#    echo $wrongFormat
+#    exit -1
+#}
 
 if (-Not $skipTests) {
     echo "--- Running tests"
@@ -123,9 +125,10 @@ if (-not $?)
 
 echo "Making versioned installed copy"
 
-cd bin\Release
 
-cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
-cp "$integration-$arch.msi" "$integration.msi"
+#cd bin\cd pk
+
+#cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
+#cp "$integration-$arch.msi" "$integration.msi"
 
 Pop-Location

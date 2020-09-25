@@ -5,7 +5,11 @@ on:
     types:
       - prereleased
 
-#env:
+env:
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  TAG: ${{ github.event.release.tag_name }}
+  PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
+  PFX_PASSPHRASE: ${{ secrets.PFX_PASSPHRASE }}
 
 jobs:
 #
@@ -77,13 +81,12 @@ jobs:
     runs-on: windows-2019
     env:
       GOPATH: ${{ github.workspace }}
-      TAG: ${{ github.event.release.tag_name }}
     defaults:
       run:
         working-directory: src/github.com/newrelic/nri-redis
     strategy:
       matrix:
-        goarch: [ amd64, 386 ]
+        goarch: [ amd64 ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -93,8 +96,17 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: '1.9.7'
-      - name: Running unit tests
+      - name: Get PFX certificate from GH secrets
+        shell: bash
+        run: |
+          printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > pkg/windows/nri-amd64-installer/mycert.pfx
+      - name: Build & create MSI
         shell: pwsh
         run: |
-          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version $TAG -installer true -skipTests true
+          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -tag "$env:TAG" -skipTests true
+      - name: Push msi to GH Release assets
+        shell: bash
+        run: |
+          hub release edit -a "pkg/windows/nri-amd64-installer/bin/Release/nri-redis-amd64.${TAG:1}.msi" -m ${TAG} ${TAG}
+
 
