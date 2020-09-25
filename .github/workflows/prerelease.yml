@@ -1,9 +1,9 @@
 name: Pre release pipelien
 
-on: push
-#  release:
-#    types:
-#      - prereleased
+on:
+  release:
+    types:
+      - prereleased
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -103,15 +103,10 @@ jobs:
       - name: Build & create MSI
         shell: pwsh
         run: |
-          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version "$env:TAG" -skipTests true
+          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -tag "$env:TAG" -skipTests true
       - name: Push msi to GH Release assets
         shell: bash
         run: |
-          pwd
-          ls
-          ls pkg/windows/nri-amd64-installer/
-          ls pkg/windows/nri-amd64-installer/bin/
-          ls pkg/windows/nri-amd64-installer/bin/Release
-          hub release edit -a "pkg/windows/nri-amd64-installer/bin/Release/nri-redis-amd64.x.y.z.msi" -m $TAG "v2.0.3"
+          hub release edit -a "pkg/windows/nri-amd64-installer/bin/Release/nri-redis-amd64.${TAG:1}.msi" -m ${TAG} ${TAG}
 
 

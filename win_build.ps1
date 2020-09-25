@@ -6,7 +6,7 @@ param (
     # Target architecture: amd64 (default) or 386
     [ValidateSet("amd64", "386")]
     [string]$arch="amd64",
-    [string]$version="0.0.0",
+    [string]$tag="v0.0.0",
     # Creates a signed installer
     [switch]$installer=$false,
     # Skip tests
@@ -16,6 +16,8 @@ param (
 $integration = $(Split-Path -Leaf $PSScriptRoot)
 $integrationName = $integration.Replace("nri-", "")
 $executable = "nri-$integrationName.exe"
+
+$version=$tag.substring(1)
 
 # verifying version number format
 $v = $version.Split(".")
@@ -123,10 +125,6 @@ if (-not $?)
 
 echo "Making versioned installed copy"
 
-pwd
-pwd
-pwd
-ls
 
 #cd bin\cd pk
 
