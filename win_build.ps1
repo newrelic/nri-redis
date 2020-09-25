@@ -126,9 +126,10 @@ if (-not $?)
 echo "Making versioned installed copy"
 
 
-#cd bin\cd pk
+cd bin\Release
 
-#cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
-#cp "$integration-$arch.msi" "$integration.msi"
+cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
+cp "$integration-$arch.msi" "$integration.msi"
+
 
 Pop-Location
