@@ -99,8 +99,6 @@ $packages = go list -f "{{.ImportPath}} {{.Name}}" ./...  | ConvertFrom-String -
 $mainPackage = $packages | ? { $_.Name -eq 'main' } | % { $_.Path }
 
 echo "generating $integrationName"
-
-go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
 go generate $mainPackage
 
 $fileName = ([io.fileinfo]$mainPackage).BaseName
