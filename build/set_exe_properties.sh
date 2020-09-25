@@ -22,6 +22,6 @@ sed \
   -e "s/{AgentMajorVersion}/$AgentMajorVersion/g" \
   -e "s/{AgentMinorVersion}/$AgentMinorVersion/g" \
   -e "s/{AgentPatchVersion}/$AgentPatchVersion/g" \
-  -e "s/{AgentBuildVersion}/$AgentBuildVersion/g" src/versioninfo.json.template > src/versioninfo.json
+  -e "s/{AgentBuildVersion}/$AgentBuildVersion/g" versioninfo.json.template > src/versioninfo.json
 
 
