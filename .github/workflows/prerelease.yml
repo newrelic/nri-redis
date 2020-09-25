@@ -5,8 +5,9 @@ on: push
 #    types:
 #      - prereleased
 
-#env:
-
+env:
+  PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
+  PFX_PASSPHRASE: ${{ secrets.PFX_PASSPHRASE }}
 jobs:
 #
 #  validate:
@@ -94,6 +95,10 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: '1.9.7'
+      - name: Get PFX certificate from GH secrets
+        shell: bash
+        run: |
+          printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > ./mycert.pfx
       - name: Build & create MSI
         shell: pwsh
         run: |
