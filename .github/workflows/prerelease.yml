@@ -1,6 +1,6 @@
 name: Pre release pipelien
 
-on:
+on: push
   release:
     types:
       - prereleased
@@ -85,7 +85,7 @@ jobs:
         working-directory: src/github.com/newrelic/nri-redis
     strategy:
       matrix:
-        goarch: [ amd64 ]
+        goarch: [amd64,386]
     steps:
       - name: Install Go
         uses: actions/setup-go@v2
@@ -99,9 +99,6 @@ jobs:
         shell: bash
         run: |
           printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > pkg/windows/nri-amd64-installer/mycert.pfx
-      - name: Prepare VersionInfo for exe
-        shell: bash
-        run: build\set_exe_properties.sh
       - name: Build & create MSI
         shell: pwsh
         run: .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -tag "$env:TAG" -skipTests true
