@@ -11,7 +11,7 @@ env:
   #TAG: v3.0.0
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  GPG_MAIL: ${{ secrets.GPG_MAIL }}
+  GPG_MAIL: info@newrelic.com
   GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
   GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 jobs:
@@ -66,8 +66,8 @@ jobs:
 #          GOPATH: ${{ github.workspace }}
 #        run: make integration-test
 #
-  prerelease-nix:
-    name: Build binary for all NIX platforms:arch and publish on GH Releases
+  prerelease-nix-win:
+    name: Build binaries for nix & win and publish on GH Releases
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -81,6 +81,7 @@ jobs:
 
   prerelease-win:
     runs-on: windows-2019
+    needs: [prerelease-nix-win]
     env:
       GOPATH: ${{ github.workspace }}
     defaults:
