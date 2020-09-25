@@ -82,7 +82,7 @@
             </Component>
         </ComponentGroup>
         <ComponentGroup Id="PluginConfigsComponent" Directory="PluginConfigsFolder">
-            <Component Id="CMP_NRI_{IntegrationName}_CONFIG_YML" Guid="6a493ba5-6d01-4b1d-9d1c-27c231fc3d4c" Win64="no"
+            <Component Id="CMP_NRI_{IntegrationName}_CONFIG_YML" Guid="640682605-75f0-496e-8e67-2eadc6224187" Win64="no"
                        NeverOverwrite="yes" Permanent="yes">
                 <File Id="FILE_NRI_{IntegrationName}_CONFIG_YML"
                       Name="{IntegrationName}-config.yml.sample"
