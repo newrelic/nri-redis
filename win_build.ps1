@@ -107,6 +107,7 @@ echo "creating $executable"
 go build -ldflags "-X main.buildVersion=$version" -o ".\target\bin\windows_$arch\$executable" $mainPackage
 
 echo "--- Creeating exe metadata"
+ls src
 go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
 go generate github.com/newrelic/nri-redis/src/
 
