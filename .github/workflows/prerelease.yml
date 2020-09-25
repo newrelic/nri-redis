@@ -1,14 +1,14 @@
 name: Pre release pipelien
 
-on: push
-#  release:
-#    types:
-#      - prereleased
+on:
+  release:
+    types:
+      - prereleased
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-  #TAG: ${{ github.event.release.tag_name }}
-  TAG: v3.0.0
+  TAG: ${{ github.event.release.tag_name }}
+  #TAG: v3.0.0
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
   GPG_MAIL: ${{ secrets.GPG_MAIL }}
