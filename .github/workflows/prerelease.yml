@@ -1,13 +1,14 @@
 name: Pre release pipelien
 
-on:
-  release:
-    types:
-      - prereleased
+on: push
+#  release:
+#    types:
+#      - prereleased
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   TAG: ${{ github.event.release.tag_name }}
+  TAG: v2.0.6
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
 
 jobs:
@@ -101,7 +102,7 @@ jobs:
           printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > pkg/windows/nri-amd64-installer/mycert.pfx
       - name: Prepare VersionInfo for exe
         shell: bash
-        run: build\set_exe_properties.sh
+        run: build/set_exe_properties.sh
       - name: Build & create MSI
         shell: pwsh
         run: .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -tag "$env:TAG" -skipTests true
