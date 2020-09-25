@@ -24,4 +24,7 @@ sed \
   -e "s/{AgentPatchVersion}/$AgentPatchVersion/g" \
   -e "s/{AgentBuildVersion}/$AgentBuildVersion/g" versioninfo.json.template > src/versioninfo.json
 
+echo "Checking versioninfo.json is in the path"
+ls src/versioninfo.json
+
 
