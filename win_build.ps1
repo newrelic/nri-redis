@@ -99,13 +99,12 @@ $packages = go list -f "{{.ImportPath}} {{.Name}}" ./...  | ConvertFrom-String -
 $mainPackage = $packages | ? { $_.Name -eq 'main' } | % { $_.Path }
 
 echo "generating $integrationName"
+
+go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
 go generate $mainPackage
 
 $fileName = ([io.fileinfo]$mainPackage).BaseName
 
-echo "--- Creeating exe metadata"
-go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
-go generate github.com/newrelic/nri-redis/src/
 
 echo "--- Creating $executable"
 go build -ldflags "-X main.buildVersion=$version" -o ".\target\bin\windows_$arch\$executable" $mainPackage
