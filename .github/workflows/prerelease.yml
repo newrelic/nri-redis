@@ -105,6 +105,6 @@ jobs:
       - name: Push msi to GH Release assets
         shell: bash
         run: |
-          hub release edit -a "\pkg\windows\nri-amd64-installer\bin\Release\nri-redis-amd64.x.y.z.msi" -m "v2.0.3" "v2.0.3"
+          hub release edit -a "\pkg\windows\nri-amd64-installer\bin\nri-redis-amd64.x.y.z.msi" -m "v2.0.3" "v2.0.3"
 
 
