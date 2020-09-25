@@ -6,6 +6,7 @@ on: push
 #      - prereleased
 
 env:
+  TAG: ${{ github.event.release.tag_name }}
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
   PFX_PASSPHRASE: ${{ secrets.PFX_PASSPHRASE }}
 jobs:
@@ -78,8 +79,6 @@ jobs:
     runs-on: windows-2019
     env:
       GOPATH: ${{ github.workspace }}
-      #TAG: ${{ github.event.release.tag_name }}
-      TAG: '0.0.0'
     defaults:
       run:
         working-directory: src/github.com/newrelic/nri-redis
@@ -102,5 +101,10 @@ jobs:
       - name: Build & create MSI
         shell: pwsh
         run: |
-          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version 0.0.0 -skipTests true
+          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version 2.0.3 -skipTests true
+      - name: Push msi to GH Release assets
+        shell: bash
+        run: |
+          hub release edit -a "bin\Release\nri-redis-amd64.2.0.3.msi" -m "v2.0.3" "v2.0.3"
+
 

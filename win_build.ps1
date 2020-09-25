@@ -123,7 +123,7 @@ if (-not $?)
 
 echo "Making versioned installed copy"
 
-cd bin\cd pk
+cd bin\cd release
 
 cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
 cp "$integration-$arch.msi" "$integration.msi"
