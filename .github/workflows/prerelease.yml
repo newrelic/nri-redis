@@ -10,7 +10,10 @@ env:
   #TAG: ${{ github.event.release.tag_name }}
   TAG: v3.0.0
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
-
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  GPG_MAIL: ${{ secrets.GPG_MAIL }}
+  GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+  GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 jobs:
 #
 #  validate:
@@ -66,12 +69,6 @@ jobs:
   prerelease-nix:
     name: Build binary for all NIX platforms:arch and publish on GH Releases
     runs-on: ubuntu-latest
-    env:
-      TAG: ${{ github.event.release.tag_name }}
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      GPG_MAIL: ${{ secrets.GPG_MAIL }}
-      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Pre release
@@ -80,7 +77,7 @@ jobs:
        uses: actions/upload-artifact@v2
         with:
           name: win-binaries
-          path: dist/nri-redis-win_windows*/*.exe
+          path: dist/nri-redis-win_windows_*/*.exe
 
   prerelease-win:
     runs-on: windows-2019
