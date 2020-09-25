@@ -97,5 +97,5 @@ jobs:
       - name: Build & create MSI
         shell: pwsh
         run: |
-          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version $TAG -skipTests true
+          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version 0.0.0 -skipTests true
 
