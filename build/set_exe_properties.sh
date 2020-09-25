@@ -6,7 +6,6 @@
 #
 TAG=$1
 
-cd ..
 if [ -n "$1" ]; then
   echo "===> Tag is ${TAG}"
 else
