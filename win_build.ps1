@@ -123,6 +123,11 @@ if (-not $?)
 
 echo "Making versioned installed copy"
 
+pwd
+pwd
+pwd
+ls
+
 #cd bin\cd pk
 
 #cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
