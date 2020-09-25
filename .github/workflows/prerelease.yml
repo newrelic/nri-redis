@@ -93,8 +93,8 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: '1.9.7'
-      - name: Running unit tests
+      - name: Build & create MSI
         shell: pwsh
         run: |
-          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version $TAG -installer true -skipTests true
+          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version $TAG -skipTests true
 
