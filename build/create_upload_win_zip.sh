@@ -23,4 +23,4 @@ cd zip
 
 echo "===> Pushing nri-${INTEGRATIONNAME}-${ARCH}.${TAG:1}.zip to GHA Release assets"
 export $GITHUB_TOKEN
-hub release edit -a nri-${INTEGRATIONNAME}-${ARCH}.${TAG}.zip -m "${TAG}" ${TAG}
+hub release edit -a zip/nri-${INTEGRATIONNAME}-${ARCH}.${TAG}.zip -m "${TAG}" ${TAG}
