@@ -74,7 +74,7 @@ jobs:
       - name: Pre release
         run: make ci/prerelease
       - name: Upload exe binaries to GHA Cache
-       uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2
         with:
           name: win-binaries
           path: dist/nri-redis-win_windows_*/*.exe
