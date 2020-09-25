@@ -22,6 +22,11 @@ sed \
   -e "s/{AgentMajorVersion}/$AgentMajorVersion/g" \
   -e "s/{AgentMinorVersion}/$AgentMinorVersion/g" \
   -e "s/{AgentPatchVersion}/$AgentPatchVersion/g" \
-  -e "s/{AgentBuildVersion}/$AgentBuildVersion/g" src/versioninfo.json.template > src/versioninfo.json
+  -e "s/{AgentBuildVersion}/$AgentBuildVersion/g" versioninfo.json.template > src/versioninfo.json
 
+echo "===> Checking versioninfo.json is in the path"
+ls src/versioninfo.json
+
+go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
+go generate github.com/newrelic/nri-redis/cmd/
 
