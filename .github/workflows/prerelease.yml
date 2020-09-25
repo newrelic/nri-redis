@@ -99,13 +99,14 @@ jobs:
         shell: bash
         run: |
           printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > pkg/windows/nri-amd64-installer/mycert.pfx
+      - name: Prepare VersionInfo for exe
+        shell: bash
+        run: build\set_exe_properties.sh
       - name: Build & create MSI
         shell: pwsh
-        run: |
-          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -tag "$env:TAG" -skipTests true
+        run: .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -tag "$env:TAG" -skipTests true
       - name: Push msi to GH Release assets
         shell: bash
-        run: |
-          hub release edit -a "pkg/windows/nri-amd64-installer/bin/Release/nri-redis-amd64.${TAG:1}.msi" -m ${TAG} ${TAG}
+        run:  hub release edit -a "pkg/windows/nri-amd64-installer/bin/Release/nri-redis-amd64.${TAG:1}.msi" -m ${TAG} ${TAG}
 
 
