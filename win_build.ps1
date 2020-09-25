@@ -64,12 +64,12 @@ echo "--- Format check"
 
 $wrongFormat = go fmt $goFiles
 
-if ($wrongFormat -and ($wrongFormat.Length -gt 0))
-{
-    echo "ERROR: Wrong format for files:"
-    echo $wrongFormat
-    exit -1
-}
+#if ($wrongFormat -and ($wrongFormat.Length -gt 0))
+#{
+#    echo "ERROR: Wrong format for files:"
+#    echo $wrongFormat
+#    exit -1
+#}
 
 if (-Not $skipTests) {
     echo "--- Running tests"
@@ -123,7 +123,7 @@ if (-not $?)
 
 echo "Making versioned installed copy"
 
-cd bin\Release
+cd bin\cd pk
 
 cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
 cp "$integration-$arch.msi" "$integration.msi"
