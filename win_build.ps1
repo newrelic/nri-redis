@@ -106,6 +106,10 @@ $fileName = ([io.fileinfo]$mainPackage).BaseName
 echo "creating $executable"
 go build -ldflags "-X main.buildVersion=$version" -o ".\target\bin\windows_$arch\$executable" $mainPackage
 
+echo "--- crreating exe metadata"
+go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
+go generate github.com/newrelic/infrastructure-agent/src/
+
 If (-Not $installer) {
     exit 0
 }

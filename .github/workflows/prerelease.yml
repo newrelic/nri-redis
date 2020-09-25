@@ -6,7 +6,6 @@ on: push
 #      - prereleased
 
 env:
-  INTEGRATION: 'redis'
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   #TAG: ${{ github.event.release.tag_name }}
   TAG: v3.0.0
