@@ -25,8 +25,4 @@ sed \
   -e "s/{AgentPatchVersion}/$AgentPatchVersion/g" \
   -e "s/{AgentBuildVersion}/$AgentBuildVersion/g" src/versioninfo.json.template > src/versioninfo.json
 
-echo "===> Adding metadata to exe with Goversioninfo"
-export PATH="$PATH:/go/bin"
-go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
 
-go generate github.com/newrelic/nri-redis/src/

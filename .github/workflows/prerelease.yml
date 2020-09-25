@@ -7,8 +7,8 @@ on: push
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-  TAG: ${{ github.event.release.tag_name }}
-  TAG: v2.0.6
+#  TAG: ${{ github.event.release.tag_name }}
+  TAG: 'v2.0.6'
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
 
 jobs:
