@@ -80,7 +80,7 @@ jobs:
        uses: actions/upload-artifact@v2
         with:
           name: win-binaries
-          path: dist/nri-redis-win*/*.exe
+          path: dist/nri-redis-win_windows*/*.exe
 
   prerelease-win:
     runs-on: windows-2019
