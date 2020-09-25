@@ -7,68 +7,94 @@ on:
 
 #env:
 
-jobs:
+#jobs:
+#
+#  validate:
+#    name: Validate code via linters
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Validate code
+#        run: make ci/validate
+#
+#  snyk:
+#    name: Run security checks via snyk
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Run Snyk to check for vulnerabilities
+#        uses: snyk/actions/golang@master
+#        env:
+#          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+#        with:
+#          args: --severity-threshold=high
+#
+#  test-linux:
+#    name: Run unit tests on linux
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Unit tests
+#        run: make ci/test
+#
+#  # can't run this step inside of container because of tests specific
+#  test-integration-linux:
+#    name: Run integration tests on linux
+#    runs-on: ubuntu-latest
+#    defaults:
+#      run:
+#        working-directory: src/github.com/${{ github.event.repository.full_name }}
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v2
+#        with:
+#          fetch-depth: 1
+#          path: src/github.com/${{ github.event.repository.full_name }}
+#      - name: Install Go
+#        uses: actions/setup-go@v2
+#        with:
+#          go-version: '1.9.7'
+#      - name: Integration test
+#        env:
+#          GOPATH: ${{ github.workspace }}
+#        run: make integration-test
+#
+#  release-nix:
+#    name: Build binary for all NIX platforms:arch and publish on GH Releases
+#    runs-on: ubuntu-latest
+#    env:
+#      TAG: ${{ github.event.release.tag_name }}
+#      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+#      GPG_MAIL: ${{ secrets.GPG_MAIL }}
+#      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+#      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Pre release
+#        run: make ci/prerelease
 
-  validate:
-    name: Validate code via linters
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Validate code
-        run: make ci/validate
-
-  snyk:
-    name: Run security checks via snyk
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/golang@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
-
-  test-linux:
-    name: Run unit tests on linux
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Unit tests
-        run: make ci/test
-
-  # can't run this step inside of container because of tests specific
-  test-integration-linux:
-    name: Run integration tests on linux
-    runs-on: ubuntu-latest
+  release-win:
+    runs-on: windows-2019
+    env:
+      GOPATH: ${{ github.workspace }}
+      TAG: ${{ github.event.release.tag_name }}
     defaults:
       run:
-        working-directory: src/github.com/${{ github.event.repository.full_name }}
+        working-directory: src/github.com/newrelic/nri-redis
+    strategy:
+      matrix:
+        goarch: [ amd64, 386 ]
     steps:
-      - name: Check out code
+      - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 1
-          path: src/github.com/${{ github.event.repository.full_name }}
+          path: src/github.com/newrelic/nri-redis
       - name: Install Go
         uses: actions/setup-go@v2
         with:
           go-version: '1.9.7'
-      - name: Integration test
-        env:
-          GOPATH: ${{ github.workspace }}
-        run: make integration-test
+      - name: Running unit tests
+        shell: pwsh
+        run: |
+          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version $TAG -installer true -skipTests true
 
-  release:
-    name: Build binary for all platforms:arch and publish on GH Releases
-    runs-on: ubuntu-latest
-    env:
-      TAG: ${{ github.event.release.tag_name }}
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      GPG_MAIL: ${{ secrets.GPG_MAIL }}
-      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Pre release
-        run: make ci/prerelease
