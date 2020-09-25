@@ -6,9 +6,11 @@ on: push
 #      - prereleased
 
 env:
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   TAG: ${{ github.event.release.tag_name }}
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
   PFX_PASSPHRASE: ${{ secrets.PFX_PASSPHRASE }}
+
 jobs:
 #
 #  validate:
@@ -101,7 +103,7 @@ jobs:
       - name: Build & create MSI
         shell: pwsh
         run: |
-          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version 2.0.3 -skipTests true
+          .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -version "$env:TAG" -skipTests true
       - name: Push msi to GH Release assets
         shell: bash
         run: |
@@ -110,6 +112,6 @@ jobs:
           ls pkg/windows/nri-amd64-installer/
           ls pkg/windows/nri-amd64-installer/bin/
           ls pkg/windows/nri-amd64-installer/bin/Release
-          hub release edit -a "pkg/windows/nri-amd64-installer/bin/Release/nri-redis-amd64.x.y.z.msi" -m "v2.0.3" "v2.0.3"
+          hub release edit -a "pkg/windows/nri-amd64-installer/bin/Release/nri-redis-amd64.x.y.z.msi" -m $TAG "v2.0.3"
 
 
