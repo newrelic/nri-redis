@@ -107,9 +107,9 @@ jobs:
         run: |
           pwd
           ls
-          ls /pkg/windows/nri-amd64-installer/
-          ls /pkg/windows/nri-amd64-installer/bin/
-          ls /pkg/windows/nri-amd64-installer/bin/Release
-          hub release edit -a "/pkg/windows/nri-amd64-installer/bin/Release/nri-redis-amd64.x.y.z.msi" -m "v2.0.3" "v2.0.3"
+          ls pkg/windows/nri-amd64-installer/
+          ls pkg/windows/nri-amd64-installer/bin/
+          ls pkg/windows/nri-amd64-installer/bin/Release
+          hub release edit -a "pkg/windows/nri-amd64-installer/bin/Release/nri-redis-amd64.x.y.z.msi" -m "v2.0.3" "v2.0.3"
 
 
