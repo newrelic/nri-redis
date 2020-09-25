@@ -110,10 +110,6 @@ If (-Not $installer) {
     exit 0
 }
 
-echo "--- Setting exe properties with goversioninfo"
-go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
-go generate github.com/newrelic/nri-redis/src/
-
 echo "--- Building Installer"
 
 Push-Location -Path "pkg\windows\nri-$arch-installer"
