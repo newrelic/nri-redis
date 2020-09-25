@@ -125,7 +125,7 @@ echo "Making versioned installed copy"
 
 #cd bin\cd pk
 
-cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
-cp "$integration-$arch.msi" "$integration.msi"
+#cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
+#cp "$integration-$arch.msi" "$integration.msi"
 
 Pop-Location
