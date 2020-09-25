@@ -100,7 +100,7 @@ jobs:
         run: printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > pkg/windows/nri-${{ matrix.goarch }}-installer/mycert.pfx
       - name: Build & create MSI
         shell: pwsh
-        run: .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -tag "$env:TAG" -skipTests true
+        run: pwd; .\win_build.ps1 -installer -arch ${{ matrix.goarch }} -tag "$env:TAG" -skipTests true
       - name: Create and upload win zip
         shell: bash
         run: build/create_upload_win_zip_.sh redis ${{ matrix.goarch }} ${TAG:1} ${GITHUB_TOKEN}
