@@ -7,10 +7,6 @@ param (
     [ValidateSet("amd64", "386")]
     [string]$arch="amd64",
     [string]$tag="v0.0.0",
-    # Creates a signed installer
-    [switch]$installer=$false,
-    # Skip tests
-    [switch]$skipTests=$false
 )
 
 $integration = $(Split-Path -Leaf $PSScriptRoot)
@@ -33,19 +29,6 @@ if ($wrong.Length  -ne 0) {
     exit -1
 }
 
-echo "--- Configuring version $version for artifacts"
-
-.\windows_set_version.ps1 -major $v[0] -minor $v[1] -patch $v[2]
-
-echo "--- Checking dependencies"
-
-echo "Checking Go..."
-go version
-if (-not $?)
-{
-    echo "Can't find Go"
-    exit -1
-}
 
 echo "Checking MSBuild.exe..."
 $msBuild = (Get-ItemProperty hklm:\software\Microsoft\MSBuild\ToolsVersions\4.0).MSBuildToolsPath
@@ -58,59 +41,6 @@ echo $msBuild
 $env:GOOS="windows"
 $env:GOARCH=$arch
 
-echo "--- Collecting files"
-
-$goFiles = go list ./...
-
-echo "--- Format check"
-
-$wrongFormat = go fmt $goFiles
-
-#if ($wrongFormat -and ($wrongFormat.Length -gt 0))
-#{
-#    echo "ERROR: Wrong format for files:"
-#    echo $wrongFormat
-#    exit -1
-#}
-
-if (-Not $skipTests) {
-    echo "--- Running tests"
-
-    go test $goFiles
-    if (-not $?)
-    {
-        echo "Failed running tests"
-        exit -1
-    }    
-}
-
-echo "--- Running Build"
-
-go build -v $goFiles
-if (-not $?)
-{
-    echo "Failed building files"
-    exit -1
-}
-
-echo "--- Collecting Go main files"
-
-$packages = go list -f "{{.ImportPath}} {{.Name}}" ./...  | ConvertFrom-String -PropertyNames Path, Name
-$mainPackage = $packages | ? { $_.Name -eq 'main' } | % { $_.Path }
-
-echo "generating $integrationName"
-go generate $mainPackage
-
-$fileName = ([io.fileinfo]$mainPackage).BaseName
-
-
-echo "--- Creating $executable"
-go build -ldflags "-X main.buildVersion=$version" -o ".\target\bin\windows_$arch\$executable" $mainPackage
-
-
-If (-Not $installer) {
-    exit 0
-}
 
 echo "--- Building Installer"
 
