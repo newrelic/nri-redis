@@ -98,7 +98,7 @@ jobs:
       - name: Get PFX certificate from GH secrets
         shell: bash
         run: |
-          printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > ./mycert.pfx
+          printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > pkg/windows/nri-amd64-installer/mycert.pfx
       - name: Build & create MSI
         shell: pwsh
         run: |
