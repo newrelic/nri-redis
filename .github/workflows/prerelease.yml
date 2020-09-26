@@ -105,7 +105,10 @@ jobs:
           path: target
       - name: Place exe's in correct place so that Wix can take them
         shell: bash
-        run: cp target/win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe  target/bin/windows_${{ matrix.goarch }}/
+        run: |
+          ls target
+          ls target/win-binaries
+          cp target/win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe  target/bin/windows_${{ matrix.goarch }}/
       - name: Create MSI
         shell: pwsh
         run: .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG"
