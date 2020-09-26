@@ -110,8 +110,6 @@ jobs:
         shell: bash
         working-directory: ${{ github.workspace }}
         run: |
-          pwd
-          echo ${{ github.workspace }}
           mkdir -p target/bin/windows_${{ matrix.goarch }}
           cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe  target/bin/windows_${{ matrix.goarch }}/
       - name: Create MSI
