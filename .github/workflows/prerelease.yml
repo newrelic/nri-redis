@@ -66,7 +66,7 @@ jobs:
 #          GOPATH: ${{ github.workspace }}
 #        run: make integration-test
 #
-  prerelease-nix-win:
+  goreleaser-push-gh:
     name: Build binaries for nix & win and publish on GH Releases
     runs-on: ubuntu-latest
     steps:
@@ -79,7 +79,7 @@ jobs:
           name: win-binaries
           path: dist/nri-redis-win_windows_*/*.exe
 
-  prerelease-win:
+  create-msi-push-gh:
     runs-on: windows-2019
     needs: [prerelease-nix-win]
     env:
@@ -110,15 +110,12 @@ jobs:
           cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe  target/bin/windows_${{ matrix.goarch }}/
       - name: Create MSI
         shell: pwsh
-        run: |
-          pwd
-          ls D:\a\nri-redis\nri-redis\src\github.com\***\nri-redis\pkg\windows\nri-amd64-installer\
-          .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG"
+        run: .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG"
       - name: Create and upload win zip
         shell: bash
         run: build/create_upload_win_zip.sh redis ${{ matrix.goarch }} ${TAG} ${GITHUB_TOKEN}
       - name: Push msi to GH Release assets
         shell: bash
-        run:  hub release edit -a "pkg/windows/nri-${{ matrix.goarch }}-installer/bin/Release/nri-redis-${{ matrix.goarch }}.${TAG:1}.msi" -m ${TAG} ${TAG}
+        run: hub release edit -a "pkg/windows/nri-${{ matrix.goarch }}-installer/bin/Release/nri-redis-${{ matrix.goarch }}.${TAG:1}.msi" -m ${TAG} ${TAG}
 
 

@@ -25,8 +25,8 @@ sed \
   -e "s/{AgentBuildVersion}/$AgentBuildVersion/g" versioninfo.json.template > src/versioninfo.json
 
 echo "===> Checking versioninfo.json is in the path"
-ls src/versioninfo.json
 
+export PATH="$PATH:/go/bin"
 go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
 go generate github.com/newrelic/nri-redis/cmd/
 

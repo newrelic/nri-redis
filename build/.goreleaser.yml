@@ -26,9 +26,6 @@ builds:
       - amd64
 #      - arm
 #      - arm64
-    ignore:
-      - goos: darwin
-        goarch: 386
 
   - id: nri-redis-win
     main: ./src
@@ -41,10 +38,8 @@ builds:
     goarch:
       - 386
       - amd64
-
-    ignore:
-      - goos: darwin
-        goarch: 386
+    hooks:
+      pre: set_exe_properties.sh {{ .Env.TAG }}
 
 nfpms:
   - id: nri-redis
