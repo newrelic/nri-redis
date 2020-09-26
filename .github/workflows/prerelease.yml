@@ -100,6 +100,7 @@ jobs:
         run: printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > pkg/windows/nri-${{ matrix.goarch }}-installer/mycert.pfx
       - name: Download binaries from GH Cache
         uses: actions/download-artifact@v2
+        id: download
         with:
           name: win-binaries
           path: win-binaries
