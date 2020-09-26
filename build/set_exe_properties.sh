@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 #
 #
 # Create the metadata for the exe's files, called by .goreleser as a hook in the build section
@@ -25,6 +26,7 @@ sed \
   -e "s/{AgentBuildVersion}/$AgentBuildVersion/g" versioninfo.json.template > src/versioninfo.json
 
 echo "===> Checking versioninfo.json is in the path"
+cat src/versioninfo.json
 
 export PATH="$PATH:/go/bin"
 go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
