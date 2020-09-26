@@ -102,14 +102,13 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: win-binaries
-          path: win-binaries
+          path: src/github.com/newrelic/nri-redis/win-binaries
       - name: Place exe's in correct place so that Wix can take them
         shell: bash
-        working-directory: ${{ github.workspace }}
         run: |
-          mkdir -p src/github.com/newrelic/nri-redis/target/bin/windows_${{ matrix.goarch }}
-          cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe  src/github.com/newrelic/nri-redis/target/bin/windows_${{ matrix.goarch }}/
-          ls src/github.com/newrelic/nri-redis/target/bin/windows_${{ matrix.goarch }}/
+          mkdir -p target/bin/windows_${{ matrix.goarch }}
+          cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe  target/bin/windows_${{ matrix.goarch }}/
+          ls target/bin/windows_${{ matrix.goarch }}/
       - name: Create MSI
         shell: pwsh
         run: .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG"
