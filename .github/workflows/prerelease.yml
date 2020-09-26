@@ -110,8 +110,8 @@ jobs:
         shell: bash
         run: |
           pwd
-          ls
-          cp target/win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe  target/bin/windows_${{ matrix.goarch }}/
+          echo ${{ github.workspace }}
+          cp D:/a/nri-redis/nri-redis/win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe  target/bin/windows_${{ matrix.goarch }}/
       - name: Create MSI
         shell: pwsh
         run: .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG"
