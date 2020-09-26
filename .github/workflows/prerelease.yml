@@ -80,8 +80,9 @@ jobs:
           path: dist/nri-redis-win_windows_*/*.exe
 
   create-msi-push-gh:
+    name: Creates MSI & zip. Push to GH
     runs-on: windows-2019
-    needs: [prerelease-nix-win]
+    needs: [goreleaser-push-gh]
     env:
       GOPATH: ${{ github.workspace }}
     defaults:
