@@ -102,7 +102,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: win-binaries
-          path: target/
+          path: win-binaries
+      - name: 'Echo download path'
+        run: echo ${{steps.download.outputs.download-path}}
       - name: Place exe's in correct place so that Wix can take them
         shell: bash
         run: |
