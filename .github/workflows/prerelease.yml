@@ -108,10 +108,11 @@ jobs:
         run: |
           mkdir -p target/bin/windows_${{ matrix.goarch }}
           cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe  target/bin/windows_${{ matrix.goarch }}/
-          ls target/bin/windows_${{ matrix.goarch }}/
       - name: Create MSI
         shell: pwsh
-        run: .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG"
+        run: |
+          pwd
+          .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG"
       - name: Create and upload win zip
         shell: bash
         run: build/create_upload_win_zip.sh redis ${{ matrix.goarch }} ${TAG} ${GITHUB_TOKEN}
