@@ -112,6 +112,7 @@ jobs:
         shell: pwsh
         run: |
           pwd
+          ls D:\a\nri-redis\nri-redis\src\github.com\***\nri-redis\pkg\windows\nri-amd64-installer\
           .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG"
       - name: Create and upload win zip
         shell: bash

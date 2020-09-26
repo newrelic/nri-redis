@@ -29,6 +29,8 @@ if ($wrong.Length  -ne 0) {
     exit -1
 }
 
+echo "--- Configuring version $version for artifacts"
+.\windows_set_version.ps1 -major $v[0] -minor $v[1] -patch $v[2]
 
 echo "Checking MSBuild.exe..."
 $msBuild = (Get-ItemProperty hklm:\software\Microsoft\MSBuild\ToolsVersions\4.0).MSBuildToolsPath
