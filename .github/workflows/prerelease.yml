@@ -8,13 +8,12 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   TAG: ${{ github.event.release.tag_name }}
-  #TAG: v3.0.0
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
   PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
   GPG_MAIL: info@newrelic.com
   GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-  GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+  GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }} # base64 encoded
 jobs:
 #
 #  validate:
@@ -81,7 +80,7 @@ jobs:
           path: dist/nri-redis-win_windows_*/*.exe
 
   create-msi-push-gh:
-    name: Creates MSI & zip. Push to GH
+    name: Create MSI+zip+Push GH
     runs-on: windows-2019
     needs: [goreleaser-push-gh]
     env:
