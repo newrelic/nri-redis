@@ -44,6 +44,10 @@ echo $msBuild
 $env:GOOS="windows"
 $env:GOARCH=$arch
 
+echo "====> Check if pfx exists in current path"
+ls
+echo $pfx_passphrase
+
 echo "===> Import .pfx certificate from GH Secrets"
 Import-PfxCertificate -FilePath mycert.pfx -Password (ConvertTo-SecureString -String $pfx_passphrase -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
 
