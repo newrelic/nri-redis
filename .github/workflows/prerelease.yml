@@ -101,7 +101,7 @@ jobs:
         with:
           name: win-binaries
           path: src/github.com/newrelic/nri-redis/win-binaries
-      - name: Place exe's in correct place so that Wix can take them
+      - name: Place exe's in correct place so that Wix can take it
         shell: bash
         run: |
           mkdir -p target/bin/windows_${{ matrix.goarch }}
