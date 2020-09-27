@@ -7,6 +7,7 @@ param (
     [ValidateSet("amd64", "386")]
     [string]$arch="amd64",
     [string]$tag="v0.0.0",
+    [string]$pfx_certificate_base64="none",
     [string]$pfx_passphrase="none"
 )
 
@@ -30,10 +31,10 @@ if ($wrong.Length  -ne 0) {
     exit -1
 }
 
-echo "--- Configuring version $version for artifacts"
+echo "===> Configuring version $version for artifacts"
 .\windows_set_version.ps1 -major $v[0] -minor $v[1] -patch $v[2]
 
-echo "Checking MSBuild.exe..."
+echo "===> Checking MSBuild.exe..."
 $msBuild = (Get-ItemProperty hklm:\software\Microsoft\MSBuild\ToolsVersions\4.0).MSBuildToolsPath
 if ($msBuild.Length -eq 0) {
     echo "Can't find MSBuild tool. .NET Framework 4.0.x must be installed"
@@ -44,9 +45,9 @@ echo $msBuild
 $env:GOOS="windows"
 $env:GOARCH=$arch
 
-echo "====> Check if pfx exists in current path"
-ls
-echo $pfx_passphrase
+echo "===> Decode PFX_CERTIFICATE_BASE64"
+$pfx_certificate = [Convert]::FromBase64String($pfx_certificate_base64)
+[IO.File]::WriteAllBytes(mycert.pfx, $pfx_certificate)
 
 echo "===> Import .pfx certificate from GH Secrets"
 Import-PfxCertificate -FilePath mycert.pfx -Password (ConvertTo-SecureString -String $pfx_passphrase -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
@@ -54,8 +55,7 @@ Import-PfxCertificate -FilePath mycert.pfx -Password (ConvertTo-SecureString -St
 echo "===> Show certificate installed"
 Get-ChildItem -Path cert:\CurrentUser\My\
 
-echo "--- Building Installer"
-
+echo "===> Building Installer"
 Push-Location -Path "pkg\windows\nri-$arch-installer"
 $env:integration = $integration
 . $msBuild/MSBuild.exe nri-installer.wixproj
@@ -67,13 +67,9 @@ if (-not $?)
     exit -1
 }
 
-echo "Making versioned installed copy"
-
-
+echo "===> Making versioned installed copy"
 cd bin\Release
-
 cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
 cp "$integration-$arch.msi" "$integration.msi"
-
 
 Pop-Location
