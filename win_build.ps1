@@ -6,7 +6,8 @@ param (
     # Target architecture: amd64 (default) or 386
     [ValidateSet("amd64", "386")]
     [string]$arch="amd64",
-    [string]$tag="v0.0.0"
+    [string]$tag="v0.0.0",
+    [string]$pfx_passphrase="none"
 )
 
 $integration = $(Split-Path -Leaf $PSScriptRoot)
@@ -43,6 +44,11 @@ echo $msBuild
 $env:GOOS="windows"
 $env:GOARCH=$arch
 
+echo "===> Import .pfx certificate from GH Secrets"
+Import-PfxCertificate -FilePath mycert.pfx -Password (ConvertTo-SecureString -String $pfx_passphrase -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
+
+echo "===> Show certificate installed"
+Get-ChildItem -Path cert:\CurrentUser\My\
 
 echo "--- Building Installer"
 
