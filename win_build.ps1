@@ -46,7 +46,7 @@ $env:GOOS="windows"
 $env:GOARCH=$arch
 
 echo "===> Decode PFX_CERTIFICATE_BASE64"
-$pfx_certificate = [Convert]::FromBase64String($pfx_certificate_base64)
+$pfx_certificate = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($pfx_certificate_base64))
 echo $pfx_certificate | Out-File mycert.pfx
 
 echo "===> Import .pfx certificate from GH Secrets"
