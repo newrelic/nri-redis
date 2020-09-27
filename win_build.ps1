@@ -47,7 +47,7 @@ $env:GOARCH=$arch
 
 echo "===> Decode PFX_CERTIFICATE_BASE64"
 $pfx_certificate = [Convert]::FromBase64String($pfx_certificate_base64)
-[IO.File]::WriteAllBytes(mycert.pfx, $pfx_certificate)
+echo $pfx_certificate | Out-File mycert.pfx
 
 echo "===> Import .pfx certificate from GH Secrets"
 Import-PfxCertificate -FilePath mycert.pfx -Password (ConvertTo-SecureString -String $pfx_passphrase -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
