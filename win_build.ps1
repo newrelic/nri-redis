@@ -54,17 +54,6 @@ $env:GOARCH=$arch
 echo "===> Building Installer"
 Push-Location -Path "pkg\windows\nri-$arch-installer"
 
-echo "===================>debug"
-pwd
-echo "===1"
-ls ..\..\..\
-echo "===2"
-ls ..\..\..\dist\
-echo "===3"
-ls ..\..\..\dist\nri-redis-win_windows_$arch\
-
-
-
 $env:integration = $integration
 . $msBuild/MSBuild.exe nri-installer.wixproj
 

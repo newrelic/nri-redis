@@ -107,21 +107,19 @@ jobs:
       - name: Place exe's in correct place so that Wix can take it
         shell: bash
         run: |
-          pwd
-          ls
           mkdir -p dist/nri-redis-win_windows_${{ matrix.goarch }}
           cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe dist/nri-redis-win_windows_${{ matrix.goarch }}/
-          ls dist/nri-redis-win_windows_${{ matrix.goarch }}/
       - name: Create MSI
         shell: pwsh
         run: |
-          pwd
           .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_certificate_base64 "$env:PFX_CERTIFICATE_BASE64" -pfx_passphrase "$env:PFX_PASSPHRASE"
       - name: Create and upload win zip to GH
         shell: bash
-        run: build/create_upload_win_zip.sh redis ${{ matrix.goarch }} ${TAG} ${GITHUB_TOKEN}
+        run: |
+          build/create_upload_win_zip.sh redis ${{ matrix.goarch }} ${TAG} ${GITHUB_TOKEN}
       - name: Upload MSI to GH
         shell: bash
-        run: hub release edit -a "pkg/windows/nri-${{ matrix.goarch }}-installer/bin/Release/nri-redis-${{ matrix.goarch }}.${TAG:1}.msi" -m ${TAG} ${TAG}
+        run: |
+          hub release edit -a "pkg/windows/nri-${{ matrix.goarch }}-installer/bin/Release/nri-redis-${{ matrix.goarch }}.${TAG:1}.msi" -m ${TAG} ${TAG}
 
 
