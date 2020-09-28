@@ -50,6 +50,14 @@ Get-ChildItem -Path cert:\CurrentUser\My\
 
 echo "===> Building Installer"
 Push-Location -Path "pkg\windows\nri-$arch-installer"
+
+echo "===================>debug"
+pwd
+ls ..\..\..\
+ls ..\..\..\dist\nri-redis-win_windows_386
+
+
+
 $env:integration = $integration
 . $msBuild/MSBuild.exe nri-installer.wixproj
 
