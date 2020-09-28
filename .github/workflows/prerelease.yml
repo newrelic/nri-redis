@@ -5,7 +5,16 @@ on:
     types:
       - prereleased
 
-#env:
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  GPG_MAIL: info@newrelic.com
+  GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+  GPG_PRIVATE_KEY_BASE64: ${{ secrets.GPG_PRIVATE_KEY_BASE64 }} # base64 encoded
+  PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
+  PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
+  SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+  TAG: ${{ github.event.release.tag_name }}
 
 jobs:
 
@@ -59,7 +68,7 @@ jobs:
           GOPATH: ${{ github.workspace }}
         run: make integration-test
 
-  release:
+  prerelease-linux:
     name: Build binary for all platforms:arch and publish on GH Releases
     runs-on: ubuntu-latest
     env:
@@ -72,3 +81,65 @@ jobs:
       - uses: actions/checkout@v2
       - name: Pre release
         run: make ci/prerelease
+      - name: Upload exe binaries to GHA Cache
+        uses: actions/upload-artifact@v2
+        with:
+          name: win-binaries
+          path: dist/nri-redis-win_windows_*/*.exe
+      - name: Notify failure via Slack
+        if: ${{ failure() }}
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_WEBHOOK }}
+          slack-channel: ${{ env.SLACK_CHANNEL }}
+          slack-text: ':shit: Repo: ${{ github.event.repository.full_name }}, prerelease for Linux FAILURE!'
+
+  prerelease-win:
+    name: Create MSI+zip+Push GH
+    runs-on: windows-2019
+    needs: [prerelease-linux]
+    env:
+      GOPATH: ${{ github.workspace }}
+    defaults:
+      run:
+        working-directory: src/github.com/newrelic/nri-redis
+    strategy:
+      matrix:
+        goarch: [amd64,386]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: src/github.com/newrelic/nri-redis
+      - name: Get PFX certificate from GH secrets
+        shell: bash
+        run: printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > mycert.pfx
+      - name: Download win binaries from GH Cache
+        uses: actions/download-artifact@v2
+        with:
+          name: win-binaries
+          path: src/github.com/newrelic/nri-redis/win-binaries
+      - name: Place exe's in correct place so that Wix can take it
+        shell: bash
+        run: |
+          mkdir -p dist/nri-redis-win_windows_${{ matrix.goarch }}
+          cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe dist/nri-redis-win_windows_${{ matrix.goarch }}/
+      - name: Create MSI
+        shell: pwsh
+        run: |
+          .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_certificate_base64 "$env:PFX_CERTIFICATE_BASE64" -pfx_passphrase "$env:PFX_PASSPHRASE"
+      - name: Create and upload win zip to GH
+        shell: bash
+        run: |
+          build/create_upload_win_zip.sh redis ${{ matrix.goarch }} ${TAG} ${GITHUB_TOKEN}
+      - name: Upload MSI to GH
+        shell: bash
+        run: |
+          hub release edit -a "pkg/windows/nri-${{ matrix.goarch }}-installer/bin/Release/nri-redis-${{ matrix.goarch }}.${TAG:1}.msi" -m ${TAG} ${TAG}
+      - name: Notify failure via Slack
+        if: ${{ failure() }}
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_WEBHOOK }}
+          slack-channel: ${{ env.SLACK_CHANNEL }}
+          slack-text: ':shit: Repo: ${{ github.event.repository.full_name }}, prerelease for Windows FAILURE!'

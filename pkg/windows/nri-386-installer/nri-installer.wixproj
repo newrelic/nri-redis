@@ -17,7 +17,7 @@
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
         <OutputPath>bin\$(Configuration)\</OutputPath>
         <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-        <DefineConstants>Debug;ProjectRootPath=..\..\..\;BinariesPath=..\..\..\target\bin\windows_386\</DefineConstants>
+        <DefineConstants>Debug;ProjectRootPath=..\..\..\;BinariesPath=..\..\..\dist\$(integration)-win_windows_386\</DefineConstants>
         <SuppressAllWarnings>True</SuppressAllWarnings>
         <Pedantic>False</Pedantic>
         <CompilerAdditionalOptions>-arch x86</CompilerAdditionalOptions>
@@ -25,7 +25,7 @@
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
         <OutputPath>bin\$(Configuration)\</OutputPath>
         <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-        <DefineConstants>Debug;ProjectRootPath=..\..\..\;BinariesPath=..\..\..\target\bin\windows_386\</DefineConstants>
+        <DefineConstants>Debug;ProjectRootPath=..\..\..\;BinariesPath=..\..\..\dist\$(integration)-win_windows_386\</DefineConstants>
         <CompilerAdditionalOptions>-arch x86</CompilerAdditionalOptions>
     </PropertyGroup>
     <ItemGroup>
@@ -33,7 +33,7 @@
     </ItemGroup>
     <Import Project="$(WixTargetsPath)"/>
     <Target Name="SignInstaller">
-        <Exec Command="&quot;$(SignToolPath)signtool.exe&quot; sign /d &quot;New Relic Infrastructure Agent, $(integration)&quot; /a &quot;$(OutputPath)$(OutputName).msi&quot;"/>
+        <Exec Command="&quot;$(SignToolPath)signtool.exe&quot; sign /s &quot;My&quot; /d &quot;Contoso&quot; /n &quot;Contoso&quot; &quot;$(OutputPath)$(OutputName).msi&quot;"/>
         <Copy SourceFiles="$(OutputPath)$(OutputName).msi" DestinationFiles="$(OutputPath)$(OutputName).x.y.z.msi"/>
         <!-- <Delete Files="$(OutputPath)$(OutputName).msi" /> -->
     </Target>

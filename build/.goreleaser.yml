@@ -5,13 +5,9 @@ before:
   # you may remove this if you don't need go generate
   #- go generate ./...
   #- make validate
-#
-#
-#  BUILDS
-#
-#
+
 builds:
-  - id: nri-redis
+  - id: nri-redis-linux
     main: ./src
     binary: nri-redis
     gobinary: "go1.9.7"
@@ -20,7 +16,6 @@ builds:
     goos:
       - linux
 #      - darwin
-#      - windows
     goarch:
 #      - 386
       - amd64
@@ -30,8 +25,24 @@ builds:
       - goos: darwin
         goarch: 386
 
+  - id: nri-redis-win
+    main: ./src
+    binary: nri-redis
+    gobinary: "go1.9.7"
+    #ldflags:
+    #  - -s -w -X github.com/newrelic/nri-flex/internal/load.IntegrationVersion={{.Version}}
+    goos:
+      - windows
+    goarch:
+      - 386
+      - amd64
+    hooks:
+      pre: build/set_exe_properties.sh {{ .Env.TAG }}
+
 nfpms:
   - id: nri-redis
+    builds:
+      - nri-redis-linux
     file_name_template: "{{ .ProjectName }}_{{ .Version }}-1_{{ .Arch }}"
     vendor: "New Relic, Inc."
     homepage: "https://www.newrelic.com/infrastructure"
@@ -57,16 +68,25 @@ nfpms:
           amd64: x86_64
 
 archives:
-  - id: nri-redis
+  - id: nri-redis-linux
+    builds:
+      - nri-redis-linux
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}"
     files:
       - redis-config.yml.sample
       - redis-definition.yml
       # installation scripts?
     format: tar.gz_dirty
-    format_overrides:
-      - goos: windows
-        format: zip_dirty
+
+  - id: nri-redis-win
+    builds:
+      - nri-redis-win
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}"
+    files:
+      - redis-config.yml.sample
+      - redis-definition.yml
+      # installation scripts?
+    format: zip_dirty
 
 # we use custom publisher for fixing archives and signing them
 release:
