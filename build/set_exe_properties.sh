@@ -26,6 +26,5 @@ sed \
   -e "s/{BuildVersion}/$BuildVersion/g" versioninfo.json.template > src/versioninfo.json
 
 export PATH="$PATH:/go/bin"
-go get github.com/josephspurrier/goversioninfo/cmd/goversioninfo
 go generate github.com/newrelic/nri-redis/cmd/
 
