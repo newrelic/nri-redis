@@ -6,14 +6,15 @@ on:
       - prereleased
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-  TAG: ${{ github.event.release.tag_name }}
-  PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
-  PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   GPG_MAIL: info@newrelic.com
   GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
   GPG_PRIVATE_KEY_BASE64: ${{ secrets.GPG_PRIVATE_KEY_BASE64 }} # base64 encoded
+  PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
+  PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
+  SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+  TAG: ${{ github.event.release.tag_name }}
 jobs:
 #
 #  validate:
@@ -78,6 +79,13 @@ jobs:
         with:
           name: win-binaries
           path: dist/nri-redis-win_windows_*/*.exe
+      - name: Notify failure via Slack
+        if: ${{ failure() }}
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_WEBHOOK }}
+          slack-channel: ${{ env.SLACK_CHANNEL }}
+          slack-text: ':shit: Repo: ${{ github.event.repository.full_name }}, Goreleaser FAILURE!'
 
   create-msi-push-gh:
     name: Create MSI+zip+Push GH
@@ -121,5 +129,11 @@ jobs:
         shell: bash
         run: |
           hub release edit -a "pkg/windows/nri-${{ matrix.goarch }}-installer/bin/Release/nri-redis-${{ matrix.goarch }}.${TAG:1}.msi" -m ${TAG} ${TAG}
-
+      - name: Notify failure via Slack
+        if: ${{ failure() }}
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_WEBHOOK }}
+          slack-channel: ${{ env.SLACK_CHANNEL }}
+          slack-text: ':shit: Repo: ${{ github.event.repository.full_name }}, Win MSI creation/Push FAILURE!'
 
