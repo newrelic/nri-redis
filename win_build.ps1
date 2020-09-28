@@ -55,7 +55,7 @@ ls ..\..\..\
 echo "===2"
 ls ..\..\..\dist\
 echo "===3"
-ls ..\..\..\dist\nri-redis-win_windows_386\
+ls ..\..\..\dist\nri-redis-win_windows_$arch\
 
 
 
