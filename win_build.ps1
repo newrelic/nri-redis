@@ -45,16 +45,17 @@ echo $msBuild
 $env:GOOS="windows"
 $env:GOARCH=$arch
 
-echo "===> Show certificate installed"
-Get-ChildItem -Path cert:\CurrentUser\My\
-
 echo "===> Building Installer"
 Push-Location -Path "pkg\windows\nri-$arch-installer"
 
 echo "===================>debug"
 pwd
+echo "===1"
 ls ..\..\..\
-ls ..\..\..\dist\nri-redis-win_windows_386
+echo "===2"
+ls ..\..\..\dist\
+echo "===3"
+ls ..\..\..\dist\nri-redis-win_windows_386\
 
 
 
