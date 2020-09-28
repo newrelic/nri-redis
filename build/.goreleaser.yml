@@ -5,11 +5,6 @@ before:
   # you may remove this if you don't need go generate
   #- go generate ./...
   #- make validate
-#
-#
-#  BUILDS
-#
-#
 builds:
   - id: nri-redis-nix
     main: ./src
@@ -38,8 +33,8 @@ builds:
     goarch:
       - 386
       - amd64
-#    hooks:
-#      pre: build/set_exe_properties.sh {{ .Env.TAG }}
+    hooks:
+      pre: build/set_exe_properties.sh {{ .Env.TAG }}
 
 nfpms:
   - id: nri-redis
