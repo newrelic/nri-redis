@@ -14,7 +14,7 @@ echo "===> Creating zip nri-${INTEGRATIONNAME}-${ARCH}.${TAG:1}.zip"
 mkdir -p zip/'New Relic'/'newrelic-infra'/'newrelic-integrations'/bin/
 mkdir -p zip/'New Relic'/'newrelic-infra'/'integrations.d'/
 
-cp target/bin/windows_${ARCH}/nri-${INTEGRATIONNAME}.exe  zip/'New Relic'/'newrelic-infra'/'newrelic-integrations'/bin/
+cp dist/nri-redis-win_windows_$arch/nri-${INTEGRATIONNAME}.exe  zip/'New Relic'/'newrelic-infra'/'newrelic-integrations'/bin/
 cp ${INTEGRATIONNAME}-definition.yml zip/'New Relic'/'newrelic-infra'/'newrelic-integrations'/
 cp ${INTEGRATIONNAME}-config.yml.sample zip/'New Relic'/'newrelic-infra'/'integrations.d'/
 
