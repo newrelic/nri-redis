@@ -111,9 +111,12 @@ jobs:
           ls
           mkdir -p dist/nri-redis-win_windows_${{ matrix.goarch }}
           cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe dist/nri-redis-win_windows_${{ matrix.goarch }}/
+          ls dist/nri-redis-win_windows_${{ matrix.goarch }}/
       - name: Create MSI
         shell: pwsh
-        run: .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_certificate_base64 "$env:PFX_CERTIFICATE_BASE64" -pfx_passphrase "$env:PFX_PASSPHRASE"
+        run: |
+          pwd
+          .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_certificate_base64 "$env:PFX_CERTIFICATE_BASE64" -pfx_passphrase "$env:PFX_PASSPHRASE"
       - name: Create and upload win zip to GH
         shell: bash
         run: build/create_upload_win_zip.sh redis ${{ matrix.goarch }} ${TAG} ${GITHUB_TOKEN}
