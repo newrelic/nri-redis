@@ -31,6 +31,12 @@ if ($wrong.Length  -ne 0) {
     exit -1
 }
 
+echo "===> Import .pfx certificate from GH Secrets"
+Import-PfxCertificate -FilePath mycert.pfx -Password (ConvertTo-SecureString -String $pfx_passphrase -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
+
+echo "===> Show certificate installed"
+Get-ChildItem -Path cert:\CurrentUser\My\
+
 echo "===> Configuring version $version for artifacts"
 .\windows_set_version.ps1 -major $v[0] -minor $v[1] -patch $v[2]
 
