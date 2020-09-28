@@ -17,7 +17,7 @@
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
         <OutputPath>bin\$(Configuration)\</OutputPath>
         <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-        <DefineConstants>Debug;ProjectRootPath=..\..\..\;BinariesPath=..\..\..\dist\$(integration)-win_windows_amd64\</DefineConstants>
+        <DefineConstants>Debug;ProjectRootPath=..\..\..\;BinariesPath=..\..\..\dist\$(integration)-win_windows_386\</DefineConstants>
         <SuppressAllWarnings>True</SuppressAllWarnings>
         <Pedantic>False</Pedantic>
         <CompilerAdditionalOptions>-arch x86</CompilerAdditionalOptions>
