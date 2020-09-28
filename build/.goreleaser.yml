@@ -7,20 +7,20 @@ before:
   #- make validate
 
 builds:
-  - id: nri-redis-linux
+  - id: nri-redis-nix
     main: ./src
     binary: nri-redis
     gobinary: "go1.9.7"
     #ldflags:
     #  - -s -w -X github.com/newrelic/nri-flex/internal/load.IntegrationVersion={{.Version}}
     goos:
-      - linux
-#      - darwin
+      - nix
+      - darwin
     goarch:
-#      - 386
+      - 386
       - amd64
-#      - arm
-#      - arm64
+      - arm
+      - arm64
     ignore:
       - goos: darwin
         goarch: 386
@@ -42,7 +42,7 @@ builds:
 nfpms:
   - id: nri-redis
     builds:
-      - nri-redis-linux
+      - nri-redis-nix
     file_name_template: "{{ .ProjectName }}_{{ .Version }}-1_{{ .Arch }}"
     vendor: "New Relic, Inc."
     homepage: "https://www.newrelic.com/infrastructure"
@@ -68,9 +68,9 @@ nfpms:
           amd64: x86_64
 
 archives:
-  - id: nri-redis-linux
+  - id: nri-redis-nix
     builds:
-      - nri-redis-linux
+      - nri-redis-nix
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}"
     files:
       - redis-config.yml.sample

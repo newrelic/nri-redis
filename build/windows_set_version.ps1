@@ -14,7 +14,7 @@ if (-not (Test-Path env:GOPATH)) {
 }
 $projectRootPath = Join-Path -Path $env:GOPATH -ChildPath "src\github.com\newrelic\$integration"
 
-$versionInfoTempl = Get-Childitem -Path $projectRootPath -Include "versioninfo.json.template" -Recurse -ErrorAction SilentlyContinue
+$versionInfoTempl = Get-Childitem -Path $projectRootPath -Include "build\versioninfo.json.template" -Recurse -ErrorAction SilentlyContinue
 if ("$versionInfoTempl" -eq "") {
 	echo "here" + $versionInfoTempl
 	Write-Error "$projectRootPath not found."

@@ -23,7 +23,7 @@ sed \
   -e "s/{MajorVersion}/$MajorVersion/g" \
   -e "s/{MinorVersion}/$MinorVersion/g" \
   -e "s/{PatchVersion}/$PatchVersion/g" \
-  -e "s/{BuildVersion}/$BuildVersion/g" versioninfo.json.template > src/versioninfo.json
+  -e "s/{BuildVersion}/$BuildVersion/g" ./build/versioninfo.json.template > src/versioninfo.json
 
 export PATH="$PATH:/go/bin"
 go generate github.com/newrelic/nri-redis/cmd/

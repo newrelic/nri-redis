@@ -19,8 +19,8 @@ jobs:
       - name: Validate code
         run: make ci/validate
 
-  test-linux:
-    name: Run unit tests on linux
+  test-nix:
+    name: Run unit tests on nix
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -46,11 +46,11 @@ jobs:
       - name: Running unit tests
         shell: pwsh
         run: |
-          .\win_build.ps1 -installer
+          .\build\win_build.ps1 -installer
 
   # can't run this step inside of container because of tests specific
-  test-integration-linux:
-    name: Run integration tests on linux
+  test-integration-nix:
+    name: Run integration tests on nix
     runs-on: ubuntu-latest
     defaults:
       run:
