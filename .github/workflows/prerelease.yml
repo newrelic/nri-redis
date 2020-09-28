@@ -96,6 +96,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: src/github.com/newrelic/nri-redis
+      - name: Get PFX certificate from GH secrets
+        shell: bash
+        run: printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > pkg/windows/nri-${{ matrix.goarch }}-installer/mycert.pfx
       - name: Download win binaries from GH Cache
         uses: actions/download-artifact@v2
         with:
@@ -104,8 +107,8 @@ jobs:
       - name: Place exe's in correct place so that Wix can take it
         shell: bash
         run: |
-          mkdir -p target/bin/windows_${{ matrix.goarch }}
-          cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe  target/bin/windows_${{ matrix.goarch }}/
+          mkdir -p dist/nri-redis-win_windows_${{ matrix.goarch }}
+          cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe dist/nri-redis-win_windows_${{ matrix.goarch }}/
       - name: Create MSI
         shell: pwsh
         run: .\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_certificate_base64 "$env:PFX_CERTIFICATE_BASE64" -pfx_passphrase "$env:PFX_PASSPHRASE"
