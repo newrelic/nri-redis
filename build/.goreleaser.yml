@@ -5,11 +5,6 @@ before:
   # you may remove this if you don't need go generate
   #- go generate ./...
   #- make validate
-#
-#
-#  BUILDS
-#
-#
 builds:
   - id: nri-redis-nix
     main: ./src
