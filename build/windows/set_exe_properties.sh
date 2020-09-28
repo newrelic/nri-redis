@@ -10,6 +10,7 @@ TAG=$1
 if [ -n "$1" ]; then
   echo "===> Tag is ${TAG}"
 else
+  # todo: exit here with error?
   echo "===> Tag not specified will be 0.0.0"
   TAG='0.0.0'
 fi
@@ -23,7 +24,8 @@ sed \
   -e "s/{MajorVersion}/$MajorVersion/g" \
   -e "s/{MinorVersion}/$MinorVersion/g" \
   -e "s/{PatchVersion}/$PatchVersion/g" \
-  -e "s/{BuildVersion}/$BuildVersion/g" ./build/versioninfo.json.template > src/versioninfo.json
+  -e "s/{BuildVersion}/$BuildVersion/g" ./build/windows/versioninfo.json.template > ./src/versioninfo.json
 
+# todo: do we need this export line
 export PATH="$PATH:/go/bin"
 go generate github.com/newrelic/nri-redis/cmd/

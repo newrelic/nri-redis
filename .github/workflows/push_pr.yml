@@ -7,7 +7,8 @@ on:
     tags-ignore:
       - '**'
 
-#env:
+env:
+  TAG: ${{ github.event.release.tag_name }}
 
 jobs:
 
@@ -46,7 +47,7 @@ jobs:
       - name: Running unit tests
         shell: pwsh
         run: |
-          .\build\win_build.ps1 -installer
+          .\build\windows\win_build.ps1 -installer
 
   # can't run this step inside of container because of tests specific
   test-integration-nix:

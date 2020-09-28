@@ -10,7 +10,9 @@ ARCH=$2
 TAG=$3
 GITHUB_TOKEN=$4
 
-echo "===> Creating zip nri-${INTEGRATIONNAME}-${ARCH}.${TAG:1}.zip"
+ZIP_NAME="nri-${INTEGRATIONNAME}-${ARCH}.${TAG:1}.zip"
+
+echo "===> Creating zip ${ZIP_NAME}"
 mkdir -p zip/'New Relic'/'newrelic-infra'/'newrelic-integrations'/bin/
 mkdir -p zip/'New Relic'/'newrelic-infra'/'integrations.d'/
 
@@ -19,8 +21,8 @@ cp ${INTEGRATIONNAME}-definition.yml zip/'New Relic'/'newrelic-infra'/'newrelic-
 cp ${INTEGRATIONNAME}-config.yml.sample zip/'New Relic'/'newrelic-infra'/'integrations.d'/
 
 cd zip
-7z a -r nri-${INTEGRATIONNAME}-${ARCH}.${TAG:1}.zip .
+7z a -r ${ZIP_NAME} .
 
-echo "===> Pushing nri-${INTEGRATIONNAME}-${ARCH}.${TAG:1}.zip to GHA Release assets"
+echo "===> Pushing ${ZIP_NAME} to GHA Release assets"
 export $GITHUB_TOKEN
-hub release edit -a nri-${INTEGRATIONNAME}-${ARCH}.${TAG:1}.zip -m "${TAG}" ${TAG}
+hub release edit -a ${ZIP_NAME} -m "${TAG}" ${TAG}

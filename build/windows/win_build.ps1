@@ -38,7 +38,7 @@ echo "===> Show certificate installed"
 Get-ChildItem -Path cert:\CurrentUser\My\
 
 echo "===> Configuring version $version for artifacts"
-.\build\windows_set_version.ps1 -major $v[0] -minor $v[1] -patch $v[2]
+.\build\widows\windows_set_version.ps1 -major $v[0] -minor $v[1] -patch $v[2]
 
 echo "===> Checking MSBuild.exe..."
 $msBuild = (Get-ItemProperty hklm:\software\Microsoft\MSBuild\ToolsVersions\4.0).MSBuildToolsPath
@@ -67,6 +67,7 @@ if (-not $?)
 echo "===> Making versioned installed copy"
 cd bin\Release
 cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
+# todo: why do we need this?
 cp "$integration-$arch.msi" "$integration.msi"
 
 Pop-Location

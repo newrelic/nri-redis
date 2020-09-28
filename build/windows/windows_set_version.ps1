@@ -14,7 +14,7 @@ if (-not (Test-Path env:GOPATH)) {
 }
 $projectRootPath = Join-Path -Path $env:GOPATH -ChildPath "src\github.com\newrelic\$integration"
 
-$versionInfoTempl = Get-Childitem -Path $projectRootPath -Include "build\versioninfo.json.template" -Recurse -ErrorAction SilentlyContinue
+$versionInfoTempl = Get-Childitem -Path $projectRootPath -Include "build\windows\versioninfo.json.template" -Recurse -ErrorAction SilentlyContinue
 if ("$versionInfoTempl" -eq "") {
 	echo "here" + $versionInfoTempl
 	Write-Error "$projectRootPath not found."
@@ -33,8 +33,8 @@ $versionInfo = $versionInfo -replace "{IntegrationExe}", $executable
 $versionInfo = $versionInfo -replace "{Year}", (Get-Date).year
 Set-Content -Path $versionInfoPath -Value $versionInfo
 
-$wix386Path = Join-Path -Path $projectRootPath -ChildPath "pkg\windows\nri-386-installer\Product.wxs"
-$wixAmd64Path = Join-Path -Path $projectRootPath -ChildPath "pkg\windows\nri-amd64-installer\Product.wxs"
+$wix386Path = Join-Path -Path $projectRootPath -ChildPath "build\package\windows\nri-386-installer\Product.wxs"
+$wixAmd64Path = Join-Path -Path $projectRootPath -ChildPath "build\package\windows\nri-amd64-installer\Product.wxs"
 
 Function ProcessProductFile($productPath) {
 	if ((Test-Path "$productPath.template" -PathType Leaf) -eq $False) {
