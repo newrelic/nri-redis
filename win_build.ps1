@@ -1,6 +1,6 @@
 <#
     .SYNOPSIS
-        This script verifies, tests, builds and packages a New Relic Infrastructure Integration
+        This script creates the win .MSI
 #>
 param (
     # Target architecture: amd64 (default) or 386
@@ -44,13 +44,6 @@ echo $msBuild
 
 $env:GOOS="windows"
 $env:GOARCH=$arch
-
-echo "===> Decode PFX_CERTIFICATE_BASE64"
-$pfx_certificate = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($pfx_certificate_base64))
-echo $pfx_certificate | Out-File mycert.pfx
-
-echo "===> Import .pfx certificate from GH Secrets"
-Import-PfxCertificate -FilePath mycert.pfx -Password (ConvertTo-SecureString -String $pfx_passphrase -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
 
 echo "===> Show certificate installed"
 Get-ChildItem -Path cert:\CurrentUser\My\
