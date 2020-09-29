@@ -124,7 +124,7 @@ jobs:
       - name: Create MSI
         shell: pwsh
         run: |
-          .\build\windows\win_build.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_certificate_base64 "$env:PFX_CERTIFICATE_BASE64" -pfx_passphrase "$env:PFX_PASSPHRASE"
+          .\build\windows\package_msi.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_certificate_base64 "$env:PFX_CERTIFICATE_BASE64" -pfx_passphrase "$env:PFX_PASSPHRASE"
       - name: Create and upload win zip to GH
         shell: bash
         run: |

@@ -47,7 +47,7 @@ jobs:
       - name: Running unit tests
         shell: pwsh
         run: |
-          .\build\windows\win_build.ps1 -installer
+          .\build\windows\package_msi.ps1 -installer
 
   # can't run this step inside of container because of tests specific
   test-integration-nix:

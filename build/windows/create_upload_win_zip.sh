@@ -21,8 +21,8 @@ cp ${INTEGRATIONNAME}-definition.yml zip/'New Relic'/'newrelic-infra'/'newrelic-
 cp ${INTEGRATIONNAME}-config.yml.sample zip/'New Relic'/'newrelic-infra'/'integrations.d'/
 
 cd zip
-7z a -r ${ZIP_NAME} .
+7z a -r "${ZIP_NAME}" .
 
 echo "===> Pushing ${ZIP_NAME} to GHA Release assets"
 export $GITHUB_TOKEN
-hub release edit -a ${ZIP_NAME} -m "${TAG}" ${TAG}
+hub release edit -a "${ZIP_NAME}" -m "${TAG}" ${TAG}

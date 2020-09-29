@@ -28,4 +28,4 @@ sed \
 
 # todo: do we need this export line
 export PATH="$PATH:/go/bin"
-go generate github.com/newrelic/nri-redis/cmd/
+go generate github.com/newrelic/nri-redis/src/

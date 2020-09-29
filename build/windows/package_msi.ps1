@@ -38,7 +38,7 @@ echo "===> Show certificate installed"
 Get-ChildItem -Path cert:\CurrentUser\My\
 
 echo "===> Configuring version $version for artifacts"
-.\build\widows\windows_set_version.ps1 -major $v[0] -minor $v[1] -patch $v[2]
+.\build\widows\set_exe_metadata.ps1 -major $v[0] -minor $v[1] -patch $v[2]
 
 echo "===> Checking MSBuild.exe..."
 $msBuild = (Get-ItemProperty hklm:\software\Microsoft\MSBuild\ToolsVersions\4.0).MSBuildToolsPath
