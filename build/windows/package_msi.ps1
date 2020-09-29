@@ -37,9 +37,6 @@ Import-PfxCertificate -FilePath mycert.pfx -Password (ConvertTo-SecureString -St
 echo "===> Show certificate installed"
 Get-ChildItem -Path cert:\CurrentUser\My\
 
-echo "===> Configuring version $version for artifacts"
-.\build\widows\set_exe_metadata.ps1 -major $v[0] -minor $v[1] -patch $v[2]
-
 echo "===> Checking MSBuild.exe..."
 $msBuild = (Get-ItemProperty hklm:\software\Microsoft\MSBuild\ToolsVersions\4.0).MSBuildToolsPath
 if ($msBuild.Length -eq 0) {
@@ -47,9 +44,6 @@ if ($msBuild.Length -eq 0) {
     exit -1
 }
 echo $msBuild
-
-$env:GOOS="windows"
-$env:GOARCH=$arch
 
 echo "===> Building Installer"
 Push-Location -Path "build\package\windows\nri-$arch-installer"

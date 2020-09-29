@@ -14,13 +14,13 @@ builds:
     #ldflags:
     #  - -s -w -X github.com/newrelic/nri-flex/internal/load.IntegrationVersion={{.Version}}
     goos:
-      - nix
-      - darwin
+      - linux
+#      - darwin
     goarch:
-      - 386
+#      - 386
       - amd64
-      - arm
-      - arm64
+#      - arm
+#      - arm64
     ignore:
       - goos: darwin
         goarch: 386
@@ -71,22 +71,22 @@ archives:
   - id: nri-redis-nix
     builds:
       - nri-redis-nix
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}"
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}_dirty"
     files:
       - redis-config.yml.sample
       - redis-definition.yml
       # installation scripts?
-    format: tar.gz_dirty
+    format: tar.gz
 
   - id: nri-redis-win
     builds:
       - nri-redis-win
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}"
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}_dirty"
     files:
       - redis-config.yml.sample
       - redis-definition.yml
       # installation scripts?
-    format: zip_dirty
+    format: zip
 
 # we use custom publisher for fixing archives and signing them
 release:

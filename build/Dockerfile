@@ -5,5 +5,7 @@ RUN apt-get update \
         rpm \
         hub \
         gnupg2 \
+        unzip \
+        zip \
     && go get golang.org/dl/go1.9.7 \
     && /go/bin/go1.9.7 download

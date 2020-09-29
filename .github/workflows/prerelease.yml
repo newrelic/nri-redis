@@ -15,6 +15,7 @@ env:
   PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
   TAG: ${{ github.event.release.tag_name }}
+  REPO_FULL_NAME: ${{ github.event.repository.full_name }}
 
 jobs:
 
@@ -70,7 +71,7 @@ jobs:
 
   #todo: add dedicated run windows tests action
 
-  prerelease-nix:
+  prerelease:
     name: Build binary for all platforms:arch, packages for nix and publish on GH Releases
     runs-on: ubuntu-latest
     needs: [validate, test-nix, test-integration-nix]
@@ -91,10 +92,10 @@ jobs:
           slack-channel: ${{ env.SLACK_CHANNEL }}
           slack-text: ':shit: Repo: ${{ github.event.repository.full_name }}, prerelease for nix FAILURE!'
 
-  prerelease-win:
-    name: Create MSI+zip+Push GH
+  package-win:
+    name: Create MSI & Push GH
     runs-on: windows-2019
-    needs: [prerelease-nix]
+    needs: [prerelease]
     env:
       GOPATH: ${{ github.workspace }}
     defaults:
@@ -111,28 +112,18 @@ jobs:
       - name: Get PFX certificate from GH secrets
         shell: bash
         run: printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > mycert.pfx
-      - name: Download win binaries from GH Cache
-        uses: actions/download-artifact@v2
-        with:
-          name: win-binaries
-          path: src/github.com/newrelic/nri-redis/win-binaries
-      - name: Place exe's in correct place so that Wix can take it
+      - name: Download win zip from GH Release assets
         shell: bash
         run: |
-          mkdir -p dist/nri-redis-win_windows_${{ matrix.goarch }}
-          cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe dist/nri-redis-win_windows_${{ matrix.goarch }}/
+          build\windows\download_win_zip.sh ${{ matrix.goarch }}
       - name: Create MSI
         shell: pwsh
         run: |
           .\build\windows\package_msi.ps1 -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_certificate_base64 "$env:PFX_CERTIFICATE_BASE64" -pfx_passphrase "$env:PFX_PASSPHRASE"
-      - name: Create and upload win zip to GH
-        shell: bash
-        run: |
-          build/winndows/create_upload_win_zip.sh redis ${{ matrix.goarch }} ${TAG} ${GITHUB_TOKEN}
       - name: Upload MSI to GH
         shell: bash
         run: |
-          hub release edit -a "pkg/windows/nri-${{ matrix.goarch }}-installer/bin/Release/nri-redis-${{ matrix.goarch }}.${TAG:1}.msi" -m ${TAG} ${TAG}
+          build/windows/upload_msi.sh ${{ matrix.goarch }} ${TAG}
       - name: Notify failure via Slack
         if: ${{ failure() }}
         uses: archive/github-actions-slack@master

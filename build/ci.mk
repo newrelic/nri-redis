@@ -4,6 +4,19 @@ BUILDER_TAG ?= nri-$(INTEGRATION)-builder
 ci/deps:
 	@docker build -t $(BUILDER_TAG) -f $(CURDIR)/build/Dockerfile $(CURDIR)
 
+.PHONY : ci/debug-container
+ci/debug-container: ci/deps
+	@docker run --rm -it \
+			-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
+			-w /go/src/github.com/newrelic/nri-redis \
+			-e PRERELEASE=true \
+			-e GITHUB_TOKEN=$(GH_TOKEN) \
+			-e TAG \
+			-e GPG_MAIL \
+			-e GPG_PASSPHRASE \
+			-e GPG_PRIVATE_KEY_BASE64 \
+			$(BUILDER_TAG) bash
+
 .PHONY : ci/validate
 ci/validate: ci/deps
 	@docker run --rm -t \
