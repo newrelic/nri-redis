@@ -9,6 +9,7 @@ on:
 
 env:
   TAG: ${{ github.event.release.tag_name }}
+  REPO_FULL_NAME: "newrelic/nri-redis" #${{ github.event.repository.full_name }}
 
 jobs:
 
@@ -34,12 +35,12 @@ jobs:
       GOPATH: ${{ github.workspace }}
     defaults:
       run:
-        working-directory: src/github.com/newrelic/nri-redis
+        working-directory: src/github.com/${{env.REPO_FULL_NAME}}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: src/github.com/newrelic/nri-redis
+          path: src/github.com/${{env.REPO_FULL_NAME}}
       - name: Install Go
         uses: actions/setup-go@v2
         with:
@@ -47,7 +48,7 @@ jobs:
       - name: Running unit tests
         shell: pwsh
         run: |
-          .\build\windows\package_msi.ps1 -installer
+          .\build\windows\unit_tests.ps1
 
   # can't run this step inside of container because of tests specific
   test-integration-nix:
@@ -55,13 +56,13 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: src/github.com/${{ github.event.repository.full_name }}
+        working-directory: src/github.com/${{env.REPO_FULL_NAME}}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
-          path: src/github.com/${{ github.event.repository.full_name }}
+          path: src/github.com/${{env.REPO_FULL_NAME}}
       - name: Install Go
         uses: actions/setup-go@v2
         with:
