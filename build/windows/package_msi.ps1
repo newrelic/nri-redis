@@ -49,7 +49,7 @@ echo "===> Building Installer"
 Push-Location -Path "build\package\windows\nri-$arch-installer"
 
 $env:integration = $integration
-. $msBuild/MSBuild.exe nri-installer.wixproj
+. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version}
 
 if (-not $?)
 {
