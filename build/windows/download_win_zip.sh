@@ -8,6 +8,7 @@ set -e
 
 ARCH=$1
 INTEGRATION=$2
+TAG=$3
 
 zip_name="nri-${INTEGRATION}_windows_${TAG:1}_${ARCH}.zip"
 wget -O ./dist --quiet https://github.com/${REPO_FULL_NAME}/releases/download/${TAG}/${zip_name}

@@ -10,6 +10,7 @@ PROJECT_PATH=$1
 
 for zip_dirty in $(find dist -regex ".*_dirty\.\(zip\)");do
   zip_file_name=${zip_dirty:5:${#zip_dirty}-(5+10)} # Strips begining and end chars
+  ZIP_CLEAN="${zip_file_name}.zip"
   ZIP_TMP="dist/zip_temp"
   ZIP_CONTENT_PATH="${ZIP_TMP}/${zip_file_name}_content"
 
@@ -31,12 +32,12 @@ for zip_dirty in $(find dist -regex ".*_dirty\.\(zip\)");do
   mv ${ZIP_CONTENT_PATH}/redis-definition.yml "${CONF_IN_ZIP_PATH}"
   mv ${ZIP_CONTENT_PATH}/redis-config.yml.sample "${CONF_IN_ZIP_PATH}"
 
-  echo "===> Creating zip ${zip_file_name}"
+  echo "===> Creating zip ${ZIP_CLEAN}"
   cd "${ZIP_CONTENT_PATH}"
-  zip -r ../${zip_file_name} .
+  zip -r ../${ZIP_CLEAN} .
   cd $PROJECT_PATH
-  echo "===> Moving zip ${zip_file_name}"
-  mv "${ZIP_TMP}/${zip_file_name}" dist/
+  echo "===> Moving zip ${ZIP_CLEAN}"
+  mv "${ZIP_TMP}/${ZIP_CLEAN}" dist/
   echo "===> Cleaning dirty zip ${zip_dirty}"
   rm "${zip_dirty}"
 done

@@ -10,6 +10,7 @@ PROJECT_PATH=$1
 
 for tarball_dirty in $(find dist -regex ".*_dirty\.\(tar.gz\)");do
   tarball=${tarball_dirty:5:${#tarball_dirty}-(5+13)} # Strips begining and end chars
+  TARBALL_CLEAN="${tarball}.tar.gz"
   TARBALL_TMP="dist/tarball_temp"
   TARBALL_CONTENT_PATH="${TARBALL_TMP}/${tarball}_content"
   mkdir -p ${TARBALL_CONTENT_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/
@@ -24,10 +25,10 @@ for tarball_dirty in $(find dist -regex ".*_dirty\.\(tar.gz\)");do
 
   echo "===> Creating tarball ${tarball}"
   cd ${TARBALL_CONTENT_PATH}
-  tar -czvf ../${tarball} .
+  tar -czvf ../${TARBALL_CLEAN} .
   cd $PROJECT_PATH
-  echo "===> Moving tarball ${tarball}"
-  mv "${TARBALL_TMP}/${tarball}" dist/
+  echo "===> Moving tarball ${TARBALL_CLEAN}"
+  mv "${TARBALL_TMP}/${TARBALL_CLEAN}" dist/
   echo "===> Cleaning dirty tarball ${tarball_dirty}"
   rm ${tarball_dirty}
 done
