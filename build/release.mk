@@ -49,7 +49,7 @@ release/sign/nix:
 .PHONY : release/publish
 release/publish:
 	@echo "=== $(INTEGRATION) === [release/publish] publishing artifacts"
-	@bash $(CURDIR)/build/upload_packages_gh.sh
+	@bash $(CURDIR)/build/upload_artifacts_gh.sh
 
 .PHONY : release
 release: release/build release/fix-archive release/sign/nix release/publish release/clean
