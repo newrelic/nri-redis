@@ -130,7 +130,7 @@ jobs:
       - name: Download zip from GH Release assets
         shell: bash
         run: |
-          build\windows\download_win_zip.sh ${{ matrix.goarch }} ${INTEGRATION}
+          build\windows\download_win_zip.sh ${{ matrix.goarch }} ${INTEGRATION} ${TAG}
       - name: Create MSI
         shell: pwsh
         run: |
