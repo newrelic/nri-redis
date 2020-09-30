@@ -38,7 +38,7 @@ echo "===> Show certificate installed"
 Get-ChildItem -Path cert:\CurrentUser\My\
 
 echo "===> Generate Product.wxs"
-.\build\widows\generate_wxs.ps1 -major $v[0] -minor $v[1] -patch $v[2]
+.\build\windows\generate_wxs.ps1 -major $v[0] -minor $v[1] -patch $v[2]
 
 echo "===> Checking MSBuild.exe..."
 $msBuild = (Get-ItemProperty hklm:\software\Microsoft\MSBuild\ToolsVersions\4.0).MSBuildToolsPath
