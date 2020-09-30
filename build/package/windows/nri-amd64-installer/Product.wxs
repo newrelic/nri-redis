@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-    <?define Version = "{IntegrationVersion}" ?>
+    <?define Version = "$(var.IntegrationVersion)" ?>
     <?define ProductId = "*" ?>
     <?define UpgradeCode = "{f2334d3a-10f1-4a4c-9185-08d197f95b2b}" ?>
 
     <Product Id="$(var.ProductId)"
-             Name="New Relic Infrastructure Integration, nri-{IntegrationName}"
+             Name="New Relic Infrastructure Integration, nri-redis"
              Language="1033"
              Version="$(var.Version)"
              Manufacturer="New Relic, Inc."
@@ -17,12 +17,12 @@
                  Platform="x64"
                  Manufacturer="New Relic, Inc."
                  Comments="(c) {Year} New Relic, Inc."
-                 Keywords="infrastructure,MSI,on-host,{IntegrationName}"/>
+                 Keywords="infrastructure,MSI,on-host,redis"/>
 
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."/>
         <MediaTemplate EmbedCab="yes"/>
 
-        <Feature Id="ProductFeature" Title="New Relic Infrastructure Integration, nri-{IntegrationName}" Level="1">
+        <Feature Id="ProductFeature" Title="New Relic Infrastructure Integration, nri-redis" Level="1">
             <ComponentRef Id="CMP_V1_PLUGIN_CONFIGS"/>
             <ComponentRef Id="CMP_V1_CUSTOM_PLUGINS"/>
             <ComponentRef Id="CMP_V1_CUSTOM_PLUGINS_BIN"/>
@@ -67,26 +67,26 @@
 
     <Fragment>
         <ComponentGroup Id="CustomPluginsBinComponent" Directory="CustomPluginsBinFolder">
-            <Component Id="CMP_NRI_{IntegrationName}_EXE" Guid="1c087224-e45b-4216-8517-f810d469eed1" Win64="yes">
-                <File Id="FILE_NRI_{IntegrationName}_EXE"
+            <Component Id="CMP_NRI_redis_EXE" Guid="1c087224-e45b-4216-8517-f810d469eed1" Win64="yes">
+                <File Id="FILE_NRI_redis_EXE"
                       Source="$(var.BinariesPath){IntegrationExe}"
                       KeyPath="yes"/>
             </Component>
         </ComponentGroup>
         <ComponentGroup Id="CustomPluginsComponent" Directory="CustomPluginsFolder">
-            <Component Id="CMP_NRI_{IntegrationName}_DEFINITION_YML" Guid="fbe397af-e27f-4d89-96cd-7395b95800e6" Win64="yes">
-                <File Id="FILE_NRI_{IntegrationName}_DEFINITION_YML"
-                      Name="{IntegrationName}-definition.yml"
-                      Source="$(var.ProjectRootPath){IntegrationName}-win-definition.yml"
+            <Component Id="CMP_NRI_redis_DEFINITION_YML" Guid="fbe397af-e27f-4d89-96cd-7395b95800e6" Win64="yes">
+                <File Id="FILE_NRI_redis_DEFINITION_YML"
+                      Name="redis-definition.yml"
+                      Source="$(var.ProjectRootPath)redis-win-definition.yml"
                       KeyPath="yes"/>
             </Component>
         </ComponentGroup>
         <ComponentGroup Id="PluginConfigsComponent" Directory="PluginConfigsFolder">
-            <Component Id="CMP_NRI_{IntegrationName}_CONFIG_YML" Guid="1bf72f1b-9d68-4c59-bd52-be6b7fe2e107" Win64="yes"
+            <Component Id="CMP_NRI_redis_CONFIG_YML" Guid="1bf72f1b-9d68-4c59-bd52-be6b7fe2e107" Win64="yes"
                        NeverOverwrite="yes" Permanent="yes">
-                <File Id="FILE_NRI_{IntegrationName}_CONFIG_YML"
-                      Name="{IntegrationName}-config.yml.sample"
-                      Source="$(var.ProjectRootPath){IntegrationName}-config.yml.sample"
+                <File Id="FILE_NRI_redis_CONFIG_YML"
+                      Name="redis-config.yml.sample"
+                      Source="$(var.ProjectRootPath)redis-config.yml.sample"
                       KeyPath="yes"/>
             </Component>
         </ComponentGroup>
