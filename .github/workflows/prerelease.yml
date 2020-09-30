@@ -15,7 +15,8 @@ env:
   PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
   TAG: ${{ github.event.release.tag_name }}
-  REPO_FULL_NAME: ${{ github.event.repository.full_name }}
+  REPO_FULL_NAME: "newrelic/nri-redis"#${{ github.event.repository.full_name }}
+  INTEGRATION: "redis"
 
 jobs:
 
@@ -53,13 +54,13 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: src/github.com/${{ github.event.repository.full_name }}
+        working-directory: src/github.com/${REPO_FULL_NAME}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
-          path: src/github.com/${{ github.event.repository.full_name }}
+          path: src/github.com/${REPO_FULL_NAME}
       - name: Install Go
         uses: actions/setup-go@v2
         with:
@@ -90,7 +91,7 @@ jobs:
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_WEBHOOK }}
           slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ':shit: Repo: ${{ github.event.repository.full_name }}, prerelease for nix FAILURE!'
+          slack-text: ':shit: Repo: ${REPO_FULL_NAME}, prerelease for nix FAILURE!'
 
   package-win:
     name: Create MSI & Push GH
@@ -112,10 +113,10 @@ jobs:
       - name: Get PFX certificate from GH secrets
         shell: bash
         run: printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > mycert.pfx
-      - name: Download win zip from GH Release assets
+      - name: Download zip from GH Release assets
         shell: bash
         run: |
-          build\windows\download_win_zip.sh ${{ matrix.goarch }}
+          build\windows\download_win_zip.sh ${{ matrix.goarch }} ${INTEGRATION}
       - name: Create MSI
         shell: pwsh
         run: |
@@ -130,4 +131,4 @@ jobs:
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_WEBHOOK }}
           slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ':shit: Repo: ${{ github.event.repository.full_name }}, prerelease for Windows FAILURE!'
+          slack-text: ':shit: Repo: ${REPO_FULL_NAME}, prerelease for Windows FAILURE!'
