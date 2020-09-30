@@ -15,6 +15,8 @@ env:
   PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
   TAG: ${{ github.event.release.tag_name }}
+  REPO_FULL_NAME: "newrelic/nri-redis"#${{ github.event.repository.full_name }}
+  INTEGRATION: "redis"
 
 jobs:
 
@@ -111,16 +113,10 @@ jobs:
       - name: Get PFX certificate from GH secrets
         shell: bash
         run: printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > mycert.pfx
-      - name: Download win binaries from GH Cache
-        uses: actions/download-artifact@v2
-        with:
-          name: win-binaries
-          path: src/github.com/newrelic/nri-redis/win-binaries
-      - name: Place exe's in correct place so that Wix can take it
+      - name: Download zip from GH Release assets
         shell: bash
         run: |
-          mkdir -p dist/nri-redis-win_windows_${{ matrix.goarch }}
-          cp win-binaries/nri-redis-win_windows_${{ matrix.goarch }}/*.exe dist/nri-redis-win_windows_${{ matrix.goarch }}/
+          build\windows\download_win_zip.sh ${{ matrix.goarch }} ${INTEGRATION}
       - name: Create MSI
         shell: pwsh
         run: |
