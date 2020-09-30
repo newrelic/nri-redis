@@ -11,7 +11,7 @@ param (
     [string]$pfx_passphrase="none"
 )
 
-$integration = $(Split-Path -Leaf $PSScriptRoot)
+$integration = "nri-redis" # $(Split-Path -Leaf $PSScriptRoot)
 $integrationName = $integration.Replace("nri-", "")
 $executable = "nri-$integrationName.exe"
 
@@ -48,7 +48,6 @@ echo $msBuild
 echo "===> Building Installer"
 Push-Location -Path "build\package\windows\nri-$arch-installer"
 
-$env:integration = $integration
 . $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version}
 
 if (-not $?)
