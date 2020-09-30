@@ -4,6 +4,9 @@ param (
     [string]$TAG="v0.0.0",
     [string]$REPO_FULL_NAME="none"
 )
+write-host "===> Creating dist folder"
+New-Item -ItemType directory -Path .\dist
+
 $VERSION=${TAG}.substring(1)
 $exe_folder="nri-${INTEGRATION}_windows_${ARCH}"
 $zip_name="nri-${INTEGRATION}_windows_${VERSION}_${ARCH}.zip"
