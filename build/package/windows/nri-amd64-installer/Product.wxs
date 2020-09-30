@@ -69,7 +69,7 @@
         <ComponentGroup Id="CustomPluginsBinComponent" Directory="CustomPluginsBinFolder">
             <Component Id="CMP_NRI_redis_EXE" Guid="1c087224-e45b-4216-8517-f810d469eed1" Win64="yes">
                 <File Id="FILE_NRI_redis_EXE"
-                      Source="$(var.BinariesPath){IntegrationExe}"
+                      Source="$(var.BinariesPath)nri-redis.exe"
                       KeyPath="yes"/>
             </Component>
         </ComponentGroup>
