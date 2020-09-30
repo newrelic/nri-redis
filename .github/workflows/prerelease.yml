@@ -54,13 +54,13 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: src/github.com/${{REPO_FULL_NAME}}
+        working-directory: src/github.com/${{env.REPO_FULL_NAME}}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
-          path: src/github.com/${{REPO_FULL_NAME}}
+          path: src/github.com/${{env.REPO_FULL_NAME}}
       - name: Install Go
         uses: actions/setup-go@v2
         with:
