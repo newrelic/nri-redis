@@ -127,10 +127,10 @@ jobs:
       - name: Get PFX certificate from GH secrets
         shell: bash
         run: printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > mycert.pfx
-      - name: Download zip from GH Release assets
-        shell: bash
+      - name: Download zip from GH Release assets and extract .exe
+        shell: pwsh
         run: |
-          build\windows\download_win_zip.sh ${{ matrix.goarch }} ${INTEGRATION}
+          build\windows\download_zip_extract_exe.ps1 "$env:INTEGRATION" ${{ matrix.goarch }} "$env:TAG" "$env:REPO_FULL_NAME"
       - name: Create MSI
         shell: pwsh
         run: |

@@ -23,7 +23,7 @@ for tarball_dirty in $(find dist -regex ".*_dirty\.\(tar.gz\)");do
   mv ${TARBALL_CONTENT_PATH}/redis-definition.yml ${TARBALL_CONTENT_PATH}/var/db/newrelic-infra/newrelic-integrations/
   mv ${TARBALL_CONTENT_PATH}/redis-config.yml.sample ${TARBALL_CONTENT_PATH}/etc/newrelic-infra/integrations.d/
 
-  echo "===> Creating tarball ${tarball}"
+  echo "===> Creating tarball ${TARBALL_CLEAN}"
   cd ${TARBALL_CONTENT_PATH}
   tar -czvf ../${TARBALL_CLEAN} .
   cd $PROJECT_PATH
