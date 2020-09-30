@@ -48,6 +48,27 @@ jobs:
       - name: Unit tests
         run: make ci/test
 
+  test-windows:
+    runs-on: windows-2019
+    env:
+      GOPATH: ${{ github.workspace }}
+    defaults:
+      run:
+        working-directory: src/github.com/${{env.REPO_FULL_NAME}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: src/github.com/${{env.REPO_FULL_NAME}}
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.9.7'
+      - name: Running unit tests
+        shell: pwsh
+        run: |
+          .\build\windows\unit_tests.ps1
+
   # can't run this step inside of container because of tests specific
   test-integration-nix:
     name: Run integration tests on nix
@@ -69,8 +90,6 @@ jobs:
         env:
           GOPATH: ${{ github.workspace }}
         run: make integration-test
-
-  #todo: add dedicated run windows tests action
 
   prerelease:
     name: Build binary for all platforms:arch, packages for nix and publish on GH Releases
