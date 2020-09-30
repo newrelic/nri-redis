@@ -8,9 +8,10 @@ set -e
 
 ARCH=$1
 INTEGRATION=$2
+TAG=$3
 
 zip_name="nri-${INTEGRATION}_windows_${TAG:1}_${ARCH}.zip"
 wget -O ./dist --quiet https://github.com/${REPO_FULL_NAME}/releases/download/${TAG}/${zip_name}
 
 7z e "dist/${zip_name}" -o "dist/nri-${INTEGRATION}_windows_${TAG:1}_${ARCH}/"
-cp "dist/nri-${INTEGRATION}_windows_${TAG:1}_${ARCH}/nri-${INTEGRATION}.exe" dist/
+cp "dist/nri-${INTEGRATION}_windows_${TAG:1}_${ARCH}/New Relic/newrelic-infra/newrelic-integrations/bin/nri-${INTEGRATION}.exe" dist/
