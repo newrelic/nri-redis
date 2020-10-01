@@ -11,9 +11,8 @@ param (
     [string]$pfx_passphrase="none"
 )
 
-$integration = "nri-redis" # $(Split-Path -Leaf $PSScriptRoot)
-$integrationName = $integration.Replace("nri-", "")
-$executable = "nri-$integrationName.exe"
+$buildYear = (Get-Date).Year
+$integrationName = "redis"
 
 $version=$tag.substring(1)
 
@@ -48,7 +47,7 @@ echo $msBuild
 echo "===> Building Installer"
 Push-Location -Path "build\package\windows\nri-$arch-installer"
 
-. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version}
+. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version} /p:IntegrationName=$integrationName /p:Year=$buildYear
 
 if (-not $?)
 {
@@ -59,8 +58,8 @@ if (-not $?)
 
 echo "===> Making versioned installed copy"
 cd bin\Release
-cp "$integration-$arch.msi" "$integration-$arch.$version.msi"
+cp "nri-$integrationName-$arch.msi" "nri-$integrationName-$arch.$version.msi"
 # todo: why do we need this?
-cp "$integration-$arch.msi" "$integration.msi"
+cp "nri-$integrationName-$arch.msi" "nri-$integrationName.msi"
 
 Pop-Location

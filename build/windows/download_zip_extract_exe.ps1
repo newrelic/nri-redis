@@ -17,5 +17,3 @@ write-host "===> Downloading & extracting .exe from ${zip_url}"
 Invoke-WebRequest "${zip_url}" -OutFile ".\dist\${zip_name}"
 write-host "===> Expanding"
 expand-archive -path "dist\${zip_name}" -destinationpath "dist\${exe_folder}\"
-write-host "===> copying"
-Copy-Item -Path ".\dist\${exe_folder}\New Relic\newrelic-infra\newrelic-integrations\bin\nri-${INTEGRATION}.exe" -Destination "dist\${exe_folder}\" -Force
