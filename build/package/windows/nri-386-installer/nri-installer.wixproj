@@ -25,7 +25,7 @@
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
         <OutputPath>bin\$(Configuration)\</OutputPath>
         <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-        <DefineConstants>Debug;ProjectRootPath=..\..\..\;BinariesPath=..\..\..\dist\$(integration)-windows_386\</DefineConstants>
+        <DefineConstants>Debug;ProjectRootPath=..\..\..\;BinariesPath=..\..\..\dist\nri-$(integration)-windows_386\</DefineConstants>
         <CompilerAdditionalOptions>-arch x86</CompilerAdditionalOptions>
     </PropertyGroup>
     <ItemGroup>
