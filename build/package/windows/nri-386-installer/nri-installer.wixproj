@@ -6,18 +6,18 @@
         <ProductVersion>3.10</ProductVersion>
         <ProjectGuid>101f30ba-6098-4ef0-8b8f-0636298997c6</ProjectGuid>
         <SchemaVersion>2.0</SchemaVersion>
-        <OutputName>$(integration)-386</OutputName>
+        <OutputName>nri-$(IntegrationName)-386</OutputName>
         <OutputType>Package</OutputType>
         <SignToolPath>C:\Program Files (x86)\Windows Kits\10\bin\x64\</SignToolPath>
         <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
         <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
-        <Name>newrelic-$(integration)-installer</Name>
+        <Name>newrelic-nri-$(IntegrationName)-installer</Name>
         <DefineSolutionProperties>false</DefineSolutionProperties>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
         <OutputPath>bin\$(Configuration)\</OutputPath>
         <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-        <DefineConstants>Debug;ProjectRootPath=..\..\..\;BinariesPath=..\..\..\dist\$(integration)-win_windows_386\</DefineConstants>
+        <DefineConstants>Debug;ProjectRootPath=..\..\..\..\;BinariesPath=..\..\..\..\dist\nri-$(IntegrationName)_windows_386\</DefineConstants>
         <SuppressAllWarnings>True</SuppressAllWarnings>
         <Pedantic>False</Pedantic>
         <CompilerAdditionalOptions>-arch x86</CompilerAdditionalOptions>
@@ -34,6 +34,12 @@
     <Import Project="$(WixTargetsPath)"/>
     <Target Name="BeforeBuild">
         <CreateProperty Condition="$(IntegrationVersion) != ''" Value="IntegrationVersion=$(IntegrationVersion);$(DefineConstants)">
+            <Output TaskParameter="Value" PropertyName="DefineConstants" />
+        </CreateProperty>
+        <CreateProperty Condition="$(IntegrationName) != ''" Value="IntegrationName=$(IntegrationName);$(DefineConstants)">
+            <Output TaskParameter="Value" PropertyName="DefineConstants" />
+        </CreateProperty>
+        <CreateProperty Condition="$(Year) != ''" Value="Year=$(Year);$(DefineConstants)">
             <Output TaskParameter="Value" PropertyName="DefineConstants" />
         </CreateProperty>
     </Target>
