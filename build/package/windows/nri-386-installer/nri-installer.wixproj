@@ -32,6 +32,11 @@
         <Compile Include="Product.wxs"/>
     </ItemGroup>
     <Import Project="$(WixTargetsPath)"/>
+    <Target Name="BeforeBuild">
+        <CreateProperty Condition="$(IntegrationVersion) != ''" Value="IntegrationVersion=$(IntegrationVersion);$(DefineConstants)">
+            <Output TaskParameter="Value" PropertyName="DefineConstants" />
+        </CreateProperty>
+    </Target>
     <Target Name="SignInstaller">
         <Exec Command="&quot;$(SignToolPath)signtool.exe&quot; sign /s &quot;My&quot; /d &quot;Contoso&quot; /n &quot;Contoso&quot; &quot;$(OutputPath)$(OutputName).msi&quot;"/>
         <Copy SourceFiles="$(OutputPath)$(OutputName).msi" DestinationFiles="$(OutputPath)$(OutputName).x.y.z.msi"/>

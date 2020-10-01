@@ -9,7 +9,8 @@ on:
 
 env:
   TAG: ${{ github.event.release.tag_name }}
-  REPO_FULL_NAME: "newrelic/nri-redis" #${{ github.event.repository.full_name }}
+  REPO_FULL_NAME: ${{ github.event.repository.full_name }}
+  ORIGINAL_REPO_NAME: "newrelic/nri-redis"
 
 jobs:
 
@@ -22,7 +23,7 @@ jobs:
         run: make ci/validate
 
   test-nix:
-    name: Run unit tests on nix
+    name: Run unit tests on *Nix
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,17 +31,18 @@ jobs:
         run: make ci/test
 
   test-windows:
+    name: Run unit tests on Windows
     runs-on: windows-2019
     env:
       GOPATH: ${{ github.workspace }}
     defaults:
       run:
-        working-directory: src/github.com/${{env.REPO_FULL_NAME}}
+        working-directory: src/github.com/${{env.ORIGINAL_REPO_NAME}}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: src/github.com/${{env.REPO_FULL_NAME}}
+          path: src/github.com/${{env.ORIGINAL_REPO_NAME}}
       - name: Install Go
         uses: actions/setup-go@v2
         with:
@@ -52,17 +54,17 @@ jobs:
 
   # can't run this step inside of container because of tests specific
   test-integration-nix:
-    name: Run integration tests on nix
+    name: Run integration tests on *Nix
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: src/github.com/${{env.REPO_FULL_NAME}}
+        working-directory: src/github.com/${{env.ORIGINAL_REPO_NAME}}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
-          path: src/github.com/${{env.REPO_FULL_NAME}}
+          path: src/github.com/${{env.ORIGINAL_REPO_NAME}}
       - name: Install Go
         uses: actions/setup-go@v2
         with:

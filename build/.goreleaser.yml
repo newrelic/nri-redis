@@ -83,8 +83,8 @@ archives:
       - nri-redis-win
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}_dirty"
     files:
-      - redis-config.yml.sample
-      - redis-definition.yml
+      - redis-win-config.yml.sample
+      - redis-win-definition.yml
       # installation scripts?
     format: zip
 
