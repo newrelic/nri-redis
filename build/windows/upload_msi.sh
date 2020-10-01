@@ -9,4 +9,4 @@ set -e
 ARCH=$1
 TAG=$2
 
-hub release edit -a "pkg/windows/nri-${ARCH}-installer/bin/Release/nri-redis-${ARCH}.${TAG:1}.msi" -m ${TAG} ${TAG}
+hub release edit -a "build/package/windows/nri-${ARCH}-installer/bin/Release/nri-redis-${ARCH}.${TAG:1}.msi" -m ${TAG} ${TAG}
