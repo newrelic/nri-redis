@@ -7,8 +7,8 @@ ci/deps:
 .PHONY : ci/debug-container
 ci/debug-container: ci/deps
 	@docker run --rm -it \
-			-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
-			-w /go/src/github.com/newrelic/nri-redis \
+			-v $(CURDIR):/go/src/github.com/newrelic/nri-$(INTEGRATION) \
+			-w /go/src/github.com/newrelic/nri-$(INTEGRATION) \
 			-e PRERELEASE=true \
 			-e GITHUB_TOKEN=$(GH_TOKEN) \
 			-e TAG \
@@ -20,22 +20,23 @@ ci/debug-container: ci/deps
 .PHONY : ci/validate
 ci/validate: ci/deps
 	@docker run --rm -t \
-			-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
-			-w /go/src/github.com/newrelic/nri-redis \
+			-v $(CURDIR):/go/src/github.com/newrelic/nri-$(INTEGRATION) \
+			-w /go/src/github.com/newrelic/nri-$(INTEGRATION) \
 			$(BUILDER_TAG) make validate
 
 .PHONY : ci/test
 ci/test: ci/deps
 	@docker run --rm -t \
-			-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
-			-w /go/src/github.com/newrelic/nri-redis \
+			-v $(CURDIR):/go/src/github.com/newrelic/nri-$(INTEGRATION) \
+			-w /go/src/github.com/newrelic/nri-$(INTEGRATION) \
 			$(BUILDER_TAG) make test
 
 .PHONY : ci/build
 ci/build: ci/deps
 	@docker run --rm -t \
-			-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
-			-w /go/src/github.com/newrelic/nri-redis \
+			-v $(CURDIR):/go/src/github.com/newrelic/nri-$(INTEGRATION) \
+			-w /go/src/github.com/newrelic/nri-$(INTEGRATION) \
+			-e INTEGRATION=$(INTEGRATION) \
 			-e TAG \
 			$(BUILDER_TAG) make release/build
 
@@ -43,8 +44,9 @@ ci/build: ci/deps
 ci/prerelease: ci/deps
 ifdef TAG
 	@docker run --rm -t \
-			-v $(CURDIR):/go/src/github.com/newrelic/nri-redis \
-			-w /go/src/github.com/newrelic/nri-redis \
+			-v $(CURDIR):/go/src/github.com/newrelic/nri-$(INTEGRATION) \
+			-w /go/src/github.com/newrelic/nri-$(INTEGRATION) \
+			-e INTEGRATION \
 			-e PRERELEASE=true \
 			-e GITHUB_TOKEN=$(GH_TOKEN) \
 			-e TAG \

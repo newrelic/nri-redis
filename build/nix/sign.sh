@@ -5,11 +5,7 @@ set -e
 # Sign RPM's and push /dist artifacts to GH Release Assets
 #
 #
-
-##################
-#   Sign RPM's   #
-##################
-
+#
 echo "===> Create .rpmmacros to sign rpm's from Goreleaser"
 echo "%_gpg_name ${GPG_MAIL}" >> ~/.rpmmacros
 echo "%_signature gpg" >> ~/.rpmmacros

@@ -4,6 +4,7 @@
 #>
 param (
     # Target architecture: amd64 (default) or 386
+    [string]$integration="none",
     [ValidateSet("amd64", "386")]
     [string]$arch="amd64",
     [string]$tag="v0.0.0",
@@ -12,7 +13,6 @@ param (
 )
 
 $buildYear = (Get-Date).Year
-$integrationName = "redis"
 
 $version=$tag.substring(1)
 
@@ -31,7 +31,7 @@ if ($wrong.Length  -ne 0) {
 }
 
 echo "===> Import .pfx certificate from GH Secrets"
-Import-PfxCertificate -FilePath mycert.pfx -Password (ConvertTo-SecureString -String $pfx_passphrase -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
+Import-PfxCertificate -FilePath wincert.pfx -Password (ConvertTo-SecureString -String $pfx_passphrase -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
 
 echo "===> Show certificate installed"
 Get-ChildItem -Path cert:\CurrentUser\My\
@@ -47,7 +47,7 @@ echo $msBuild
 echo "===> Building Installer"
 Push-Location -Path "build\package\windows\nri-$arch-installer"
 
-. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version} /p:IntegrationName=$integrationName /p:Year=$buildYear
+. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version} /p:IntegrationName=$integration /p:Year=$buildYear
 
 if (-not $?)
 {
@@ -58,8 +58,8 @@ if (-not $?)
 
 echo "===> Making versioned installed copy"
 cd bin\Release
-cp "nri-$integrationName-$arch.msi" "nri-$integrationName-$arch.$version.msi"
+cp "nri-$integration-$arch.msi" "nri-$integration-$arch.$version.msi"
 # todo: why do we need this?
-cp "nri-$integrationName-$arch.msi" "nri-$integrationName.msi"
+cp "nri-$integration-$arch.msi" "nri-$integration.msi"
 
 Pop-Location

@@ -6,7 +6,7 @@ set -e
 #
 #
 TAG=$1
-Integration=$2
+INTEGRATION=$2
 
 if [ -n "$1" ]; then
   echo "===> Tag is ${TAG}"
@@ -22,8 +22,7 @@ PatchVersion=$(echo ${TAG:1} | cut -d "." -f 3)
 BuildVersion='0'
 
 Year=$(date +"%Y")
-Integration="nri-redis"
-IntegrationExe="${Integration}.exe"
+INTEGRATION_EXE="nri-${INTEGRATION}.exe"
 
 sed \
   -e "s/{MajorVersion}/$MajorVersion/g" \
@@ -31,10 +30,10 @@ sed \
   -e "s/{PatchVersion}/$PatchVersion/g" \
   -e "s/{BuildVersion}/$BuildVersion/g" \
   -e "s/{Year}/$Year/g" \
-  -e "s/{Integration}/$Integration/g" \
-  -e "s/{IntegrationExe}/$IntegrationExe/g" \
+  -e "s/{Integration}/nri-$INTEGRATION/g" \
+  -e "s/{IntegrationExe}/$INTEGRATION_EXE/g" \
    ./build/windows/versioninfo.json.template > ./src/versioninfo.json
 
 # todo: do we need this export line
 export PATH="$PATH:/go/bin"
-go generate github.com/newrelic/nri-redis/src/
+go generate github.com/newrelic/nri-${INTEGRATION}/src/
