@@ -45,6 +45,7 @@ ifdef TAG
 	@docker run --rm -t \
 			-v $(CURDIR):/go/src/github.com/newrelic/nri-$(INTEGRATION) \
 			-w /go/src/github.com/newrelic/nri-$(INTEGRATION) \
+			-e INTEGRATION \
 			-e PRERELEASE=true \
 			-e GITHUB_TOKEN=$(GH_TOKEN) \
 			-e TAG \
