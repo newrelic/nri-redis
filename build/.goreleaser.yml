@@ -65,7 +65,7 @@ nfpms:
   - id: nri-redis-rpm
     builds:
       - nri-redis-nix
-    file_name_template: "{{ .ProjectName }}-{{ .Version }}-1_{{ .Arch }}"
+    file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Arch }}"
     vendor: "New Relic, Inc."
     homepage: "https://www.newrelic.com/infrastructure"
     maintainer: "New Relic Infrastructure Team <infrastructure-eng@newrelic.com>"
@@ -86,7 +86,7 @@ nfpms:
     overrides:
       rpm:
         replacements:
-          amd64: x86_64
+          amd64: 1.x86_64
 
 archives:
   - id: nri-redis-nix
