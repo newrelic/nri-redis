@@ -12,6 +12,7 @@ env:
   REPO_FULL_NAME: ${{ github.event.repository.full_name }}
   ORIGINAL_REPO_NAME: "newrelic/nri-redis"
   SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  GO_VERSION: '1.9.7'
 
 jobs:
 
