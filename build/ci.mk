@@ -36,6 +36,7 @@ ci/build: ci/deps
 	@docker run --rm -t \
 			-v $(CURDIR):/go/src/github.com/newrelic/nri-$(INTEGRATION) \
 			-w /go/src/github.com/newrelic/nri-$(INTEGRATION) \
+			-e INTEGRATION=$(INTEGRATION) \
 			-e TAG \
 			$(BUILDER_TAG) make release/build
 
