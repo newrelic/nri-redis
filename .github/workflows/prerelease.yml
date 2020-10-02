@@ -20,7 +20,7 @@ env:
   PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
   REPO_FULL_NAME: ${{ github.event.repository.full_name }}
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-  SNYK_TOKEN: '########'
+  SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
   TAG: ${{ github.event.release.tag_name }}
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/golang@master
         env:
-          SNYK_TOKEN: $SNYK_TOKEN
+          SNYK_TOKEN: ${{env.SNYK_TOKEN}}
         with:
           args: --severity-threshold=high
 
