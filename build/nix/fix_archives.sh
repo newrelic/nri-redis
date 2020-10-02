@@ -2,10 +2,9 @@
 set -e
 #
 #
-# Gets dist/tarball_dirty created by Goreleaser and reorganize inside files
+# Gets dist/tarball_dirty created by Goreleaser (all files in root path) and reorganize files in correct path
 #
 #
-
 PROJECT_PATH=$1
 
 for tarball_dirty in $(find dist -regex ".*_dirty\.\(tar.gz\)");do
@@ -19,9 +18,9 @@ for tarball_dirty in $(find dist -regex ".*_dirty\.\(tar.gz\)");do
   tar -xvf ${tarball_dirty} -C ${TARBALL_CONTENT_PATH}
 
   echo "===> Move files inside ${tarball}"
-  mv ${TARBALL_CONTENT_PATH}/nri-redis "${TARBALL_CONTENT_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/"
-  mv ${TARBALL_CONTENT_PATH}/redis-definition.yml ${TARBALL_CONTENT_PATH}/var/db/newrelic-infra/newrelic-integrations/
-  mv ${TARBALL_CONTENT_PATH}/redis-config.yml.sample ${TARBALL_CONTENT_PATH}/etc/newrelic-infra/integrations.d/
+  mv ${TARBALL_CONTENT_PATH}/nri-${INTEGRATION} "${TARBALL_CONTENT_PATH}/var/db/newrelic-infra/newrelic-integrations/bin/"
+  mv ${TARBALL_CONTENT_PATH}/${INTEGRATION}-definition.yml ${TARBALL_CONTENT_PATH}/var/db/newrelic-infra/newrelic-integrations/
+  mv ${TARBALL_CONTENT_PATH}/${INTEGRATION}-config.yml.sample ${TARBALL_CONTENT_PATH}/etc/newrelic-infra/integrations.d/
 
   echo "===> Creating tarball ${TARBALL_CLEAN}"
   cd ${TARBALL_CONTENT_PATH}
