@@ -6,20 +6,20 @@ on:
       - prereleased
 
 env:
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+GH_TOKEN: ${{ secrets.GH_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  GO_VERSION: '1.9.7'
   GPG_MAIL: 'info@newrelic.com'
   GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
   GPG_PRIVATE_KEY_BASE64: ${{ secrets.GPG_PRIVATE_KEY_BASE64 }} # base64 encoded
+  INTEGRATION: "redis"
+  ORIGINAL_REPO_NAME: 'newrelic/nri-redis'
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
   PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
-  SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-  TAG: ${{ github.event.release.tag_name }}
   REPO_FULL_NAME: ${{ github.event.repository.full_name }}
-  ORIGINAL_REPO_NAME: 'newrelic/nri-redis'
-  INTEGRATION: "redis"
+  SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
   SNYK_TOKEN: '########'
-  GO_VERSION: '1.9.7'
+  TAG: ${{ github.event.release.tag_name }}
 
 jobs:
 
