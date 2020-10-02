@@ -6,7 +6,7 @@ on:
       - prereleased
 
 env:
-GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   GO_VERSION: '1.9.7'
   GPG_MAIL: 'info@newrelic.com'
