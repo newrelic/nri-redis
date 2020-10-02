@@ -37,7 +37,7 @@ builds:
       - 386
       - amd64
     hooks:
-      pre: build/windows/set_exe_properties.sh {{ .Env.TAG }}
+      pre: build/windows/set_exe_properties.sh {{ .Env.TAG }} "redis"
 
 nfpms:
   - id: nri-redis

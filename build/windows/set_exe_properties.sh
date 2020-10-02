@@ -6,6 +6,7 @@ set -e
 #
 #
 TAG=$1
+Integration=$2
 
 if [ -n "$1" ]; then
   echo "===> Tag is ${TAG}"
@@ -20,7 +21,7 @@ MinorVersion=$(echo ${TAG:1} | cut -d "." -f 2)
 PatchVersion=$(echo ${TAG:1} | cut -d "." -f 3)
 BuildVersion='0'
 
-Year=date +"%Y"
+Year=$(date +"%Y")
 Integration="nri-redis"
 IntegrationExe="${Integration}.exe"
 
