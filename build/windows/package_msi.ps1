@@ -4,6 +4,7 @@
 #>
 param (
     # Target architecture: amd64 (default) or 386
+    [string]$integration="none",
     [ValidateSet("amd64", "386")]
     [string]$arch="amd64",
     [string]$tag="v0.0.0",
@@ -46,7 +47,7 @@ echo $msBuild
 echo "===> Building Installer"
 Push-Location -Path "build\package\windows\nri-$arch-installer"
 
-. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version} /p:IntegrationName=$INTEGRATION /p:Year=$buildYear
+. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version} /p:IntegrationName=$integration /p:Year=$buildYear
 
 if (-not $?)
 {
