@@ -4,6 +4,8 @@ on:
   release:
     types:
       - prereleased
+    tags:
+      - 'v*'
 
 env:
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
