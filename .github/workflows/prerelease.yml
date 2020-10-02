@@ -144,7 +144,7 @@ jobs:
       - name: Upload MSI to GH
         shell: bash
         run: |
-          build/windows/upload_msi.sh ${{ matrix.goarch }} ${TAG}
+          build/windows/upload_msi.sh ${INTEGRATION} ${{ matrix.goarch }} ${TAG}
       - name: Notify failure via Slack
         if: ${{ failure() }}
         uses: archive/github-actions-slack@master
