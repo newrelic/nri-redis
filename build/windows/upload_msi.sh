@@ -5,7 +5,6 @@ set -e
 # Gets dist/zip_dirty created by Goreleaser and reorganize inside files
 #
 #
-
 ARCH=$1
 TAG=$2
 
