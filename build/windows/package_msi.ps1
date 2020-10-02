@@ -12,7 +12,6 @@ param (
 )
 
 $buildYear = (Get-Date).Year
-$integrationName = "redis"
 
 $version=$tag.substring(1)
 
@@ -47,7 +46,7 @@ echo $msBuild
 echo "===> Building Installer"
 Push-Location -Path "build\package\windows\nri-$arch-installer"
 
-. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version} /p:IntegrationName=$integrationName /p:Year=$buildYear
+. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version} /p:IntegrationName=$INTEGRATION /p:Year=$buildYear
 
 if (-not $?)
 {
@@ -58,8 +57,8 @@ if (-not $?)
 
 echo "===> Making versioned installed copy"
 cd bin\Release
-cp "nri-$integrationName-$arch.msi" "nri-$integrationName-$arch.$version.msi"
+cp "nri-$INTEGRATION-$arch.msi" "nri-$INTEGRATION-$arch.$version.msi"
 # todo: why do we need this?
-cp "nri-$integrationName-$arch.msi" "nri-$integrationName.msi"
+cp "nri-$INTEGRATION-$arch.msi" "nri-$INTEGRATION.msi"
 
 Pop-Location
