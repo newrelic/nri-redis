@@ -31,7 +31,7 @@ if ($wrong.Length  -ne 0) {
 }
 
 echo "===> Import .pfx certificate from GH Secrets"
-Import-PfxCertificate -FilePath mycert.pfx -Password (ConvertTo-SecureString -String $pfx_passphrase -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
+Import-PfxCertificate -FilePath wincert.pfx -Password (ConvertTo-SecureString -String $pfx_passphrase -AsPlainText -Force) -CertStoreLocation Cert:\CurrentUser\My
 
 echo "===> Show certificate installed"
 Get-ChildItem -Path cert:\CurrentUser\My\
