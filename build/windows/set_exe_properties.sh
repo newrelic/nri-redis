@@ -20,11 +20,19 @@ MinorVersion=$(echo ${TAG:1} | cut -d "." -f 2)
 PatchVersion=$(echo ${TAG:1} | cut -d "." -f 3)
 BuildVersion='0'
 
+Year=date +"%Y"
+Integration="nri-redis"
+IntegrationExe="${Integration}.exe"
+
 sed \
   -e "s/{MajorVersion}/$MajorVersion/g" \
   -e "s/{MinorVersion}/$MinorVersion/g" \
   -e "s/{PatchVersion}/$PatchVersion/g" \
-  -e "s/{BuildVersion}/$BuildVersion/g" ./build/windows/versioninfo.json.template > ./src/versioninfo.json
+  -e "s/{BuildVersion}/$BuildVersion/g" \
+  -e "s/{Year}/$Year/g" \
+  -e "s/{Integration}/$Integration/g" \
+  -e "s/{IntegrationExe}/$IntegrationExe/g" \
+   ./build/windows/versioninfo.json.template > ./src/versioninfo.json
 
 # todo: do we need this export line
 export PATH="$PATH:/go/bin"
