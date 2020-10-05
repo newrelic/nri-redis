@@ -36,7 +36,7 @@ const (
 
 var (
 	args               argumentList
-	integrationVersion = "development"
+	integrationVersion = "0.0.0"
 	gitCommit          = ""
 	showVersion        bool
 )
