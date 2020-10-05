@@ -3,8 +3,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
+	"runtime"
 	"strconv"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
@@ -29,13 +31,28 @@ type argumentList struct {
 
 const (
 	integrationName    = "com.newrelic.redis"
-	integrationVersion = "1.5.0"
 	entityRemoteType   = "instance"
 )
 
-var args argumentList
+var (
+	args               argumentList
+	integrationVersion = "development"
+	gitCommit          = ""
+	showVersion        bool
+)
+
+func init(){
+	flag.BoolVar(&showVersion, "version", false, "Shows version details")
+}
 
 func main() {
+	flag.Parse()
+
+	if showVersion {
+		fmt.Printf("New Relic Redis integration version: %s, GoVersion: %s, GitCommit: %s\n", integrationVersion, runtime.Version(), gitCommit)
+		os.Exit(0)
+	}
+
 	i, err := createIntegration()
 	fatalIfErr(err)
 
