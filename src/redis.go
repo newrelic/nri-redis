@@ -3,7 +3,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"runtime"
@@ -27,6 +26,7 @@ type argumentList struct {
 	UseUnixSocket    bool         `default:"false" help:"Adds the UnixSocketPath value to the entity. If you are monitoring more than one Redis instance on the same host using Unix sockets, then you should set it to true."`
 	RemoteMonitoring bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
 	ConfigInventory  bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
+	ShowVersion      bool         `default:"false" help:"Print build information and exit"`
 }
 
 const (
@@ -38,17 +38,10 @@ var (
 	args               argumentList
 	integrationVersion = "0.0.0"
 	gitCommit          = ""
-	showVersion        bool
 )
 
-func init() {
-	flag.BoolVar(&showVersion, "version", false, "Shows version details")
-}
-
 func main() {
-	flag.Parse()
-
-	if showVersion {
+	if args.ShowVersion {
 		fmt.Printf("New Relic Redis integration version: %s, GoVersion: %s, GitCommit: %s\n", integrationVersion, runtime.Version(), gitCommit)
 		os.Exit(0)
 	}
