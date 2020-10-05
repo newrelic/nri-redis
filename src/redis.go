@@ -30,8 +30,8 @@ type argumentList struct {
 }
 
 const (
-	integrationName    = "com.newrelic.redis"
-	entityRemoteType   = "instance"
+	integrationName  = "com.newrelic.redis"
+	entityRemoteType = "instance"
 )
 
 var (
@@ -41,7 +41,7 @@ var (
 	showVersion        bool
 )
 
-func init(){
+func init() {
 	flag.BoolVar(&showVersion, "version", false, "Shows version details")
 }
 
