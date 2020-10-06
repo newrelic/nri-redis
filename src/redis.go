@@ -41,13 +41,13 @@ var (
 )
 
 func main() {
+	i, err := createIntegration()
+	fatalIfErr(err)
+
 	if args.ShowVersion {
 		fmt.Printf("New Relic Redis integration version: %s, GoVersion: %s, GitCommit: %s\n", integrationVersion, runtime.Version(), gitCommit)
 		os.Exit(0)
 	}
-
-	i, err := createIntegration()
-	fatalIfErr(err)
 
 	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password)
 	if err != nil {
