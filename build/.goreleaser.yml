@@ -11,8 +11,8 @@ builds:
     main: ./src
     binary: nri-redis
     gobinary: "go1.9.7"
-    #ldflags:
-    #  - -s -w -X github.com/newrelic/nri-flex/internal/load.IntegrationVersion={{.Version}}
+    ldflags:
+      - -s -w -X main.integrationVersion={{.Version}} -X main.gitCommit={{.Commit}}
     goos:
       - linux
       - darwin
@@ -29,8 +29,8 @@ builds:
     main: ./src
     binary: nri-redis
     gobinary: "go1.9.7"
-    #ldflags:
-    #  - -s -w -X github.com/newrelic/nri-flex/internal/load.IntegrationVersion={{.Version}}
+    ldflags:
+      - -s -w -X main.integrationVersion={{.Version}} -X main.gitCommit={{.Commit}}
     goos:
       - windows
     goarch:
