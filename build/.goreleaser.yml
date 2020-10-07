@@ -74,7 +74,7 @@ nfpms:
     # Formats to be generated.
     formats:
       - rpm
-    bindir: /var/db/newrelic-infra/newrelic-integrations/bin
+    bindir: /usr/bin #/var/db/newrelic-infra/newrelic-integrations/bin
     files:
       'redis-config.yml.sample': '/etc/newrelic-infra/integrations.d'
       'redis-definition.yml': '/var/db/newrelic-infra/newrelic-integrations'
