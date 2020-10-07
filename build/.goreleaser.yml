@@ -15,6 +15,7 @@ builds:
     #  - -s -w -X github.com/newrelic/nri-flex/internal/load.IntegrationVersion={{.Version}}
     goos:
       - linux
+      - darwin
     goarch:
       - 386
       - amd64
@@ -57,6 +58,7 @@ nfpms:
       "CHANGELOG.md": "/usr/share/doc/nri-redis/CHANGELOG.md"
       "README.md":  "/usr/share/doc/nri-redis/README.md"
       "LICENSE": "/usr/share/doc/nri-redis/LICENSE"
+    config_files:
       "redis-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/redis-definition.yml"
     dependencies:
       - "newrelic-infra"
@@ -81,7 +83,6 @@ nfpms:
       "LICENSE": "/usr/share/doc/nri-redis/LICENSE"
     config_files:
       "redis-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/redis-definition.yml"
-
     dependencies:
       - "newrelic-infra"
     overrides:
