@@ -64,7 +64,6 @@ nfpms:
   - id: nri-redis-rpm
     builds:
       - nri-redis-nix
-    package_name: nri-redis
     file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Arch }}"
     vendor: "New Relic, Inc."
     homepage: "https://www.newrelic.com/infrastructure"
@@ -74,15 +73,15 @@ nfpms:
     # Formats to be generated.
     formats:
       - rpm
-    bindir: /usr/bin #/var/db/newrelic-infra/newrelic-integrations/bin
+    bindir: "/var/db/newrelic-infra/newrelic-integrations/bin"
     files:
-      'redis-config.yml.sample': '/etc/newrelic-infra/integrations.d'
-      'redis-definition.yml': '/var/db/newrelic-infra/newrelic-integrations'
-      'CHANGELOG.md': '/usr/share/doc/nri-redis'
-      'README.md':  '/usr/share/doc/nri-redis'
-      'LICENSE': '/usr/share/doc/nri-redis'
+      "redis-config.yml.sample": "/etc/newrelic-infra/integrations.d/redis-config.yml.sample"
+      "redis-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/redis-definition.yml"
+      "CHANGELOG.md": "/usr/share/doc/nri-redis/CHANGELOG.md"
+      "README.md":  "/usr/share/doc/nri-redis/README.md"
+      "LICENSE": "/usr/share/doc/nri-redis/LICENSE"
     dependencies:
-      - 'newrelic-infra'
+      - "newrelic-infra"
     overrides:
       rpm:
         replacements:
