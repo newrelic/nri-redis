@@ -90,7 +90,6 @@ install: bin/$(BINARY_NAME)
 	@sudo install -D --mode=644 --owner=root $(ROOT)$(INTEGRATION)-config.yml.sample $(CONFIG_DIR)/$(INTEGRATION)-config.yml.sample
 
 # Include thematic Makefiles
-include Makefile-*.mk
 include $(CURDIR)/build/ci.mk
 include $(CURDIR)/build/release.mk
 
