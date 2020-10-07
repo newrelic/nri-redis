@@ -16,27 +16,27 @@ builds:
     goos:
       - linux
     goarch:
-#      - 386
+      - 386
       - amd64
-#      - arm
-#      - arm64
+      - arm
+      - arm64
     ignore:
       - goos: darwin
         goarch: 386
 
-#  - id: nri-redis-win
-#    main: ./src
-#    binary: nri-redis
-#    gobinary: "go1.9.7"
-#    #ldflags:
-#    #  - -s -w -X github.com/newrelic/nri-flex/internal/load.IntegrationVersion={{.Version}}
-#    goos:
-#      - windows
-#    goarch:
-#      - 386
-#      - amd64
-#    hooks:
-#      pre: build/windows/set_exe_properties.sh {{ .Env.TAG }} "redis"
+  - id: nri-redis-win
+    main: ./src
+    binary: nri-redis
+    gobinary: "go1.9.7"
+    #ldflags:
+    #  - -s -w -X github.com/newrelic/nri-flex/internal/load.IntegrationVersion={{.Version}}
+    goos:
+      - windows
+    goarch:
+      - 386
+      - amd64
+    hooks:
+      pre: build/windows/set_exe_properties.sh {{ .Env.TAG }} "redis"
 
 nfpms:
   - id: nri-redis-deb
@@ -54,10 +54,11 @@ nfpms:
     bindir: "/var/db/newrelic-infra/newrelic-integrations/bin"
     files:
       "redis-config.yml.sample": "/etc/newrelic-infra/integrations.d/redis-config.yml.sample"
-      "redis-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/redis-definition.yml"
       "CHANGELOG.md": "/usr/share/doc/nri-redis/CHANGELOG.md"
       "README.md":  "/usr/share/doc/nri-redis/README.md"
       "LICENSE": "/usr/share/doc/nri-redis/LICENSE"
+    config_files:
+      "redis-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/redis-definition.yml"
     dependencies:
       - "newrelic-infra"
 
@@ -76,10 +77,12 @@ nfpms:
     bindir: "/var/db/newrelic-infra/newrelic-integrations/bin"
     files:
       "redis-config.yml.sample": "/etc/newrelic-infra/integrations.d/redis-config.yml.sample"
-      "redis-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/redis-definition.yml"
       "CHANGELOG.md": "/usr/share/doc/nri-redis/CHANGELOG.md"
       "README.md":  "/usr/share/doc/nri-redis/README.md"
       "LICENSE": "/usr/share/doc/nri-redis/LICENSE"
+    config_files:
+      "redis-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/redis-definition.yml"
+
     dependencies:
       - "newrelic-infra"
     overrides:
@@ -87,26 +90,26 @@ nfpms:
         replacements:
           amd64: 1.x86_64
 
-#archives:
-#  - id: nri-redis-nix
-#    builds:
-#      - nri-redis-nix
-#    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}_dirty"
-#    files:
-#      - redis-config.yml.sample
-#      - redis-definition.yml
-#      # installation scripts?
-#    format: tar.gz
-#
-#  - id: nri-redis-win
-#    builds:
-#      - nri-redis-win
-#    name_template: "{{ .ProjectName }}-{{ .Arch }}.{{ .Version }}_dirty"
-#    files:
-#      - redis-win-config.yml.sample
-#      - redis-win-definition.yml
-#      # installation scripts?
-#    format: zip
+archives:
+  - id: nri-redis-nix
+    builds:
+      - nri-redis-nix
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}_dirty"
+    files:
+      - redis-config.yml.sample
+      - redis-definition.yml
+      # installation scripts?
+    format: tar.gz
+
+  - id: nri-redis-win
+    builds:
+      - nri-redis-win
+    name_template: "{{ .ProjectName }}-{{ .Arch }}.{{ .Version }}_dirty"
+    files:
+      - redis-win-config.yml.sample
+      - redis-win-definition.yml
+      # installation scripts?
+    format: zip
 
 # we use custom publisher for fixing archives and signing them
 release:
