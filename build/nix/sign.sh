@@ -7,6 +7,8 @@ set -e
 #
 #
 #
+
+# Sign RPM's
 echo "===> Create .rpmmacros to sign rpm's from Goreleaser"
 echo "%_gpg_name ${GPG_MAIL}" >> ~/.rpmmacros
 echo "%_signature gpg" >> ~/.rpmmacros
@@ -31,6 +33,7 @@ for rpm_file in $(find -regex ".*\.\(rpm\)");do
   rpm -v --checksig $rpm_file
 done
 
+# Sign DEB's
 GNUPGHOME="/root/.gnupg"
 echo "${GPG_PASSPHRASE}" > "${GNUPGHOME}/gpg-passphrase"
 echo "passphrase-file ${GNUPGHOME}/gpg-passphrase" >> "$GNUPGHOME/gpg.conf"
