@@ -59,7 +59,5 @@ if (-not $?)
 echo "===> Making versioned installed copy"
 cd bin\Release
 cp "nri-$integration-$arch.msi" "nri-$integration-$arch.$version.msi"
-# todo: why do we need this?
-cp "nri-$integration-$arch.msi" "nri-$integration.msi"
 
 Pop-Location
