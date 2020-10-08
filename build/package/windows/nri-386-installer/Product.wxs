@@ -72,7 +72,7 @@
                       Source="$(var.BinariesPath)New Relic\newrelic-infra\newrelic-integrations\bin\nri-$(var.IntegrationName).exe"
                       KeyPath="yes"/>
             </Component>
-            <Component Id="CMP_NRI_$(var.IntegrationName)_LICENSE" Guid="4d336ed6-54be-46d9-ad9f-700259a31201" Win64="yes">
+            <Component Id="CMP_NRI_$(var.IntegrationName)_LICENSE" Guid="4d336ed6-54be-46d9-ad9f-700259a31201" Win64="no">
                 <File Id="FILE_NRI_$(var.IntegrationName)_LICENSE"
                       Source="$(var.ProjectRootPath)LICENSE"
                       KeyPath="yes"/>
