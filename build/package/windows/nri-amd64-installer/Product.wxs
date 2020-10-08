@@ -72,6 +72,11 @@
                       Source="$(var.BinariesPath)New Relic\newrelic-infra\newrelic-integrations\bin\nri-$(var.IntegrationName).exe"
                       KeyPath="yes"/>
             </Component>
+            <Component Id="CMP_NRI_$(var.IntegrationName)_LICENSE" Guid="62f06c15-b924-4223-99a1-df7942b311c5" Win64="yes">
+                <File Id="FILE_NRI_$(var.IntegrationName)_LICENSE"
+                      Source="$(var.ProjectRootPath)LICENSE"
+                      KeyPath="yes"/>
+            </Component>
         </ComponentGroup>
         <ComponentGroup Id="CustomPluginsComponent" Directory="CustomPluginsFolder">
             <Component Id="CMP_NRI_$(var.IntegrationName)_DEFINITION_YML" Guid="fbe397af-e27f-4d89-96cd-7395b95800e6" Win64="yes">
