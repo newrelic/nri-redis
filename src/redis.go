@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime"
 	"strconv"
+	"strings"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
@@ -30,14 +31,16 @@ type argumentList struct {
 }
 
 const (
-	integrationName  = "com.newrelic.redis"
-	entityRemoteType = "instance"
+	integrationName      = "com.newrelic.redis"
+	shortIntegrationName = "redis"
+	entityRemoteType     = "instance"
 )
 
 var (
 	args               argumentList
 	integrationVersion = "0.0.0"
 	gitCommit          = ""
+	targetPlatformArch = ""
 )
 
 func main() {
@@ -45,7 +48,7 @@ func main() {
 	fatalIfErr(err)
 
 	if args.ShowVersion {
-		fmt.Printf("New Relic Redis integration version: %s, GoVersion: %s, GitCommit: %s\n", integrationVersion, runtime.Version(), gitCommit)
+		fmt.Printf("New Relic %s integration \nVersion: %s \nPlatform: %s \nGoVersion: %s \nGitCommit: %s\n", strings.Title(shortIntegrationName), integrationVersion, targetPlatformArch, runtime.Version(), gitCommit)
 		os.Exit(0)
 	}
 
