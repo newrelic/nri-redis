@@ -31,9 +31,8 @@ type argumentList struct {
 }
 
 const (
-	integrationName      = "com.newrelic.redis"
-	shortIntegrationName = "redis"
-	entityRemoteType     = "instance"
+	integrationName  = "com.newrelic.redis"
+	entityRemoteType = "instance"
 )
 
 var (
@@ -48,7 +47,13 @@ func main() {
 	fatalIfErr(err)
 
 	if args.ShowVersion {
-		fmt.Printf("New Relic %s integration \nVersion: %s \nPlatform: %s \nGoVersion: %s \nGitCommit: %s\n", strings.Title(shortIntegrationName), integrationVersion, targetPlatformArch, runtime.Version(), gitCommit)
+		fmt.Printf(
+			"New Relic %s integration \nVersion: %s \nPlatform: %s \nGoVersion: %s \nGitCommit: %s\n",
+			strings.Title(strings.Replace(integrationName, "com.newrelic.", "", 1)),
+			integrationVersion,
+			targetPlatformArch,
+			runtime.Version(),
+			gitCommit)
 		os.Exit(0)
 	}
 
