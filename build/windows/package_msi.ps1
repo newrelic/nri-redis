@@ -10,6 +10,7 @@ param (
     [string]$tag="v0.0.0",
     [string]$pfx_certificate_base64="none",
     [string]$pfx_passphrase="none"
+    [string]$pfx_certificate_description="none"
 )
 
 $buildYear = (Get-Date).Year
@@ -47,7 +48,7 @@ echo $msBuild
 echo "===> Building Installer"
 Push-Location -Path "build\package\windows\nri-$arch-installer"
 
-. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version} /p:IntegrationName=$integration /p:Year=$buildYear
+. $msBuild/MSBuild.exe nri-installer.wixproj /p:IntegrationVersion=${version} /p:IntegrationName=$integration /p:Year=$buildYear /p:pfx_certificate_description=$pfx_certificate_description
 
 if (-not $?)
 {

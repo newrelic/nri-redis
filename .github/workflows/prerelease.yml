@@ -17,6 +17,7 @@ env:
   INTEGRATION: "redis"
   ORIGINAL_REPO_NAME: 'newrelic/nri-redis'
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
+  PFX_CERTIFICATE_DESCRIPTION: 'Contoso' # 'New Relic Infrastructure Agent'
   PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
   REPO_FULL_NAME: ${{ github.event.repository.full_name }}
   SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -140,7 +141,7 @@ jobs:
       - name: Create MSI
         shell: pwsh
         run: |
-          build\windows\package_msi.ps1 -integration "$env:INTEGRATION" -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_certificate_base64 "$env:PFX_CERTIFICATE_BASE64" -pfx_passphrase "$env:PFX_PASSPHRASE"
+          build\windows\package_msi.ps1 -integration "$env:INTEGRATION" -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_certificate_base64 "$env:PFX_CERTIFICATE_BASE64" -pfx_passphrase "$env:PFX_PASSPHRASE" -pfx_cert_description "$env:PFX_CERT_DESCRIPTION"
       - name: Upload MSI to GH
         shell: bash
         run: |
