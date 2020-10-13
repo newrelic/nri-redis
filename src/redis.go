@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime"
 	"strconv"
+	"strings"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
@@ -38,6 +39,7 @@ var (
 	args               argumentList
 	integrationVersion = "0.0.0"
 	gitCommit          = ""
+	targetPlatformArch = ""
 )
 
 func main() {
@@ -45,7 +47,13 @@ func main() {
 	fatalIfErr(err)
 
 	if args.ShowVersion {
-		fmt.Printf("New Relic Redis integration version: %s, GoVersion: %s, GitCommit: %s\n", integrationVersion, runtime.Version(), gitCommit)
+		fmt.Printf(
+			"New Relic %s integration Version: %s, Platform: %s, GoVersion: %s, GitCommit: %s\n",
+			strings.Title(strings.Replace(integrationName, "com.newrelic.", "", 1)),
+			integrationVersion,
+			targetPlatformArch,
+			runtime.Version(),
+			gitCommit)
 		os.Exit(0)
 	}
 
