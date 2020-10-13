@@ -1,11 +1,3 @@
-before:
-  hooks:
-  # You may remove this if you don't use go modules.
-  #- go mod download
-  # you may remove this if you don't need go generate
-  #- go generate ./...
-  #- make validate
-
 builds:
   - id: nri-redis-nix
     main: ./src
@@ -98,7 +90,6 @@ archives:
     files:
       - redis-config.yml.sample
       - redis-definition.yml
-      # installation scripts?
     format: tar.gz
 
   - id: nri-redis-win
@@ -108,7 +99,6 @@ archives:
     files:
       - redis-win-config.yml.sample
       - redis-win-definition.yml
-      # installation scripts?
     format: zip
 
 # we use custom publisher for fixing archives and signing them
