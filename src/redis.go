@@ -39,7 +39,7 @@ var (
 	args               argumentList
 	integrationVersion = "0.0.0"
 	gitCommit          = ""
-	buildDate = ""
+	buildDate          = ""
 )
 
 func main() {
