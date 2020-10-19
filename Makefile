@@ -1,15 +1,12 @@
 INTEGRATION     := redis
 BINARY_NAME      = nri-$(INTEGRATION)
 SRC_DIR          = ./src/
-GO_PKGS         := $(shell go list ./... | grep -v "/vendor/")
 VALIDATE_DEPS    = golang.org/x/lint/golint
 TEST_DEPS        = github.com/axw/gocov/gocov github.com/AlekSi/gocov-xml
 INTEGRATIONS_DIR = /var/db/newrelic-infra/newrelic-integrations/
 CONFIG_DIR       = /etc/newrelic-infra/integrations.d
 GO_FILES        := ./src/
-WORKDIR         := $(shell pwd)
 TARGET          := target
-TARGET_DIR       = $(WORKDIR)/$(TARGET)
 
 all: build
 
@@ -93,6 +90,7 @@ install: bin/$(BINARY_NAME)
 	@sudo install -D --mode=644 --owner=root $(ROOT)$(INTEGRATION)-config.yml.sample $(CONFIG_DIR)/$(INTEGRATION)-config.yml.sample
 
 # Include thematic Makefiles
-include Makefile-*.mk
+include $(CURDIR)/build/ci.mk
+include $(CURDIR)/build/release.mk
 
 .PHONY: all build clean validate-deps validate-only validate compile-deps compile test-deps test-only test integration-test install
