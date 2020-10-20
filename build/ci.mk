@@ -11,7 +11,6 @@ ci/debug-container: ci/deps
 			-w /go/src/github.com/newrelic/nri-$(INTEGRATION) \
 			-e PRERELEASE=true \
 			-e GITHUB_TOKEN \
-			-e GITHUB_USER \
 			-e TAG \
 			-e GPG_MAIL \
 			-e GPG_PASSPHRASE \
@@ -64,7 +63,6 @@ ifdef TAG
 			-e INTEGRATION \
 			-e PRERELEASE=true \
 			-e GITHUB_TOKEN \
-			-e GITHUB_USER \
 			-e TAG \
 			-e GPG_MAIL \
 			-e GPG_PASSPHRASE \
