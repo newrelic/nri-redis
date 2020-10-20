@@ -8,7 +8,6 @@ on:
       - 'v*'
 
 env:
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GO_VERSION: '1.9.7'
   GPG_MAIL: 'infrastructure-eng@newrelic.com'
