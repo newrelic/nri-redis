@@ -108,7 +108,7 @@ jobs:
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
           slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${REPO_FULL_NAME}, prerelease for nix FAILURE!"
+          slack-text: ":shit: Repo: ${ env.REPO_FULL_NAME }, prerelease for nix FAILURE!"
 
   package-win:
     name: Create MSI & Upload into GH Release assets
@@ -148,4 +148,4 @@ jobs:
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
           slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${REPO_FULL_NAME}, prerelease for Windows FAILURE!"
+          slack-text: ":shit: Repo: ${ env.REPO_FULL_NAME }, prerelease for Windows FAILURE!"
