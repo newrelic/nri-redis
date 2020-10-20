@@ -3,7 +3,7 @@ FROM golang:1.15.2-buster
 RUN apt-get update \
     && apt-get -y install \
         rpm \
-        hub \
+        jq \
         gnupg2 \
         gpg-agent \
         debsigs \
