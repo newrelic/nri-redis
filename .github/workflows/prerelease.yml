@@ -16,7 +16,7 @@ env:
   INTEGRATION: "redis"
   ORIGINAL_REPO_NAME: 'newrelic/nri-redis'
   PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
-  PFX_CERTIFICATE_DESCRIPTION: 'New Relic Infrastructure Agent'
+  PFX_CERTIFICATE_DESCRIPTION: 'New Relic'
   PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
   REPO_FULL_NAME: ${{ github.event.repository.full_name }}
   SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
