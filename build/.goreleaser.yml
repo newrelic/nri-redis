@@ -46,12 +46,12 @@ nfpms:
       - deb
     bindir: "/var/db/newrelic-infra/newrelic-integrations/bin"
     files:
-      "redis-config.yml.sample": "/etc/newrelic-infra/integrations.d/redis-config.yml.sample"
       "CHANGELOG.md": "/usr/share/doc/nri-redis/CHANGELOG.md"
       "README.md":  "/usr/share/doc/nri-redis/README.md"
       "LICENSE": "/usr/share/doc/nri-redis/LICENSE"
     config_files:
       "redis-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/redis-definition.yml"
+      "redis-config.yml.sample": "/etc/newrelic-infra/integrations.d/redis-config.yml.sample"
     dependencies:
       - "newrelic-infra"
 
@@ -69,12 +69,12 @@ nfpms:
       - rpm
     bindir: "/var/db/newrelic-infra/newrelic-integrations/bin"
     files:
-      "redis-config.yml.sample": "/etc/newrelic-infra/integrations.d/redis-config.yml.sample"
       "CHANGELOG.md": "/usr/share/doc/nri-redis/CHANGELOG.md"
       "README.md":  "/usr/share/doc/nri-redis/README.md"
       "LICENSE": "/usr/share/doc/nri-redis/LICENSE"
     config_files:
       "redis-definition.yml": "/var/db/newrelic-infra/newrelic-integrations/redis-definition.yml"
+      "redis-config.yml.sample": "/etc/newrelic-infra/integrations.d/redis-config.yml.sample"
     dependencies:
       - "newrelic-infra"
     overrides:
