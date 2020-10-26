@@ -4,3 +4,5 @@ services:
     build:
       context: dockerfiles/test/
       dockerfile: Dockerfile
+    environment:
+      - AWS_DEFAULT_REGION
