@@ -173,7 +173,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Update APT repo
       run: |
-        source build/docker/locking_s3.sh
+        source build/locking_s3.sh
         create_dynamo_table
         wait_free_lock
         lock
