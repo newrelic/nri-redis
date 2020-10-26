@@ -1,0 +1,17 @@
+name: Test pipeline
+
+on: push
+
+env:
+  AWS_DEFAULT_REGION: 'us-east-1'
+
+jobs:
+
+  s3-apt-prerelease:
+    name: S3 repo APT update prerelease (tests dir)
+    runs-on: ubuntu-latest
+    steps:
+    - name: Update APT repo
+      run: |
+        cd build
+        docker-compose --file docker_compose_apt_updater.yml run release

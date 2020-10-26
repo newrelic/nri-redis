@@ -8,6 +8,17 @@ on:
       - 'v*'
 
 env:
+  AWS_DEFAULT_REGION: 'us-east-1'
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_S3_BUCKET: 'nr-clone'
+  DOCKERHUB_NAMESPACE: 'jportasa'
+  DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DYNAMO_TABLE_NAME: 's3-repo-lock'
+  FASTLY_API_KEY: ${{ secrets.FASTLY_API_KEY }}
+  FASTLY_SERVICE_ID: '2RMeBJ1ZTGnNJYvrWMgQhk'
+
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GO_VERSION: '1.9.7'
   GPG_MAIL: 'infrastructure-eng@newrelic.com'
@@ -149,3 +160,24 @@ jobs:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
           slack-channel: ${{ env.SLACK_CHANNEL }}
           slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, prerelease for Windows FAILURE!"
+
+  s3-apt-prerelease:
+    name: S3 repo APT update prerelease (tests dir)
+    if: github.event.action == 'prereleased'
+    needs: [prerelease, package-win]
+    runs-on: ubuntu-latest
+    env:
+      PIPELINE_ACTION: 'prereleased'
+      BASE_PATH: "infrastructure_agent/test/linux/apt"
+      LOCK_REPO_TYPE: 'apt' # yum | apt | zypp | win
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update APT repo
+      run: |
+        cd build
+        source locking_s3.sh
+        create_dynamo_table
+        wait_free_lock
+        lock
+        docker-compose --file docker_compose_apt_updater.yml run release
+        release_lock
