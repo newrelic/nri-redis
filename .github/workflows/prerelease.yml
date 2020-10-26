@@ -13,6 +13,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_S3_BUCKET: 'nr-clone'
   DEPOT_REPO: 'https://github.com/jportasa/depot' # Script to push .deb to APT repo
+  DYNAMO_TABLE_NAME: 's3-repo-lock'
   #DOCKERHUB_NAMESPACE: 'jportasa'
   #DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
   #DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}

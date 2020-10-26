@@ -7,6 +7,10 @@ set -e
 #
 function create_dynamo_table {
   # Setup DynamoDB table
+  if [ -z ${$DYNAMO_TABLE_NAME+x} ]; then
+    echo "$DYNAMO_TABLE_NAME is unset"
+    exit 1
+  fi
   if aws dynamodb describe-table --table-name $DYNAMO_TABLE_NAME --region $AWS_DEFAULT_REGION >/dev/null 2>&1 ; then
     echo "===> Dynamodb lock table already exists"
   else
