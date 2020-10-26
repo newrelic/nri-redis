@@ -9,10 +9,12 @@ services:
       - AWS_DEFAULT_REGION
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
+      - AWS_S3_BUCKET
       - DEPOT_REPO
       - GPG_PRIVATE_KEY_BASE64
-      - GPG_APT_PASSPHRASE
+      - GPG_PASSPHRASE
       - TAG
       - REPO_FULL_NAME
       - BASE_PATH
       - DYNAMO_TABLE_NAME
+      - LOCK_REPO_TYPE
