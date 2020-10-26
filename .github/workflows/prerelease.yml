@@ -167,7 +167,6 @@ jobs:
     needs: [prerelease]
     runs-on: ubuntu-latest
     env:
-      PIPELINE_ACTION: 'prereleased'
       BASE_PATH: "infrastructure_agent/test/linux/apt"
       LOCK_REPO_TYPE: 'apt' # yum | apt | zypp | win
     steps:

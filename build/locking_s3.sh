@@ -44,10 +44,13 @@ function wait_free_lock {
   echo "===> Wait for Lock to be released"
   while true; do
     locked=$(aws dynamodb get-item \
-       --table-name $DYNAMO_TABLE_NAME  \
+       --table-name ${DYNAMO_TABLE_NAME}  \
        --key "{ \"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"} }" \
        --projection-expression "locked" \
       | jq -r '.Item.locked.BOOL');
+    if [[ $locked == "false" ]]; then
+      break
+    fi
     sleep 10
   done
 }
