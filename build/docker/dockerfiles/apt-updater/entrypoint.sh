@@ -15,6 +15,7 @@ cd depot; python setup.py install
 echo "===> Importing GPG signature and getting KeyId"
 printf %s ${GPG_PRIVATE_KEY_BASE64} | base64 --decode | gpg --batch --import -
 GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | awk '/sec/{if (length($2) > 0) print $2}' | cut -d "/" -f2)
+echo  "===> KEYiD: $GPG_KEY_ID"
 
 mkdir -p /artifacts; cd /artifacts
 DEB_PACKAGE="nri-${INTEGRATION}_${TAG:1}-${SUFIX}_amd64.deb"
@@ -29,7 +30,7 @@ for codename in "${CODENAMES[@]}"; do
       --codename=${codename} \
       --pool-path=${POOL_PATH} \
       --gpg-key ${GPG_KEY_ID} \
-      --passphrase ${GPG_APT_PASSPHRASE} \
+      --passphrase ${GPG_PASSPHRASE} \
       /artifacts/${DEB_PACKAGE} \
       --force
 done
