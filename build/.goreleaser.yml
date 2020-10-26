@@ -7,12 +7,11 @@ builds:
       - -s -w -X main.integrationVersion={{.Version}} -X main.gitCommit={{.Commit}} -X main.buildDate={{.Date}}
     goos:
       - linux
-      - darwin
     goarch:
 #      - 386
       - amd64
-#      - arm
-#      - arm64
+      - arm
+      - arm64
     ignore:
       - goos: darwin
         goarch: 386
