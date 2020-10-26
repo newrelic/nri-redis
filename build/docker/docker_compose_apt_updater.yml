@@ -2,7 +2,7 @@ version: '3'
 services:
   service:
     build:
-      context: dockerfiles/apt-updater/
+      context: build/dockerfiles/apt-updater/
       dockerfile: Dockerfile
     environment:
       - INTEGRATION
