@@ -23,16 +23,18 @@ DEB_PACKAGE="nri-${INTEGRATION}_${TAG:1}-${SUFIX}_${ARCH}.deb"
 echo "===> Downloading ${DEB_PACKAGE} from GH"
 curl -SL https://github.com/${REPO_FULL_NAME}/releases/download/${TAG}/${DEB_PACKAGE} -o ${DEB_PACKAGE}
 
-for codename in "${CODENAMES[@]}"; do
-   echo "===> Uploading to S3 $BASE_PATH ${DEB_PACKAGE} to component=main and codename=${codename}"
-   POOL_PATH="pool/main/n/nri-${INTEGRATION}/${DEB_PACKAGE}"
-   depot --storage="s3://${AWS_S3_BUCKET}/${BASE_PATH}" \
-      --component=main \
-      --codename=${codename} \
-      --architecture=${ARCH} \
-      --pool-path=${POOL_PATH} \
-      --gpg-key ${GPG_KEY_ID} \
-      --passphrase ${GPG_PASSPHRASE} \
-      /artifacts/${DEB_PACKAGE} \
-      --force
+for arch in "${ARCH[@]}"; do
+  for codename in "${CODENAMES[@]}"; do
+     echo "===> Uploading to S3 $BASE_PATH ${DEB_PACKAGE} to component=main and codename=${codename}"
+     POOL_PATH="pool/main/n/nri-${INTEGRATION}/${DEB_PACKAGE}"
+     depot --storage="s3://${AWS_S3_BUCKET}/${BASE_PATH}" \
+        --component=main \
+        --codename=${codename} \
+        --architecture=${arch} \
+        --pool-path=${POOL_PATH} \
+        --gpg-key ${GPG_KEY_ID} \
+        --passphrase ${GPG_PASSPHRASE} \
+        /artifacts/${DEB_PACKAGE} \
+        --force
+  done
 done
