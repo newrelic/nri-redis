@@ -7,7 +7,7 @@ set -e
 #
 function create_dynamo_table {
   # Setup DynamoDB table
-  if [ -z ${$DYNAMO_TABLE_NAME+x} ]; then
+  if [ -z ${DYNAMO_TABLE_NAME+x} ]; then
     echo "$DYNAMO_TABLE_NAME is unset"
     exit 1
   fi
