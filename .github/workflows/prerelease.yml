@@ -164,7 +164,7 @@ jobs:
   s3-apt-prerelease:
     name: S3 repo APT update prerelease (tests dir)
     if: github.event.action == 'prereleased'
-    needs: [prerelease, package-win]
+    needs: [prerelease]
     runs-on: ubuntu-latest
     env:
       PIPELINE_ACTION: 'prereleased'
