@@ -173,10 +173,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Update APT repo
       run: |
-        cd build/docker
-        source locking_s3.sh
+        source build/dockerlocking_s3.sh
         create_dynamo_table
         wait_free_lock
         lock
-        docker-compose --file docker_compose_apt_updater.yml run service
+        docker-compose --file build/docker/docker_compose_apt_updater.yml run service
         release_lock
