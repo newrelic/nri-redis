@@ -41,7 +41,7 @@ function create_dynamo_table {
 }
 
 function wait_free_lock {
-  echo "===> Wait for Lock to be released"
+  echo "===> Wait for Lock to be released, if takes long unlock DynamoDB item manually"
   while true; do
     locked=$(aws dynamodb get-item \
        --table-name ${DYNAMO_TABLE_NAME}  \
