@@ -1,8 +1,17 @@
 version: '3'
 services:
-  release:
+  service:
     build:
-      context: dockerfiles/test/
+      context: dockerfiles/apt-updater/
       dockerfile: Dockerfile
     environment:
+      - INTEGRATION
       - AWS_DEFAULT_REGION
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DEPOT_REPO
+      - GPG_PRIVATE_KEY_BASE64
+      - GPG_APT_PASSPHRASE
+      - TAG
+      - REPO_FULL_NAME
+      - BASE_PATH
