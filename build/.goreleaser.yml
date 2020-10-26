@@ -1,5 +1,5 @@
 builds:
-  - id: nri-redis-nix
+  - id: nri-nix
     main: ./src
     binary: nri-redis
     gobinary: "go1.9.7"
@@ -17,7 +17,7 @@ builds:
       - goos: darwin
         goarch: 386
 
-  - id: nri-redis-win
+  - id: nri-win
     main: ./src
     binary: nri-redis
     gobinary: "go1.9.7"
@@ -32,9 +32,9 @@ builds:
       pre: build/windows/set_exe_properties.sh {{ .Env.TAG }} "redis"
 
 nfpms:
-  - id: nri-redis-deb
+  - id: nri-deb
     builds:
-      - nri-redis-nix
+      - nri-nix
     file_name_template: "{{ .ProjectName }}_{{ .Version }}-1_{{ .Arch }}"
     vendor: "New Relic, Inc."
     homepage: "https://www.newrelic.com/infrastructure"
@@ -55,9 +55,9 @@ nfpms:
     dependencies:
       - "newrelic-infra"
 
-  - id: nri-redis-rpm
+  - id: nri-rpm
     builds:
-      - nri-redis-nix
+      - nri-nix
     file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Arch }}"
     vendor: "New Relic, Inc."
     homepage: "https://www.newrelic.com/infrastructure"
@@ -83,18 +83,18 @@ nfpms:
           amd64: 1.x86_64
 
 archives:
-  - id: nri-redis-nix
+  - id: nri-nix
     builds:
-      - nri-redis-nix
+      - nri-nix
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}_dirty"
     files:
       - redis-config.yml.sample
       - redis-definition.yml
     format: tar.gz
 
-  - id: nri-redis-win
+  - id: nri-win
     builds:
-      - nri-redis-win
+      - nri-win
     name_template: "{{ .ProjectName }}-{{ .Arch }}.{{ .Version }}_dirty"
     files:
       - redis-win-config.yml.sample
