@@ -165,7 +165,7 @@ jobs:
     name: S3 repo APT update prerelease (tests dir)
     if: github.event.action == 'prereleased'
     needs: [prerelease]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       BASE_PATH: "infrastructure_agent/test/linux/apt"
       LOCK_REPO_TYPE: 'apt' # yum | apt | zypp | win
@@ -178,4 +178,23 @@ jobs:
         wait_free_lock
         lock
         docker-compose --file build/docker/docker_compose_apt_updater.yml run service
+        release_lock
+
+  s3-yum-prerelease:
+    name: S3 YUM update prerelease (tests dir)
+    if: github.event.action == 'prereleased'
+    needs: [prerelease]
+    runs-on: ubuntu-20.04
+    env:
+      BASE_PATH: "/infrastructure_agent/test/linux/yum/el"
+      LOCK_REPO_TYPE: 'yum' # yum | apt | zypp | win
+    steps:
+    - uses: actions/checkout@v2
+    - name: Upload & update YUM repo
+      run: |
+        source build/locking_s3.sh
+        create_dynamo_table
+        wait_free_lock
+        lock
+        docker-compose --file build/docker/docker_compose_yum_updater.yml run service
         release_lock
