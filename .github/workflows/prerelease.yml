@@ -239,5 +239,5 @@ jobs:
         create_dynamo_table
         wait_free_lock
         lock
-        docker-compose --file docker_compose_win_updater.yml run release
+        docker-compose --file build/docker/docker_compose_win_updater.yml run release
         release_lock
