@@ -172,7 +172,7 @@ jobs:
       LOCK_REPO_TYPE: 'apt' # yum | apt | zypp | win
     steps:
     - uses: actions/checkout@v2
-    - name: Update APT repo
+    - name: Update S3 APT repo
       run: |
         source build/locking_s3.sh
         create_dynamo_table
@@ -194,7 +194,7 @@ jobs:
       ARCH: 'x86_64,arm,arm64'
     steps:
     - uses: actions/checkout@v2
-    - name: Upload & update YUM repo
+    - name: Update S3 YUM repo
       run: |
         source build/locking_s3.sh
         create_dynamo_table
@@ -216,7 +216,7 @@ jobs:
       ARCH: 'x86_64,arm,arm64'
     steps:
     - uses: actions/checkout@v2
-    - name: Upload & update ZYPP repo
+    - name: Update S3 ZYPP repo
       run: |
         source build/locking_s3.sh
         create_dynamo_table
@@ -233,15 +233,9 @@ jobs:
     needs: [package-win]
     env:
       BASE_PATH: "/infrastructure_agent/test/windows/integrations"
-      LOCK_REPO_TYPE: 'win' # yum | apt | zypp | win
       ARCH: 'amd64,386'
     steps:
     - uses: actions/checkout@v2
-    - name: Upload MSI's
+    - name: Update MSI S3 repo
       run: |
-        source build/locking_s3.sh
-        create_dynamo_table
-        wait_free_lock
-        lock
         docker-compose --file build/docker/docker_compose_win_updater.yml run service
-        release_lock

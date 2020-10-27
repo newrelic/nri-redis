@@ -31,12 +31,6 @@ function create_dynamo_table {
     aws dynamodb put-item \
         --table-name $DYNAMO_TABLE_NAME \
         --item '{"lock-type": {"S": "zypp"}, "locked": {"BOOL": false}, "repo": {"S": "-"}}'
-    aws dynamodb put-item \
-        --table-name $DYNAMO_TABLE_NAME \
-        --item '{"lock-type": {"S": "win"}, "locked": {"BOOL": false}, "repo": {"S": "-"}}'
-    aws dynamodb put-item \
-        --table-name $DYNAMO_TABLE_NAME \
-        --item '{"lock-type": {"S": "tarball"}, "locked": {"BOOL": false}, "repo": {"S": "-"}}'
   fi
 }
 
@@ -62,7 +56,7 @@ function wait_free_lock {
 }
 
 function lock {
-  echo "===> Locking $LOCK_REPO_TYPE"
+  echo "===> I got the lock $LOCK_REPO_TYPE!!!"
   aws dynamodb put-item \
     --table-name $DYNAMO_TABLE_NAME \
     --item "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}, \"locked\": {\"BOOL\": true}, \"repo\": {\"S\": \"${REPO_FULL_NAME}\"}}"
