@@ -166,6 +166,7 @@ jobs:
     if: github.event.action == 'prereleased'
     needs: [prerelease]
     runs-on: ubuntu-20.04
+    timeout-minutes: 10
     env:
       BASE_PATH: "infrastructure_agent/test/linux/apt"
       LOCK_REPO_TYPE: 'apt' # yum | apt | zypp | win
@@ -185,6 +186,7 @@ jobs:
     if: github.event.action == 'prereleased'
     needs: [prerelease]
     runs-on: ubuntu-20.04
+    timeout-minutes: 10
     env:
       BASE_PATH: "/infrastructure_agent/test/linux/yum/el"
       LOCK_REPO_TYPE: 'yum' # yum | apt | zypp | win
@@ -206,6 +208,7 @@ jobs:
     if: github.event.action == 'prereleased'
     needs: [prerelease]
     runs-on: ubuntu-20.04
+    timeout-minutes: 10
     env:
       BASE_PATH: "/infrastructure_agent/test/linux/zypp/sles"
       LOCK_REPO_TYPE: 'zypp' # yum | apt | zypp | win
@@ -226,6 +229,7 @@ jobs:
     name: S3 Windows .msi update prerelease (tests dir)
     if: github.event.action == 'prereleased'
     runs-on: ubuntu-20.04
+    timeout-minutes: 10
     needs: [package-win]
     env:
       BASE_PATH: "/infrastructure_agent/test/windows/integrations"
