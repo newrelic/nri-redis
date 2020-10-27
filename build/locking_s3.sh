@@ -54,7 +54,7 @@ function wait_free_lock {
     repo_that_locks=$(aws dynamodb get-item \
        --table-name ${DYNAMO_TABLE_NAME}  \
        --key "{ \"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"} }" \
-       --projection-expression "locked" \
+       --projection-expression "repo" \
       | jq -r '.Item.repo.S');
     echo "===> Wait 10 more seconds, repo ${repo_that_locks} is locking"
     sleep 10
