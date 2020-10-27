@@ -2,7 +2,7 @@ version: '3'
 services:
   service:
     build:
-      context: dockerfiles/yum-updater-s3fuse/
+      context: dockerfiles/yum-zypp-updater-s3fuse/
       dockerfile: Dockerfile
     privileged: true
     cap_add:
@@ -21,3 +21,5 @@ services:
       - GPG_PRIVATE_KEY_BASE64
       - GPG_PASSPHRASE
       - INTEGRATION
+      - OS_VERSIONS
+      - ARCH

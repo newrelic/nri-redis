@@ -5,8 +5,8 @@ set -e
 # Mount S3 with S3Fuse and update YUM repo
 #
 #
-OS_VERSIONS=( 5 6 7 8 )
-ARCH=( x86_64 arm arm64 )
+OS_VERSIONS_LIST=($(echo $OS_VERSIONS | tr ',' "\n"))
+ARCH_LIST=($(echo $ARCH | tr ',' "\n"))
 SUFIX='1'
 
 [ "${DEBUG:-false}" == 'true' ] && { set -x; S3FS_DEBUG='-d -d'; }
@@ -41,7 +41,7 @@ echo "===> Importing GPG signature"
 printf %s ${GPG_PRIVATE_KEY_BASE64} | base64 --decode | gpg --batch --import -
 
 echo "===> Download RPM packages from GH"
-for arch in "${ARCH[@]}"; do
+for arch in "${ARCH_LIST[@]}"; do
   if [ $arch == 'x86_64' ]; then
     package_name="nri-${INTEGRATION}-${TAG:1}-${SUFIX}.${arch}.rpm"
   else
@@ -51,8 +51,8 @@ for arch in "${ARCH[@]}"; do
   curl -SL https://github.com/${REPO_FULL_NAME}/releases/download/${TAG}/${package_name} -o ${package_name}
 done
 
-for arch in "${ARCH[@]}"; do
-  for os_version in "${OS_VERSIONS[@]}"; do
+for arch in "${ARCH_LIST[@]}"; do
+  for os_version in "${OS_VERSIONS_LIST[@]}"; do
     if [ $arch == 'x86_64' ]; then
       package_name="nri-${INTEGRATION}-${TAG:1}-${SUFIX}.${arch}.rpm"
     else

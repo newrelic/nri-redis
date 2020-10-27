@@ -51,6 +51,7 @@ function wait_free_lock {
     if [[ $locked == "false" ]]; then
       break
     fi
+    echo "===> Wait 10 more seconds, or change manually Dyanmodb lock"
     sleep 10
   done
 }

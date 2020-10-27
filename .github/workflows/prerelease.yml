@@ -188,6 +188,8 @@ jobs:
     env:
       BASE_PATH: "/infrastructure_agent/test/linux/yum/el"
       LOCK_REPO_TYPE: 'yum' # yum | apt | zypp | win
+      OS_VERSIONS: '5,6,7,8'
+      ARCH: 'x86_64,arm,arm64'
     steps:
     - uses: actions/checkout@v2
     - name: Upload & update YUM repo
@@ -196,5 +198,26 @@ jobs:
         create_dynamo_table
         wait_free_lock
         lock
-        docker-compose --file build/docker/docker_compose_yum_updater.yml run service
+        docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
+        release_lock
+
+  s3-zypp-prerelease:
+    name: S3 YUM update prerelease (tests dir)
+    if: github.event.action == 'prereleased'
+    needs: [prerelease]
+    runs-on: ubuntu-20.04
+    env:
+      BASE_PATH: "/infrastructure_agent/test/linux/zypp/sles"
+      LOCK_REPO_TYPE: 'zypp' # yum | apt | zypp | win
+      OS_VERSIONS: '11.4,12.1,12.2,12.3,12.4'
+      ARCH: 'x86_64,arm,arm64'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Upload & update ZYPP repo
+      run: |
+        source build/locking_s3.sh
+        create_dynamo_table
+        wait_free_lock
+        lock
+        docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
         release_lock
