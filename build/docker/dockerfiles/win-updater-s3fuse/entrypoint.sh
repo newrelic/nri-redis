@@ -23,8 +23,8 @@ ARCH_LIST=($(echo $ARCH | tr ',' "\n"))
 [ "$1" == "" ] && set -- "$@" bash -c 'echo "Error: Please specify a command to run."; exit 128'
 
 # Configuration checks
-if [ -z "$AWS_STORAGE_BUCKET_NAME" ]; then
-    echo "Error: AWS_STORAGE_BUCKET_NAME is not specified"
+if [ -z "$AWS_S3_BUCKET" ]; then
+    echo "Error: AWS_S3_BUCKET is not specified"
     exit 128
 fi
 
@@ -46,7 +46,7 @@ fi
 
 mkdir -p ${AWS_S3_MOUNTPOINT}
 echo "===> Mounting s3 in local docker with Fuse"
-s3fs $S3FS_DEBUG $S3FS_ARGS -o passwd_file=${AWS_S3_AUTHFILE} -o url=${AWS_S3_URL} ${AWS_STORAGE_BUCKET_NAME} ${AWS_S3_MOUNTPOINT}
+s3fs $S3FS_DEBUG $S3FS_ARGS -o passwd_file=${AWS_S3_AUTHFILE} -o url=${AWS_S3_URL} ${AWS_S3_BUCKET} ${AWS_S3_MOUNTPOINT}
 
 ######################
 #    UPLOAD TO S3    #

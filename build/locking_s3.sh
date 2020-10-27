@@ -51,7 +51,12 @@ function wait_free_lock {
     if [[ $locked == "false" ]]; then
       break
     fi
-    echo "===> Wait 10 more seconds, or change manually Dyanmodb lock"
+    repo_that_locks=$(aws dynamodb get-item \
+       --table-name ${DYNAMO_TABLE_NAME}  \
+       --key "{ \"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"} }" \
+       --projection-expression "locked" \
+      | jq -r '.Item.repo.S');
+    echo "===> Wait 10 more seconds, repo ${repo_that_locks} is locking"
     sleep 10
   done
 }
