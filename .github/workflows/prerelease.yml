@@ -14,11 +14,6 @@ env:
   AWS_S3_BUCKET: 'nr-clone'
   DEPOT_REPO: 'https://github.com/jportasa/depot' # Script to push .deb to APT repo
   DYNAMO_TABLE_NAME: 's3-repo-lock'
-  #DOCKERHUB_NAMESPACE: 'jportasa'
-  #DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-  #DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  #FASTLY_API_KEY: ${{ secrets.FASTLY_API_KEY }}
-  #FASTLY_SERVICE_ID: '2RMeBJ1ZTGnNJYvrWMgQhk'
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GO_VERSION: '1.9.7'
   GPG_MAIL: 'info@newrelic.com'
@@ -37,78 +32,78 @@ env:
 
 jobs:
 
-#  validate:
-#    name: Validate code via linters
-#    runs-on: ubuntu-20.04
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Validate code
-#        run: make ci/validate
-#
-#  snyk:
-#    name: Run security checks via snyk
-#    runs-on: ubuntu-20.04
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Scan code for vulnerabilities
-#        run: make ci/snyk-test
-#
-#  test-nix:
-#    name: Run unit tests on *Nix
-#    runs-on: ubuntu-20.04
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Unit tests
-#        run: make ci/test
-#
-#  test-windows:
-#    name: Run unit tests on Windows
-#    runs-on: windows-2019
-#    env:
-#      GOPATH: ${{ github.workspace }}
-#    defaults:
-#      run:
-#        working-directory: src/github.com/${{env.ORIGINAL_REPO_NAME}}
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#        with:
-#          path: src/github.com/${{env.ORIGINAL_REPO_NAME}}
-#      - name: Install Go
-#        uses: actions/setup-go@v2
-#        with:
-#          go-version: ${{env.GO_VERSION}}
-#      - name: Running unit tests
-#        shell: pwsh
-#        run: |
-#          .\build\windows\unit_tests.ps1
-#
-#  # can't run this step inside of container because of tests specific
-#  test-integration-nix:
-#    name: Run integration tests on *Nix
-#    runs-on: ubuntu-20.04
-#    defaults:
-#      run:
-#        working-directory: src/github.com/${{env.ORIGINAL_REPO_NAME}}
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v2
-#        with:
-#          fetch-depth: 1
-#          path: src/github.com/${{env.ORIGINAL_REPO_NAME}}
-#      - name: Install Go
-#        uses: actions/setup-go@v2
-#        with:
-#          go-version: ${{env.GO_VERSION}}
-#      - name: Integration test
-#        env:
-#          GOPATH: ${{ github.workspace }}
-#        run: make integration-test
+  validate:
+    name: Validate code via linters
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Validate code
+        run: make ci/validate
+
+  snyk:
+    name: Run security checks via snyk
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Scan code for vulnerabilities
+        run: make ci/snyk-test
+
+  test-nix:
+    name: Run unit tests on *Nix
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Unit tests
+        run: make ci/test
+
+  test-windows:
+    name: Run unit tests on Windows
+    runs-on: windows-2019
+    env:
+      GOPATH: ${{ github.workspace }}
+    defaults:
+      run:
+        working-directory: src/github.com/${{env.ORIGINAL_REPO_NAME}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: src/github.com/${{env.ORIGINAL_REPO_NAME}}
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{env.GO_VERSION}}
+      - name: Running unit tests
+        shell: pwsh
+        run: |
+          .\build\windows\unit_tests.ps1
+
+  # can't run this step inside of container because of tests specific
+  test-integration-nix:
+    name: Run integration tests on *Nix
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: src/github.com/${{env.ORIGINAL_REPO_NAME}}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          path: src/github.com/${{env.ORIGINAL_REPO_NAME}}
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{env.GO_VERSION}}
+      - name: Integration test
+        env:
+          GOPATH: ${{ github.workspace }}
+        run: make integration-test
 
   prerelease:
     name: Build binary for *Nix/Win, create archives for *Nix/Win, create packages for *Nix, upload all artifacts into GH Release assets
     runs-on: ubuntu-20.04
-#    needs: [validate, test-nix, test-windows, snyk, test-integration-nix]
+    needs: [validate, test-nix, test-windows, snyk, test-integration-nix]
     steps:
       - uses: actions/checkout@v2
       - name: Pre release
