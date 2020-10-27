@@ -2,12 +2,16 @@
 set -e
 #
 #
-# Mount S3 with S3Fuse and update YUM repo
+# Mount S3 with S3Fuse and update YUM or ZYPP repo.
 #
 #
 OS_VERSIONS_LIST=($(echo $OS_VERSIONS | tr ',' "\n"))
 ARCH_LIST=($(echo $ARCH | tr ',' "\n"))
 SUFIX='1'
+
+#################
+#    S3 FUSE    #
+#################
 
 [ "${DEBUG:-false}" == 'true' ] && { set -x; S3FS_DEBUG='-d -d'; }
 
@@ -36,6 +40,10 @@ fi
 echo "===> Mounting s3 in local docker with Fuse"
 mkdir -p ${AWS_S3_MOUNTPOINT}
 s3fs $S3FS_DEBUG $S3FS_ARGS -o passwd_file=${AWS_S3_AUTHFILE} -o url=${AWS_S3_URL} ${AWS_S3_BUCKET} ${AWS_S3_MOUNTPOINT}
+
+#######################################
+#    UPLOAD TO S3, UPDATE METADATA    #
+#######################################
 
 echo "===> Importing GPG signature"
 printf %s ${GPG_PRIVATE_KEY_BASE64} | base64 --decode | gpg --batch --import -
