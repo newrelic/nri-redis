@@ -164,7 +164,7 @@ jobs:
     timeout-minutes: 10
     env:
       BASE_PATH: "infrastructure_agent/test/linux/apt"
-      LOCK_REPO_TYPE: 'apt' # yum | apt | zypp | win
+      LOCK_REPO_TYPE: 'apt-prerelease' # yum-prerelease | apt-prerelease | zypp-prerelease
     steps:
     - uses: actions/checkout@v2
     - name: Update S3 APT repo
@@ -184,7 +184,7 @@ jobs:
     timeout-minutes: 10
     env:
       BASE_PATH: "/infrastructure_agent/test/linux/yum/el"
-      LOCK_REPO_TYPE: 'yum' # yum | apt | zypp | win
+      LOCK_REPO_TYPE: 'yum-prerelease' # yum-prerelease | apt-prerelease | zypp-prerelease
       OS_VERSIONS: '5,6,7,8'
       ARCH: 'x86_64,arm,arm64'
     steps:
@@ -206,7 +206,7 @@ jobs:
     timeout-minutes: 10
     env:
       BASE_PATH: "/infrastructure_agent/test/linux/zypp/sles"
-      LOCK_REPO_TYPE: 'zypp' # yum | apt | zypp | win
+      LOCK_REPO_TYPE: 'zypp-prerelease' # yum-prerelease | apt-prerelease | zypp-prerelease
       OS_VERSIONS: '11.4,12.1,12.2,12.3,12.4'
       ARCH: 'x86_64,arm,arm64'
     steps:
