@@ -1,8 +1,6 @@
 version: '3'
-
 services:
-
-  release:
+  service:
     build:
       context: dockerfiles/win-updater-s3fuse/
       dockerfile: Dockerfile
@@ -21,3 +19,4 @@ services:
       - TAG
       - REPO_FULL_NAME
       - INTEGRATION
+      - ARCH
