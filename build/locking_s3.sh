@@ -59,12 +59,12 @@ function lock {
   echo "===> Locking $LOCK_REPO_TYPE"
   aws dynamodb put-item \
     --table-name $DYNAMO_TABLE_NAME \
-    --item "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}, \"locked\": {\"BOOL\": true}}, \"repo\": {\"S\": \"${REPO_FULL_NAME}\"}}"
+    --item "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}, \"locked\": {\"BOOL\": true}, \"repo\": {\"S\": \"${REPO_FULL_NAME}\"}}"
 }
 
 function release_lock {
   echo "===> Release Lock in $LOCK_REPO_TYPE"
   aws dynamodb put-item \
     --table-name $DYNAMO_TABLE_NAME \
-    --item "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}, \"locked\": {\"BOOL\": false}}, \"repo\": {\"S\": \"-\"}}"
+    --item "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}, \"locked\": {\"BOOL\": false}, \"repo\": {\"S\": \"-\"}}"
 }
