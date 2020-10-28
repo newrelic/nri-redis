@@ -64,3 +64,6 @@ for arch in "${ARCH_LIST[@]}"; do
   mkdir -p ${LOCAL_REPO_PATH}
   cp ${package_name} ${LOCAL_REPO_PATH}
 done
+
+echo "===> umount s3 Fuse"
+s3fs umount ${AWS_S3_MOUNTPOINT}
