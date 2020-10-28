@@ -181,13 +181,19 @@ jobs:
         wait_and_lock
         docker-compose --file build/docker/docker_compose_apt_updater.yml run service
         release_lock
-      - name: Notify failure via Slack
-        if: ${{ failure() }}
-        uses: archive/github-actions-slack@master
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
-          slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-apt-prerelease job FAILURE!"
+    - name: Release lock
+      if: ${{ failure() }}
+      run: |
+        source build/locking_s3.sh
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-apt-prerelease job FAILURE!"
+
 
   s3-yum-prerelease:
     name: S3 YUM update prerelease (tests dir)
@@ -209,13 +215,18 @@ jobs:
         wait_and_lock
         docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
         release_lock
-      - name: Notify failure via Slack
-        if: ${{ failure() }}
-        uses: archive/github-actions-slack@master
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
-          slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-yum-prerelease job FAILURE!"
+    - name: Release lock
+      if: ${{ failure() }}
+      run: |
+        source build/locking_s3.sh
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-yum-prerelease job FAILURE!"
 
   s3-zypp-prerelease:
     name: S3 ZYPP update prerelease (tests dir)
@@ -237,13 +248,18 @@ jobs:
         wait_and_lock
         docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
         release_lock
-      - name: Notify failure via Slack
-        if: ${{ failure() }}
-        uses: archive/github-actions-slack@master
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
-          slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-zypp-prerelease job FAILURE!"
+    - name: Release lock
+      if: ${{ failure() }}
+      run: |
+        source build/locking_s3.sh
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-zypp-prerelease job FAILURE!"
 
   s3-win-prerelease:
     name: S3 Windows .msi update prerelease (tests dir)
@@ -259,10 +275,15 @@ jobs:
     - name: Update MSI S3 repo
       run: |
         docker-compose --file build/docker/docker_compose_win_updater.yml run service
-      - name: Notify failure via Slack
-        if: ${{ failure() }}
-        uses: archive/github-actions-slack@master
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
-          slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-win-prerelease job FAILURE!"
+    - name: Release lock
+      if: ${{ failure() }}
+      run: |
+        source build/locking_s3.sh
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-win-prerelease job FAILURE!"
