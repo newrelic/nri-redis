@@ -136,32 +136,32 @@ jobs:
       matrix:
         goarch: [amd64,386]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: src/github.com/${{env.ORIGINAL_REPO_NAME}}
-      - name: Get PFX certificate from GH secrets
-        shell: bash
-        run: printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > wincert.pfx
-      - name: Download zip from GH Release assets and extract .exe
-        shell: pwsh
-        run: |
-          build\windows\download_zip_extract_exe.ps1 "$env:INTEGRATION" ${{ matrix.goarch }} "$env:TAG" "$env:REPO_FULL_NAME"
-      - name: Create MSI
-        shell: pwsh
-        run: |
-          build\windows\package_msi.ps1 -integration "$env:INTEGRATION" -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_passphrase "$env:PFX_PASSPHRASE" -pfx_certificate_description "$env:PFX_CERTIFICATE_DESCRIPTION"
-      - name: Upload MSI to GH
-        shell: bash
-        run: |
-          build/windows/upload_msi.sh ${INTEGRATION} ${{ matrix.goarch }} ${TAG}
-      - name: Notify failure via Slack
-        if: ${{ failure() }}
-        uses: archive/github-actions-slack@master
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
-          slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, package-win job FAILURE!"
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        path: src/github.com/${{env.ORIGINAL_REPO_NAME}}
+    - name: Get PFX certificate from GH secrets
+      shell: bash
+      run: printf "%s" "$PFX_CERTIFICATE_BASE64" | base64 -d - > wincert.pfx
+    - name: Download zip from GH Release assets and extract .exe
+      shell: pwsh
+      run: |
+        build\windows\download_zip_extract_exe.ps1 "$env:INTEGRATION" ${{ matrix.goarch }} "$env:TAG" "$env:REPO_FULL_NAME"
+    - name: Create MSI
+      shell: pwsh
+      run: |
+        build\windows\package_msi.ps1 -integration "$env:INTEGRATION" -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_passphrase "$env:PFX_PASSPHRASE" -pfx_certificate_description "$env:PFX_CERTIFICATE_DESCRIPTION"
+    - name: Upload MSI to GH
+      shell: bash
+      run: |
+        build/windows/upload_msi.sh ${INTEGRATION} ${{ matrix.goarch }} ${TAG}
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, package-win job FAILURE!"
 
   s3-apt-prerelease:
     name: S3 repo APT update prerelease (tests dir)
@@ -181,13 +181,19 @@ jobs:
         wait_and_lock
         docker-compose --file build/docker/docker_compose_apt_updater.yml run service
         release_lock
-      - name: Notify failure via Slack
-        if: ${{ failure() }}
-        uses: archive/github-actions-slack@master
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
-          slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-apt-prerelease job FAILURE!"
+    - name: Release lock
+      if: ${{ failure() }}
+      run: |
+        source build/locking_s3.sh
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-apt-prerelease job FAILURE!"
+
 
   s3-yum-prerelease:
     name: S3 YUM update prerelease (tests dir)
@@ -209,13 +215,18 @@ jobs:
         wait_and_lock
         docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
         release_lock
-      - name: Notify failure via Slack
-        if: ${{ failure() }}
-        uses: archive/github-actions-slack@master
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
-          slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-yum-prerelease job FAILURE!"
+    - name: Release lock
+      if: ${{ failure() }}
+      run: |
+        source build/locking_s3.sh
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-yum-prerelease job FAILURE!"
 
   s3-zypp-prerelease:
     name: S3 ZYPP update prerelease (tests dir)
@@ -237,13 +248,18 @@ jobs:
         wait_and_lock
         docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
         release_lock
-      - name: Notify failure via Slack
-        if: ${{ failure() }}
-        uses: archive/github-actions-slack@master
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
-          slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-zypp-prerelease job FAILURE!"
+    - name: Release lock
+      if: ${{ failure() }}
+      run: |
+        source build/locking_s3.sh
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-zypp-prerelease job FAILURE!"
 
   s3-win-prerelease:
     name: S3 Windows .msi update prerelease (tests dir)
@@ -259,10 +275,15 @@ jobs:
     - name: Update MSI S3 repo
       run: |
         docker-compose --file build/docker/docker_compose_win_updater.yml run service
-      - name: Notify failure via Slack
-        if: ${{ failure() }}
-        uses: archive/github-actions-slack@master
-        with:
-          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
-          slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-win-prerelease job FAILURE!"
+    - name: Release lock
+      if: ${{ failure() }}
+      run: |
+        source build/locking_s3.sh
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-win-prerelease job FAILURE!"
