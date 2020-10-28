@@ -61,13 +61,6 @@ function wait_and_lock {
   done
 }
 
-function lock {
-  aws dynamodb put-item \
-    --table-name $DYNAMO_TABLE_NAME \
-    --item "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}, \"locked\": {\"BOOL\": true}, \"repo\": {\"S\": \"${REPO_FULL_NAME}\"}}"
-  echo "===> I got the lock $LOCK_REPO_TYPE!!!"
-}
-
 function release_lock {
   aws dynamodb put-item \
     --table-name $DYNAMO_TABLE_NAME \
