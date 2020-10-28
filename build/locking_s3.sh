@@ -12,8 +12,9 @@ function create_dynamo_table {
     exit 1
   fi
   if aws dynamodb describe-table --table-name $DYNAMO_TABLE_NAME --region $AWS_DEFAULT_REGION >/dev/null 2>&1 ; then
-    echo "===> Dynamodb lock table already exists"
+    echo "===> Dynamodb lock table already exists, I don't create it"
   else
+    echo "===> Dynamodb lock table doen't exist, I create it"
     aws dynamodb create-table \
             --region $AWS_DEFAULT_REGION \
             --table-name $DYNAMO_TABLE_NAME \
