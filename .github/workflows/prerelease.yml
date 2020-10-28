@@ -115,6 +115,13 @@ jobs:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
           slack-channel: ${{ env.SLACK_CHANNEL }}
           slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, prerelease for nix FAILURE!"
+      - name: Notify failure via Slack
+        if: ${{ failure() }}
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+          slack-channel: ${{ env.SLACK_CHANNEL }}
+          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, prerelease job FAILURE!"
 
   package-win:
     name: Create MSI & Upload into GH Release assets
@@ -154,14 +161,14 @@ jobs:
         with:
           slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
           slack-channel: ${{ env.SLACK_CHANNEL }}
-          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, prerelease for Windows FAILURE!"
+          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, package-win job FAILURE!"
 
   s3-apt-prerelease:
     name: S3 repo APT update prerelease (tests dir)
     if: github.event.action == 'prereleased'
     needs: [prerelease]
     runs-on: ubuntu-20.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     env:
       BASE_PATH: "infrastructure_agent/test/linux/apt"
       LOCK_REPO_TYPE: 'apt-prerelease' # yum-prerelease | apt-prerelease | zypp-prerelease
@@ -174,13 +181,20 @@ jobs:
         wait_and_lock
         docker-compose --file build/docker/docker_compose_apt_updater.yml run service
         release_lock
+      - name: Notify failure via Slack
+        if: ${{ failure() }}
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+          slack-channel: ${{ env.SLACK_CHANNEL }}
+          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-apt-prerelease job FAILURE!"
 
   s3-yum-prerelease:
     name: S3 YUM update prerelease (tests dir)
     if: github.event.action == 'prereleased'
     needs: [prerelease]
     runs-on: ubuntu-20.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     env:
       BASE_PATH: "/infrastructure_agent/test/linux/yum/el"
       LOCK_REPO_TYPE: 'yum-prerelease' # yum-prerelease | apt-prerelease | zypp-prerelease
@@ -195,13 +209,20 @@ jobs:
         wait_and_lock
         docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
         release_lock
+      - name: Notify failure via Slack
+        if: ${{ failure() }}
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+          slack-channel: ${{ env.SLACK_CHANNEL }}
+          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-yum-prerelease job FAILURE!"
 
   s3-zypp-prerelease:
     name: S3 ZYPP update prerelease (tests dir)
     if: github.event.action == 'prereleased'
     needs: [prerelease]
     runs-on: ubuntu-20.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     env:
       BASE_PATH: "/infrastructure_agent/test/linux/zypp/sles"
       LOCK_REPO_TYPE: 'zypp-prerelease' # yum-prerelease | apt-prerelease | zypp-prerelease
@@ -216,12 +237,19 @@ jobs:
         wait_and_lock
         docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
         release_lock
+      - name: Notify failure via Slack
+        if: ${{ failure() }}
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+          slack-channel: ${{ env.SLACK_CHANNEL }}
+          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-zypp-prerelease job FAILURE!"
 
   s3-win-prerelease:
     name: S3 Windows .msi update prerelease (tests dir)
     if: github.event.action == 'prereleased'
     runs-on: ubuntu-20.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     needs: [package-win]
     env:
       BASE_PATH: "/infrastructure_agent/test/windows/integrations"
@@ -231,3 +259,10 @@ jobs:
     - name: Update MSI S3 repo
       run: |
         docker-compose --file build/docker/docker_compose_win_updater.yml run service
+      - name: Notify failure via Slack
+        if: ${{ failure() }}
+        uses: archive/github-actions-slack@master
+        with:
+          slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+          slack-channel: ${{ env.SLACK_CHANNEL }}
+          slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-win-prerelease job FAILURE!"
