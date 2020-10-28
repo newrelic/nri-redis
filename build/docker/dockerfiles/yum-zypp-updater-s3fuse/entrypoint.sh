@@ -56,7 +56,7 @@ for arch in "${ARCH_LIST[@]}"; do
     package_name="nri-${INTEGRATION}-${TAG:1}-${arch}.rpm"
   fi
   echo "===> Download ${package_name} from GH"
-  curl -SL https://github.com/${REPO_FULL_NAME}/releases/download/${TAG}/${package_name} -o ${package_name}
+  wget https://github.com/${REPO_FULL_NAME}/releases/download/${TAG}/${package_name}
 done
 
 for arch in "${ARCH_LIST[@]}"; do

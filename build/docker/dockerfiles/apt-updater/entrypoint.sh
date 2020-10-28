@@ -22,7 +22,7 @@ mkdir -p /artifacts; cd /artifacts
 for arch in "${ARCH[@]}"; do
   DEB_PACKAGE="nri-${INTEGRATION}_${TAG:1}-${SUFIX}_${arch}.deb"
   echo "===> Downloading ${DEB_PACKAGE} from GH"
-  curl -SL https://github.com/${REPO_FULL_NAME}/releases/download/${TAG}/${DEB_PACKAGE} -o ${DEB_PACKAGE}
+  wget https://github.com/${REPO_FULL_NAME}/releases/download/${TAG}/${DEB_PACKAGE}
 done
 
 for arch in "${ARCH[@]}"; do

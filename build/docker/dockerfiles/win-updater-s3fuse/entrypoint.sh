@@ -58,7 +58,7 @@ for arch in "${ARCH_LIST[@]}"; do
   LOCAL_REPO_PATH="${AWS_S3_MOUNTPOINT}${BASE_PATH}/nri-${INTEGRATION}/${arch}/"
 
   echo "===> Downloading ${package_name} from GH"
-  curl -SL https://github.com/${REPO_FULL_NAME}/releases/download/${TAG}/${package_name} -o ${package_name}
+  wget https://github.com/${REPO_FULL_NAME}/releases/download/${TAG}/${package_name}
 
   echo "===> Uploading ${package_name} to S3 in ${BASE_PATH}/windows/${arch}"
   mkdir -p ${LOCAL_REPO_PATH}
