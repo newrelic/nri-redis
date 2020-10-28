@@ -53,6 +53,7 @@ function wait_and_lock {
     --expression-attribute-values '{":t":{"BOOL":true},":f":{"BOOL":false}}' \
     --condition-expression 'locked = :f')
     if [ $? -eq 0 ]; then
+      set -e
       break
     fi
     echo "===> Wait 10 seconds to retry lock status, repo: ${repo_that_locks} is locking"
