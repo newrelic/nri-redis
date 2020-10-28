@@ -51,11 +51,17 @@ function wait_and_lock {
     --key "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}}" \
     --update-expression "SET locked = :t" \
     --expression-attribute-values '{":t":{"BOOL":true},":f":{"BOOL":false}}' \
-    --condition-expression 'locked = :f')
+    --condition-expression 'locked = :f' \
+    2>/dev/null)
     if [ $? -eq 0 ]; then
       set -e
       break
     fi
+    repo_that_locks=$(aws dynamodb get-item \
+       --table-name ${DYNAMO_TABLE_NAME}  \
+       --key "{ \"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"} }" \
+       --projection-expression "repo" \
+      | jq -r '.Item.repo.S');
     echo "===> Wait 10 seconds to retry lock status, repo: ${repo_that_locks} is locking"
     sleep 10
   done
