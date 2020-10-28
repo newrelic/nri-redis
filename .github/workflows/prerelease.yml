@@ -171,8 +171,7 @@ jobs:
       run: |
         source build/locking_s3.sh
         create_dynamo_table
-        wait_free_lock
-        lock
+        wait_and_lock
         docker-compose --file build/docker/docker_compose_apt_updater.yml run service
         release_lock
 
@@ -193,8 +192,7 @@ jobs:
       run: |
         source build/locking_s3.sh
         create_dynamo_table
-        wait_free_lock
-        lock
+        wait_and_lock
         docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
         release_lock
 
@@ -215,8 +213,7 @@ jobs:
       run: |
         source build/locking_s3.sh
         create_dynamo_table
-        wait_free_lock
-        lock
+        wait_and_lock
         docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
         release_lock
 

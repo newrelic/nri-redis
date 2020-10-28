@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-20.04
     timeout-minutes: 10
     env:
-      BASE_PATH: "infrastructure_agent/test/linux/apt"
+      BASE_PATH: "infrastructure_agent/linux/apt"
       LOCK_REPO_TYPE: 'apt-release' # yum-release | apt-release | zypp-release
     steps:
     - uses: actions/checkout@v2

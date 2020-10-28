@@ -43,37 +43,33 @@ function create_dynamo_table {
   fi
 }
 
-function wait_free_lock {
-  echo "===> Wait for Lock to be released, if takes long, unlock DynamoDB item manually"
+function wait_and_lock {
   while true; do
-    locked=$(aws dynamodb get-item \
-       --table-name ${DYNAMO_TABLE_NAME}  \
-       --key "{ \"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"} }" \
-       --projection-expression "locked" \
-      | jq -r '.Item.locked.BOOL');
-    if [[ $locked == "false" ]]; then
+    set +e # Error if dynamo condition-expression fails, so we avoid error
+    result=$(aws dynamodb update-item \
+    --table-name ${DYNAMO_TABLE_NAME} \
+    --key "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}}" \
+    --update-expression "SET locked = :t" \
+    --expression-attribute-values '{":t":{"BOOL":true},":f":{"BOOL":false}}' \
+    --condition-expression 'locked = :f')
+    if [ $? -eq 0 ]; then
       break
     fi
-    repo_that_locks=$(aws dynamodb get-item \
-       --table-name ${DYNAMO_TABLE_NAME}  \
-       --key "{ \"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"} }" \
-       --projection-expression "repo" \
-      | jq -r '.Item.repo.S');
-    echo "===> Wait 10 more seconds, repo ${repo_that_locks} is locking"
+    echo "===> Wait 10 seconds to retry lock status, repo: ${repo_that_locks} is locking"
     sleep 10
   done
 }
 
 function lock {
-  echo "===> I got the lock $LOCK_REPO_TYPE!!!"
   aws dynamodb put-item \
     --table-name $DYNAMO_TABLE_NAME \
     --item "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}, \"locked\": {\"BOOL\": true}, \"repo\": {\"S\": \"${REPO_FULL_NAME}\"}}"
+  echo "===> I got the lock $LOCK_REPO_TYPE!!!"
 }
 
 function release_lock {
-  echo "===> Release Lock in $LOCK_REPO_TYPE"
   aws dynamodb put-item \
     --table-name $DYNAMO_TABLE_NAME \
     --item "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}, \"locked\": {\"BOOL\": false}, \"repo\": {\"S\": \"-\"}}"
+  echo "===> Release Lock in $LOCK_REPO_TYPE"
 }
