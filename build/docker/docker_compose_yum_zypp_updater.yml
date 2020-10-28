@@ -1,0 +1,25 @@
+version: '3'
+services:
+  service:
+    build:
+      context: dockerfiles/yum-zypp-updater-s3fuse/
+      dockerfile: Dockerfile
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+      - MKNOD
+    devices:
+      - "/dev/fuse"
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_DEFAULT_REGION
+      - AWS_S3_BUCKET
+      - BASE_PATH
+      - TAG
+      - REPO_FULL_NAME
+      - GPG_PRIVATE_KEY_BASE64
+      - GPG_PASSPHRASE
+      - INTEGRATION
+      - OS_VERSIONS
+      - ARCH

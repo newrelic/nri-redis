@@ -1,0 +1,130 @@
+name: Release pipeline
+
+on:
+  release:
+    types:
+      - released
+    tags:
+      - 'v*'
+
+env:
+  AWS_DEFAULT_REGION: 'us-east-1'
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_S3_BUCKET: 'nr-clone'
+  DEPOT_REPO: 'https://github.com/jportasa/depot' # Script to push .deb to APT repo
+  DYNAMO_TABLE_NAME: 's3-repo-lock'
+  GPG_MAIL: 'info@newrelic.com'
+  GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+  GPG_PRIVATE_KEY_BASE64: ${{ secrets.GPG_PRIVATE_KEY_BASE64 }} # base64 encoded
+  INTEGRATION: "redis"
+  PFX_CERTIFICATE_BASE64: ${{ secrets.PFX_CERTIFICATE_BASE64 }} # base64 encoded
+  PFX_CERTIFICATE_DESCRIPTION: 'Contoso'
+  PFX_PASSPHRASE:  ${{ secrets.PFX_PASSPHRASE }}
+  REPO_FULL_NAME: ${{ github.event.repository.full_name }}
+  SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+  SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+  TAG: ${{ github.event.release.tag_name }}
+
+jobs:
+
+  s3-apt-release:
+    name: S3 repo APT update release
+    if: github.event.action == 'released'
+    runs-on: ubuntu-20.04
+    timeout-minutes: 20
+    env:
+      BASE_PATH: "infrastructure_agent/linux/apt"
+      LOCK_REPO_TYPE: 'apt-release' # yum-release | apt-release | zypp-release
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update S3 APT repo
+      run: |
+        source build/locking_s3.sh
+        create_dynamo_table
+        wait_and_lock
+        docker-compose --file build/docker/docker_compose_apt_updater.yml run service
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-apt-release job FAILURE!"
+
+  s3-yum-release:
+    name: S3 YUM update release
+    if: github.event.action == 'released'
+    runs-on: ubuntu-20.04
+    timeout-minutes: 20
+    env:
+      BASE_PATH: "/infrastructure_agent/linux/yum/el"
+      LOCK_REPO_TYPE: 'yum-release' # yum-release | apt-release | zypp-release
+      OS_VERSIONS: '5,6,7,8'
+      ARCH: 'x86_64,arm,arm64'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update S3 YUM repo
+      run: |
+        source build/locking_s3.sh
+        create_dynamo_table
+        wait_and_lock
+        docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-yum-release job FAILURE!"
+
+  s3-zypp-release:
+    name: S3 ZYPP update release
+    if: github.event.action == 'released'
+    runs-on: ubuntu-20.04
+    timeout-minutes: 20
+    env:
+      BASE_PATH: "/infrastructure_agent/linux/zypp/sles"
+      LOCK_REPO_TYPE: 'zypp-release' # yum-release | apt-release | zypp-release
+      OS_VERSIONS: '11.4,12.1,12.2,12.3,12.4'
+      ARCH: 'x86_64,arm,arm64'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update S3 ZYPP repo
+      run: |
+        source build/locking_s3.sh
+        create_dynamo_table
+        wait_and_lock
+        docker-compose --file build/docker/docker_compose_yum_zypp_updater.yml run service
+        release_lock
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-zypp-release job FAILURE!"
+
+  s3-win-release:
+    name: S3 Windows .msi update release (tests dir)
+    if: github.event.action == 'released'
+    runs-on: ubuntu-20.04
+    timeout-minutes: 20
+    env:
+      BASE_PATH: "/infrastructure_agent/windows/integrations"
+      ARCH: 'amd64,386'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update MSI S3 repo
+      run: |
+        docker-compose --file build/docker/docker_compose_win_updater.yml run service
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-win-release job FAILURE!"
+

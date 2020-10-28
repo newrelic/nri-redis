@@ -1,0 +1,20 @@
+version: '3'
+services:
+  service:
+    build:
+      context: dockerfiles/apt-updater/
+      dockerfile: Dockerfile
+    environment:
+      - INTEGRATION
+      - AWS_DEFAULT_REGION
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_S3_BUCKET
+      - DEPOT_REPO
+      - GPG_PRIVATE_KEY_BASE64
+      - GPG_PASSPHRASE
+      - TAG
+      - REPO_FULL_NAME
+      - BASE_PATH
+      - DYNAMO_TABLE_NAME
+      - LOCK_REPO_TYPE
