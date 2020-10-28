@@ -65,5 +65,3 @@ for arch in "${ARCH_LIST[@]}"; do
   cp ${package_name} ${LOCAL_REPO_PATH}
 done
 
-echo "===> umount s3 Fuse"
-s3fs -o nonempty umount ${AWS_S3_MOUNTPOINT}

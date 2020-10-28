@@ -82,6 +82,3 @@ for arch in "${ARCH_LIST[@]}"; do
     gpg --batch --pinentry-mode=loopback --passphrase ${GPG_PASSPHRASE} --detach-sign --armor "${LOCAL_REPO_PATH}/repodata/repomd.xml"
   done
 done
-
-echo "===> umount s3 Fuse"
-s3fs -o nonempty umount ${AWS_S3_MOUNTPOINT}
