@@ -54,7 +54,7 @@ function wait_and_lock {
     --expression-attribute-values "{\":t\":{\"BOOL\":true},\":f\":{\"BOOL\":false},\":r\":{\"S\":\"${REPO_FULL_NAME}\"}}" \
     --condition-expression 'locked = :f' \
     --return-values ALL_NEW \
-    2>/dev/null
+    2>&1/dev/null
     if [ $? -eq 0 ]; then
       set -e
       break
