@@ -66,4 +66,4 @@ for arch in "${ARCH_LIST[@]}"; do
 done
 
 echo "===> umount s3 Fuse"
-s3fs umount ${AWS_S3_MOUNTPOINT}
+s3fs -o -o nonempty umount ${AWS_S3_MOUNTPOINT}
