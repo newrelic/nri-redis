@@ -47,13 +47,14 @@ function create_dynamo_table {
 function wait_and_lock {
   while true; do
     set +e # Error if dynamo condition-expression fails, so we avoid error
-    result=$(aws dynamodb update-item \
+    aws dynamodb update-item \
     --table-name ${DYNAMO_TABLE_NAME} \
     --key "{\"lock-type\": {\"S\": \"${LOCK_REPO_TYPE}\"}}" \
-    --update-expression "SET locked = :t" \
-    --expression-attribute-values '{":t":{"BOOL":true},":f":{"BOOL":false}}' \
+    --update-expression "SET locked = :t,repo = :r" \
+    --expression-attribute-values "{\":t\":{\"BOOL\":true},\":f\":{\"BOOL\":false},\":r\":{\"S\":\"${REPO_FULL_NAME}\"}}" \
     --condition-expression 'locked = :f' \
-    2>/dev/null)
+    --return-values ALL_NEW \
+    2>/dev/null
     if [ $? -eq 0 ]; then
       set -e
       break
