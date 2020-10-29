@@ -163,7 +163,7 @@ jobs:
         slack-channel: ${{ env.SLACK_CHANNEL }}
         slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, package-win job FAILURE!"
 
-  s3-apt-prerelease:
+  s3-prerelease-apt:
     name: S3 repo APT update prerelease (tests dir)
     if: github.event.action == 'prereleased'
     needs: [prerelease]
@@ -171,7 +171,7 @@ jobs:
     timeout-minutes: 20
     env:
       BASE_PATH: "infrastructure_agent/test/linux/apt"
-      LOCK_REPO_TYPE: 'apt-prerelease' # yum-prerelease | apt-prerelease | zypp-prerelease
+      LOCK_REPO_TYPE: 'prerelease-apt' # prerelease-yum | prerelease-apt | prerelease-zypp
     steps:
     - uses: actions/checkout@v2
     - name: Update S3 APT repo
@@ -192,10 +192,10 @@ jobs:
       with:
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
         slack-channel: ${{ env.SLACK_CHANNEL }}
-        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-apt-prerelease job FAILURE!"
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-prerelease-apt job FAILURE!"
 
 
-  s3-yum-prerelease:
+  s3-prerelease-yum:
     name: S3 YUM update prerelease (tests dir)
     if: github.event.action == 'prereleased'
     needs: [prerelease]
@@ -203,7 +203,7 @@ jobs:
     timeout-minutes: 20
     env:
       BASE_PATH: "/infrastructure_agent/test/linux/yum/el"
-      LOCK_REPO_TYPE: 'yum-prerelease' # yum-prerelease | apt-prerelease | zypp-prerelease
+      LOCK_REPO_TYPE: 'prerelease-yum' # prerelease-yum | prerelease-apt | prerelease-zypp
       OS_VERSIONS: '5,6,7,8'
       ARCH: 'x86_64,arm,arm64'
     steps:
@@ -226,9 +226,9 @@ jobs:
       with:
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
         slack-channel: ${{ env.SLACK_CHANNEL }}
-        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-yum-prerelease job FAILURE!"
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-prerelease-yum job FAILURE!"
 
-  s3-zypp-prerelease:
+  s3-prerelease-zypp:
     name: S3 ZYPP update prerelease (tests dir)
     if: github.event.action == 'prereleased'
     needs: [prerelease]
@@ -236,7 +236,7 @@ jobs:
     timeout-minutes: 20
     env:
       BASE_PATH: "/infrastructure_agent/test/linux/zypp/sles"
-      LOCK_REPO_TYPE: 'zypp-prerelease' # yum-prerelease | apt-prerelease | zypp-prerelease
+      LOCK_REPO_TYPE: 'prerelease-zypp' # prerelease-yum | prerelease-apt | prerelease-zypp
       OS_VERSIONS: '11.4,12.1,12.2,12.3,12.4'
       ARCH: 'x86_64,arm,arm64'
     steps:
@@ -259,7 +259,7 @@ jobs:
       with:
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
         slack-channel: ${{ env.SLACK_CHANNEL }}
-        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-zypp-prerelease job FAILURE!"
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-prerelease-zypp job FAILURE!"
 
   s3-win-prerelease:
     name: S3 Windows .msi update prerelease (tests dir)
