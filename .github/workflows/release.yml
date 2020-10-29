@@ -28,14 +28,14 @@ env:
 
 jobs:
 
-  s3-apt-release:
+  s3-release-apt:
     name: S3 repo APT update release
     if: github.event.action == 'released'
     runs-on: ubuntu-20.04
     timeout-minutes: 20
     env:
       BASE_PATH: "infrastructure_agent/linux/apt"
-      LOCK_REPO_TYPE: 'apt-release' # yum-release | apt-release | zypp-release
+      LOCK_REPO_TYPE: 'release-apt' # release-yum | release-apt | release-zypp
     steps:
     - uses: actions/checkout@v2
     - name: Update S3 APT repo
@@ -51,16 +51,16 @@ jobs:
       with:
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
         slack-channel: ${{ env.SLACK_CHANNEL }}
-        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-apt-release job FAILURE!"
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-release-apt job FAILURE!"
 
-  s3-yum-release:
+  s3-release-yum:
     name: S3 YUM update release
     if: github.event.action == 'released'
     runs-on: ubuntu-20.04
     timeout-minutes: 20
     env:
       BASE_PATH: "/infrastructure_agent/linux/yum/el"
-      LOCK_REPO_TYPE: 'yum-release' # yum-release | apt-release | zypp-release
+      LOCK_REPO_TYPE: 'release-yum' # release-yum | release-apt | release-zypp
       OS_VERSIONS: '5,6,7,8'
       ARCH: 'x86_64,arm,arm64'
     steps:
@@ -78,16 +78,16 @@ jobs:
       with:
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
         slack-channel: ${{ env.SLACK_CHANNEL }}
-        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-yum-release job FAILURE!"
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-release-yum job FAILURE!"
 
-  s3-zypp-release:
+  s3-release-zypp:
     name: S3 ZYPP update release
     if: github.event.action == 'released'
     runs-on: ubuntu-20.04
     timeout-minutes: 20
     env:
       BASE_PATH: "/infrastructure_agent/linux/zypp/sles"
-      LOCK_REPO_TYPE: 'zypp-release' # yum-release | apt-release | zypp-release
+      LOCK_REPO_TYPE: 'release-zypp' # release-yum | release-apt | release-zypp
       OS_VERSIONS: '11.4,12.1,12.2,12.3,12.4'
       ARCH: 'x86_64,arm,arm64'
     steps:
@@ -105,7 +105,7 @@ jobs:
       with:
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
         slack-channel: ${{ env.SLACK_CHANNEL }}
-        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-zypp-release job FAILURE!"
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-release-zypp job FAILURE!"
 
   s3-win-release:
     name: S3 Windows .msi update release (tests dir)
