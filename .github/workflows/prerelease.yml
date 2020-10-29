@@ -287,3 +287,21 @@ jobs:
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
         slack-channel: ${{ env.SLACK_CHANNEL }}
         slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-win-prerelease job FAILURE!"
+
+  installation-testing-ubuntu:
+    name: APT prerelease installation test
+    if: github.event.action == 'prereleased'
+    needs: [s3-prerelease-apt]
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install with APT Release and Prerelease
+      run: |
+        build/installation_testing_ubuntu.sh
+    - name: Notify failure via Slack
+      if: ${{ failure() }}
+      uses: archive/github-actions-slack@master
+      with:
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: ${{ env.SLACK_CHANNEL }}
+        slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, installation-testing-ubuntu job FAILURE!"
