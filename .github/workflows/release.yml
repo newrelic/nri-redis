@@ -129,4 +129,3 @@ jobs:
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
         slack-channel: ${{ env.SLACK_CHANNEL }}
         slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, s3-win-release job FAILURE!"
-

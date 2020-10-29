@@ -200,11 +200,11 @@ jobs:
       BASE_PATH: "infrastructure_agent/test/linux/apt"
       LOCK_REPO_TYPE: 'prerelease-apt' # prerelease-yum | prerelease-apt | prerelease-zypp
     steps:
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     - uses: actions/checkout@v2
     - name: Update S3 APT repo
       run: |
@@ -239,11 +239,11 @@ jobs:
       OS_VERSIONS: '5,6,7,8'
       ARCH: 'x86_64,arm,arm64'
     steps:
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     - uses: actions/checkout@v2
     - name: Update S3 YUM repo
       run: |
@@ -277,11 +277,11 @@ jobs:
       OS_VERSIONS: '11.4,12.1,12.2,12.3,12.4'
       ARCH: 'x86_64,arm,arm64'
     steps:
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     - uses: actions/checkout@v2
     - name: Update S3 ZYPP repo
       run: |
@@ -313,11 +313,11 @@ jobs:
       BASE_PATH: "/infrastructure_agent/test/windows/integrations"
       ARCH: 'amd64,386'
     steps:
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     - uses: actions/checkout@v2
     - name: Update MSI S3 repo
       run: |
