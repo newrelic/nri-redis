@@ -13,6 +13,8 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_S3_BUCKET: 'nr-clone'
   DEPOT_REPO: 'https://github.com/jportasa/depot' # Script to push .deb to APT repo
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   DYNAMO_TABLE_NAME: 's3-repo-lock'
   GPG_MAIL: 'info@newrelic.com'
   GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}

@@ -45,7 +45,6 @@ release/sign/nix:
 	@echo "===> $(INTEGRATION) === [release/sign] signing packages"
 	@bash $(CURDIR)/build/nix/sign.sh
 
-
 .PHONY : release/publish
 release/publish:
 	@echo "===> $(INTEGRATION) === [release/publish] publishing artifacts"
