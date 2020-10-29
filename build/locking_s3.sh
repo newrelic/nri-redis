@@ -25,13 +25,13 @@ function create_dynamo_table {
     aws dynamodb wait table-exists --table-name $DYNAMO_TABLE_NAME --region $AWS_DEFAULT_REGION
     aws dynamodb put-item \
         --table-name $DYNAMO_TABLE_NAME \
-        --item '{"lock-type": {"S": "yum-prerelease"}, "locked": {"BOOL": false}, "repo": {"S": "-"}}'
+        --item '{"lock-type": {"S": "prerelease-yum"}, "locked": {"BOOL": false}, "repo": {"S": "-"}}'
     aws dynamodb put-item \
         --table-name $DYNAMO_TABLE_NAME \
-        --item '{"lock-type": {"S": "apt-prerelease"}, "locked": {"BOOL": false}, "repo": {"S": "-"}}'
+        --item '{"lock-type": {"S": "prerelease-apt"}, "locked": {"BOOL": false}, "repo": {"S": "-"}}'
     aws dynamodb put-item \
         --table-name $DYNAMO_TABLE_NAME \
-        --item '{"lock-type": {"S": "zypp-prerelease"}, "locked": {"BOOL": false}, "repo": {"S": "-"}}'
+        --item '{"lock-type": {"S": "prerelease-zypp"}, "locked": {"BOOL": false}, "repo": {"S": "-"}}'
     aws dynamodb put-item \
         --table-name $DYNAMO_TABLE_NAME \
         --item '{"lock-type": {"S": "yum-release"}, "locked": {"BOOL": false}, "repo": {"S": "-"}}'
