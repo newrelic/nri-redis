@@ -6,13 +6,13 @@ os: windows
 commands:
   metrics:
     command:
-      - ./bin/nri-redis
+      - .\bin\nri-redis.exe
       - --metrics
     interval: 15
 
   inventory:
     command:
-      - ./bin/nri-redis
+      - .\bin\nri-redis.exe
       - --inventory
     prefix: config/redis
     interval: 60
