@@ -14,5 +14,5 @@ runs:
   steps:
     - run: docker build -t newrelic/infrastructure-publish-action -f ./actions/publish/Dockerfile ./actions/publish
       shell: bash
-    - run: docker run --rm --device /dev/fuse --cap-add SYS_ADMIN -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY -e S3_BUCKET_NAME -e S3_MOUNT_DIRECTORY newrelic/infrastructure-publish-action
+    - run: docker run --rm --security-opt apparmor:unconfined --device /dev/fuse --cap-add SYS_ADMIN -e AWS_SECRET_ACCESS_KEY -e AWS_ACCESS_KEY -e S3_BUCKET_NAME -e S3_MOUNT_DIRECTORY newrelic/infrastructure-publish-action
       shell: bash
