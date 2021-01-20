@@ -12,5 +12,7 @@ description: 'Publish artifacts to S3 bucket'
 runs:
   using: "composite"
   steps:
-    - run: docker-compose up -f docker-compose.yml --build
+    - run: docker build -t newrelic/infrastructure-publish-action -f ./actions/publish/Dockerfile ./actions/publish
+      shell: bash
+    - run: docker run --rm --device /dev/fuse --cap-add SYS_ADMIN newrelic/infrastructure-publish-action
       shell: bash
