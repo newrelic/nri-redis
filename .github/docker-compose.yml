@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  s3-repo:
+    build: .
+#    volumes:
+    environment:
+      AWS_ACCESS_KEY: YOURAWSACCESSKEY
+      AWS_SECRET_ACCESS_KEY: YOURAWSSECRETACCESSKEY
+      ## Set the directory where you want to mount your s3 bucket
+      S3_MOUNT_DIRECTORY: /var/www/s3
+      ## Replace with your s3 bucket name
+      S3_BUCKET_NAME: your-s3-bucket-name
