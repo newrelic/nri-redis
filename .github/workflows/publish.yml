@@ -6,10 +6,10 @@ on:
       - s3_publish_packages
 
 env:
-  AWS_SECRET: ${{ secrets.TEST_AWS_SECRET }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.TEST_AWS_SECRET }}
   AWS_ACCESS_KEY: ${{ secrets.TEST_AWS_ACCESS_KEY }}
-  AWS_BUCKET: ${{ secrets.TEST_AWS_BUCKET }}
-  AWS_MOUNT_POINT: "/var/www/s3"
+  S3_BUCKET_NAME: ${{ secrets.TEST_AWS_BUCKET }}
+  S3_MOUNT_DIRECTORY: "/var/www/s3"
   DOCKER_HUB_ID: ${{ secrets.OHAI_DOCKER_HUB_ID }}
   DOCKER_HUB_PASSWORD: ${{ secrets.OHAI_DOCKER_HUB_PASSWORD }}
 
