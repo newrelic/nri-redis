@@ -12,5 +12,5 @@ description: 'Publish artifacts to S3 bucket'
 runs:
   using: "composite"
   steps:
-    - run: docker-compose up -f docker-compose.yml --build --force-recreate
+    - run: docker-compose up -f docker-compose.yml --build
       shell: bash
