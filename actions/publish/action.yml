@@ -4,7 +4,7 @@ description: 'Publish artifacts to S3 bucket'
 #  who-to-greet:  # id of input
 #    description: 'Who to greet'
 #    required: true
-#    default: 'World'
+#    default: 'World 1'
 #outputs:
 #  random-number:
 #    description: "Random number"
