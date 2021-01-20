@@ -26,4 +26,4 @@ jobs:
           username: ${{ env.DOCKER_HUB_ID }}
           password: ${{ env.DOCKER_HUB_PASSWORD }}
       - name: Publish to S3 action
-        uses: ./
+        uses: ./actions/publish
