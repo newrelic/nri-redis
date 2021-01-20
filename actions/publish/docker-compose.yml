@@ -1,16 +1,18 @@
 version: "3.3"
 services:
   s3-repo:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
 #    volumes:
     devices:
       - /dev/fuse
     cap_add:
       - SYS_ADMIN
     environment:
-      AWS_ACCESS_KEY: AKIA4TIVTFV5DVU4Z7GA
-      AWS_SECRET_ACCESS_KEY: Cq/QthThhuK8hcHUvudl6r9iSByd8sYSY81oRFcu
+      - AWS_ACCESS_KEY
+      - AWS_SECRET_ACCESS_KEY
       ## Set the directory where you want to mount your s3 bucket
-      S3_MOUNT_DIRECTORY: /var/www/s3
+      - S3_MOUNT_DIRECTORY
       ## Replace with your s3 bucket name
-      S3_BUCKET_NAME: newrelic-test-20200121
+      - S3_BUCKET_NAME

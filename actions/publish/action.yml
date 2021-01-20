@@ -1,0 +1,16 @@
+name: 'Publish to S3'
+description: 'Publish artifacts to S3 bucket'
+#inputs:
+#  who-to-greet:  # id of input
+#    description: 'Who to greet'
+#    required: true
+#    default: 'World'
+#outputs:
+#  random-number:
+#    description: "Random number"
+#    value: ${{ steps.random-number-generator.outputs.random-id }}
+runs:
+  using: "composite"
+  steps:
+    - run: docker-compose up -f docker-compose.yml --build --force-recreate
+      shell: bash
