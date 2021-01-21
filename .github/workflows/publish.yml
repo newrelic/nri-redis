@@ -8,8 +8,7 @@ on:
 env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.TEST_AWS_SECRET }}
   AWS_ACCESS_KEY: ${{ secrets.TEST_AWS_ACCESS_KEY }}
-  S3_BUCKET_NAME: ${{ secrets.TEST_AWS_BUCKET }}
-  S3_MOUNT_DIRECTORY: "/var/www/s3"
+  AWS_S3_BUCKET_NAME: ${{ secrets.TEST_AWS_BUCKET }}
   DOCKER_HUB_ID: ${{ secrets.OHAI_DOCKER_HUB_ID }}
   DOCKER_HUB_PASSWORD: ${{ secrets.OHAI_DOCKER_HUB_PASSWORD }}
 
