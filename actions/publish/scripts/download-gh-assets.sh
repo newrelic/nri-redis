@@ -11,26 +11,31 @@ PKG_VERSION=1.6.0
 #DEB_ARCHS=(386 amd64 arm arm64)
 #DEB='${PKG_NAME}_${PKG_VERSION}-1_${ARCH}.deb'
 
-#TAR_ARCHS=(386 amd64 arm arm64)
-#TAR='${PKG_NAME}_linux_${PKG_VERSION}_${ARCH}.tar.gz'
-
 download_pkg () {
   PKG_NAME=$1
-  set +e && curl -sS -L -o ./assets/${PKG_NAME} "https://github.com/${GH_REPO}/releases/download/${GH_TAG}/${PKG_NAME}"
+  URL="https://github.com/${GH_REPO}/releases/download/${GH_TAG}/${PKG_NAME}"
+  printf "downloading ${URL} ... "
+  set +e && curl -sS -L --fail -o ./assets/${PKG_NAME} "${URL}"
+  test $? -eq 0 && echo "OK!"
 }
 
 download () {
-  ARCHS=$1
-  PKG_SCHEMA=$2
+  PKG_SCHEMA=$1
+  shift
+  ARCHS=("$@")
 
   for arch in "${ARCHS[@]}"; do
-    download_pkg "$(echo $PKG_SCHEMA | sed "s/ARCH/${arch}/g" )"
+    download_pkg "$(echo $PKG_SCHEMA | sed "s/ARCH/${arch}/g")"
   done
 }
 
 WIN_ARCHS=(386 amd64)
 MSI="${INTEGRATION}-ARCH.${PKG_VERSION}.msi"
-download $WIN_ARCHS $MSI
+download $MSI "${WIN_ARCHS[@]}"
 
 ZIP="${INTEGRATION}-ARCH.${PKG_VERSION}.zip"
-download $WIN_ARCHS $ZIP
+download $ZIP "${WIN_ARCHS[@]}"
+
+TAR_ARCHS=(386 amd64 arm arm64)
+TAR="${INTEGRATION}_linux_${PKG_VERSION}_ARCH.tar.gz"
+download $TAR "${TAR_ARCHS[@]}"
