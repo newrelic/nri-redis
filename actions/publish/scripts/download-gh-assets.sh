@@ -2,7 +2,7 @@
 
 GH_REPO=newrelic/nri-redis
 GH_TAG=v1.6.0
-PKG_NAME=nri-redis
+INTEGRATION=nri-redis
 PKG_VERSION=1.6.0
 
 #RPM_ARCHS=(386 1.x86_64 arm arm64)
@@ -16,7 +16,7 @@ PKG_VERSION=1.6.0
 
 download_pkg () {
   PKG_NAME=$1
-  set +e && curl -sS -L -o ${PKG_NAME} "https://github.com/${GH_REPO}/releases/download/${GH_TAG}/${PKG_NAME}"
+  set +e && curl -sS -L -o ./assets/${PKG_NAME} "https://github.com/${GH_REPO}/releases/download/${GH_TAG}/${PKG_NAME}"
 }
 
 download () {
@@ -24,13 +24,13 @@ download () {
   PKG_SCHEMA=$2
 
   for arch in "${ARCHS[@]}"; do
-    download_pkg "${PKG_NAME}-${arch}.${PKG_VERSION}.msi"
+    download_pkg "$(echo $PKG_SCHEMA | sed "s/ARCH/${arch}/g" )"
   done
 }
 
 WIN_ARCHS=(386 amd64)
-MSI='${PKG_NAME}-${ARCH}.${PKG_VERSION}.msi'
+MSI="${INTEGRATION}-ARCH.${PKG_VERSION}.msi"
 download $WIN_ARCHS $MSI
 
-ZIP='${PKG_NAME}-${ARCH}.${PKG_VERSION}.zip'
+ZIP="${INTEGRATION}-ARCH.${PKG_VERSION}.zip"
 download $WIN_ARCHS $ZIP
