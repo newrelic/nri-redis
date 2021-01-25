@@ -47,4 +47,19 @@ download-from-gh-check:
 	@echo "List all downloaded assets"
 	@ls -la $(CURDIR)/assets
 
+# jmx
+# repos
+# nrjmx_1.5.2-1_amd64.deb => infrastructure_agent/linux/apt/pool/main/n/nrjmx/
+# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/5/x86_64/
+# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/6/x86_64/
+# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/7/x86_64/
+# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/8/x86_64/
+# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/11.4/x86_64/
+# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.1/x86_64/
+# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.2/x86_64/
+# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.3/x86_64/
+# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.4/x86_64/
+
+
+
 .PHONY: prepare-secrets mount-s3 mount-s3-check download-from-gh download-from-gh-check
