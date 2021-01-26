@@ -26,7 +26,7 @@ type uploadArtifactConfig struct {
 	arch []string `json:"arch"`
 }
 
-type uploadConfig uploadArtifactConfig
+type uploadConfig []uploadArtifactConfig
 
 func readFileContent(filePath string) (string, error){
 	return "", nil
