@@ -4,40 +4,48 @@ import (
 	"github.com/prometheus/common/log"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"os"
 )
 
-func main() {
-	// get version from env
-	version := "0.0.0"
-	s3Folder := "path/to/s3"
-	artifactsStore := "path/to/downloads"
-	fileMappingConfig := "path/to/config"
-	binaryName := "some-app-name"
+type config struct {
+	version               string
+	artifactsDestFolder   string
+	artifactsSourceFolder string
+	uploadSchemaFilePath  string
+	binaryName            string
+}
 
-	// take schema
+type uploadArtifactSchema struct {
+	src  string   `json:"src"`
+	dest string   `json:"dest"`
+	arch []string `json:"arch"`
+}
+
+type uploadArtifactsSchema []uploadArtifactSchema
+
+func main() {
+
+	conf := config{
+		version:               "0.0.0",
+		artifactsDestFolder:   "path/to/s3",
+		artifactsSourceFolder: "path/to/downloads",
+		uploadSchemaFilePath:  "path/to/config",
+		binaryName:            "some-app-name",
+	}
+
 	fileContent, err := readFileContent("filepath")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//handle err
-	// parse schema
-	config := parseConfig(fileContent)
-	// iterate over config
-	uploadArtifacts(binaryName, config, version)
-	// --> replace variables
-	// --> copy (move?) file
-}
+	uploadSchema, err := parseUploadSchema(fileContent)
 
-type uploadArtifactConfig struct {
-	src  string   `json:"src"`
-	dest string   `json:"dest"`
-	arch []string `json:"arch"`
-}
+	if err != nil {
+		log.Fatal(err)
+	}
 
-type uploadConfig []uploadArtifactConfig
+	uploadArtifacts(conf, uploadSchema)
+}
 
 func readFileContent(filePath string) ([]byte, error) {
 	fileContent, err := ioutil.ReadFile(filePath)
@@ -45,26 +53,26 @@ func readFileContent(filePath string) ([]byte, error) {
 	return fileContent, err
 }
 
-func parseConfig(fileContent []byte) (uploadConfig, error) {
+func parseUploadSchema(fileContent []byte) (uploadArtifactsSchema, error) {
 
-	var config uploadConfig
+	var schema uploadArtifactsSchema
 
-	err := yaml.Unmarshal(fileContent, &config)
+	err := yaml.Unmarshal(fileContent, &schema)
 
 	if err != nil {
-		return uploadConfig{}, err
+		return uploadArtifactsSchema{}, err
 
 	}
 
-	return config, nil
+	return schema, nil
 }
 
-func uploadArtifact(binaryName string, config uploadArtifactConfig, version string) {
+func uploadArtifact(conf config, schema uploadArtifactSchema) {
 
-	if len(config.arch) > 0 {
+	if len(schema.arch) > 0 {
 
-		for _, arch := range config.arch {
-			srcPath, destPath := replacePlaceholders(config.src, config.dest, arch, binaryName, version)
+		for _, arch := range schema.arch {
+			srcPath, destPath := replacePlaceholders(schema.src, schema.dest, arch, conf.binaryName, conf.version)
 
 			//srcPath = os.Jo "" + srcPath
 
@@ -83,13 +91,13 @@ func uploadArtifact(binaryName string, config uploadArtifactConfig, version stri
 
 		}
 	} else {
-		replacePlaceholders(config.src, config.dest, "", binaryName, version)
+		replacePlaceholders(schema.src, schema.dest, "", conf.binaryName, conf.version)
 	}
 }
 
-func uploadArtifacts(binaryName string, config uploadConfig, version string) {
-	for _, artifactConfig := range config {
-		uploadArtifact(binaryName, artifactConfig, version)
+func uploadArtifacts(conf config, schema uploadArtifactsSchema) {
+	for _, artifactSchema := range schema {
+		uploadArtifact(conf, artifactSchema)
 	}
 }
 

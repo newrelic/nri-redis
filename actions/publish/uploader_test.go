@@ -7,7 +7,7 @@ func TestParseConfig(t *testing.T) {
 	t.Parallel() // marks TLog as capable of running in parallel with other tests
 	tests := map[string]struct {
 		config string
-		expected []uploadArtifactConfig
+		expected []uploadArtifactSchema
 		isError bool
 	}{
 		"good config multiple entries": { `
@@ -21,7 +21,7 @@ func TestParseConfig(t *testing.T) {
 			    dest: "infrastructure_agent/binaries/linux/{arch}/"
  				arch:
 				  - ppc
-		`, []uploadArtifactConfig {
+		`, []uploadArtifactSchema{
 			{"foo.tar.gz", "/tmp", []string { "amd64", "386"}},
 			{"{integration_name}_linux_{version}_{arch}.tar.gz", "infrastructure_agent/binaries/linux/{arch}/", []string { "ppc" }},
 		}, false},
@@ -41,7 +41,7 @@ func TestParseConfig(t *testing.T) {
 			ohi:
 			  - src: "foo.tar.gz"
 			    dest: "/tmp"
-		`, []uploadArtifactConfig {
+		`, []uploadArtifactSchema{
 			{"foo.tar.gz", "/tmp", nil},
 		},false},
 	}
