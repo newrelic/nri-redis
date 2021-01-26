@@ -1,5 +1,5 @@
-ARG VERSION=20.04
-FROM ubuntu:$VERSION
+ARG VERSION=1.15.7-buster
+FROM golang:$VERSION
 
 ARG AWS_S3_MOUNT_DIRECTORY=/mnt/s3
 ENV AWS_S3_MOUNT_DIRECTORY $AWS_S3_MOUNT_DIRECTORY
@@ -13,9 +13,15 @@ RUN mkdir $AWS_S3_MOUNT_DIRECTORY
 WORKDIR /home/gha
 
 ADD scripts ./scripts
+ADD go ./go
+ADD schemas ./schemas
 ADD Makefile .
 
 RUN mkdir ./assets
+
+RUN cd ./go && go get -d -v && go build -o ../uploader uploader.go
+
+RUN chmod +x ./uploader
 
 RUN chmod -R 755 ./scripts
 CMD ["make"]

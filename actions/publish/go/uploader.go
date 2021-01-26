@@ -36,30 +36,38 @@ type uploadArtifactsSchema []uploadArtifactSchema
 func main() {
 
 	viper.BindEnv("version")
-	viper.BindEnv("artifactsDestFolder")
-	viper.BindEnv("artifactsSrcFolder")
-	viper.BindEnv("uploadSchemaFilePath")
-	viper.BindEnv("appName")
+	viper.BindEnv("artifacts_dest_folder")
+	viper.BindEnv("artifacts_src_folder")
+	viper.BindEnv("uploadSchema_file_path")
+	viper.BindEnv("app_name")
 
 	pflag.String("version", "0.0.0", "asset version")
 	pflag.String("artifactsDestFolder", "", "artifacts destination folder")
 	pflag.String("artifactsSrcFolder", "", "artifacts source folder")
-	pflag.String("uploadSchemaFilePath", "", "artifacts source folder")
+	pflag.String("uploadSchemaFilePath", "", "upload schema file path")
 	pflag.String("appName", "", "app name")
 
 	pflag.Parse()
 
 	viper.BindPFlags(pflag.CommandLine)
 
-	fmt.Println(viper.GetString("version"))
+	getFirstNotEmpty := func(first, second string) string {
+		if first != "" {
+			return first
+		}
+
+		return second
+	}
 
 	conf := config{
 		version:              viper.GetString("version"),
-		artifactsDestFolder:  viper.GetString("artifactsDestFolder"),
-		artifactsSrcFolder:   viper.GetString("artifactsSrcFolder"),
-		uploadSchemaFilePath: viper.GetString("uploadSchemaFilePath"),
-		appName:              viper.GetString("appName"),
+		artifactsDestFolder:  getFirstNotEmpty(viper.GetString("artifactsDestFolder"), viper.GetString("artifacts_dest_folder")),
+		artifactsSrcFolder:   getFirstNotEmpty(viper.GetString("artifactsSrcFolder"), viper.GetString("artifacts_src_folder")),
+		uploadSchemaFilePath: getFirstNotEmpty(viper.GetString("uploadSchemaFilePath"), viper.GetString("uploadSchema_file_path")),
+		appName:              getFirstNotEmpty(viper.GetString("appName"), viper.GetString("app_name")),
 	}
+
+	log.Println(fmt.Sprintf("%v", conf))
 
 	uploadSchemaContent, err := readFileContent(conf.uploadSchemaFilePath)
 
@@ -96,7 +104,7 @@ func parseUploadSchema(fileContent []byte) (uploadArtifactsSchema, error) {
 	return schema, nil
 }
 
-func uploadArtifact(conf config, schema uploadArtifactSchema) {
+func uploadArtifact(conf config, schema uploadArtifactSchema) error {
 
 	if len(schema.Arch) > 0 {
 
@@ -108,27 +116,29 @@ func uploadArtifact(conf config, schema uploadArtifactSchema) {
 
 			input, err := ioutil.ReadFile(srcPath)
 			if err != nil {
-				log.Fatal(err)
-				return
+				return err
 			}
 
 			err = ioutil.WriteFile(destPath, input, 0644)
 			if err != nil {
-				log.Print("Error creating", destPath)
-				log.Fatal(err)
-				return
+				return err
 			}
 
 		}
 	} else {
 		replacePlaceholders(schema.Src, schema.Dest, "", conf.appName, conf.version)
 	}
+	return nil
 }
 
-func uploadArtifacts(conf config, schema uploadArtifactsSchema) {
+func uploadArtifacts(conf config, schema uploadArtifactsSchema) error {
 	for _, artifactSchema := range schema {
-		uploadArtifact(conf, artifactSchema)
+		err := uploadArtifact(conf, artifactSchema)
+		if err != nil{
+			return err
+		}
 	}
+	return nil
 }
 
 func replacePlaceholders(srcTemplate, destTemplate, arch, binaryName, version string) (string, string) {

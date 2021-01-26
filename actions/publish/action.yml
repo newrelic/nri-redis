@@ -12,5 +12,5 @@ description: 'Publish artifacts to S3 bucket'
 runs:
   using: "composite"
   steps:
-    - run: ./action-run.sh
+    - run: ./action-run-ohi.sh
       shell: bash

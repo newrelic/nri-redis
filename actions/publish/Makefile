@@ -18,7 +18,7 @@ OHI_MSI				= "${INTEGRATION}-ARCH.${VERSION}.msi"
 #OHI_DEB_ARCHS		= "386 amd64 arm arm64"
 #OHI_DEB		    = "${INTEGRATION}_${VERSION}-1_ARCH.deb"
 
-ohi: prepare-secrets mount-s3 mount-s3-check download-ohi-from-gh download-from-gh-check
+default: prepare-secrets mount-s3 mount-s3-check download-ohi-from-gh download-from-gh-check upload-artifacts
 
 prepare-secrets:
 	@echo "Generating secrets file into /etc/passwd-s3fs"
@@ -49,7 +49,10 @@ download-from-gh-check:
 
 upload-artifacts:
 	@echo "Upload artifacts"
-	@go run uploader.go
+	@./uploader
+
+
+
 # jmx
 # repos
 # nrjmx_1.5.2-1_amd64.deb => infrastructure_agent/linux/apt/pool/main/n/nrjmx/
