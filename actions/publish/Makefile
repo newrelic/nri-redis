@@ -47,6 +47,9 @@ download-from-gh-check:
 	@echo "List all downloaded assets"
 	@ls -la $(CURDIR)/assets
 
+upload-artifacts:
+	@echo "Upload artifacts"
+	@go run uploader.go
 # jmx
 # repos
 # nrjmx_1.5.2-1_amd64.deb => infrastructure_agent/linux/apt/pool/main/n/nrjmx/
@@ -62,4 +65,4 @@ download-from-gh-check:
 
 
 
-.PHONY: prepare-secrets mount-s3 mount-s3-check download-from-gh download-from-gh-check
+.PHONY: prepare-secrets mount-s3 mount-s3-check download-from-gh download-from-gh-check upload-artifacts

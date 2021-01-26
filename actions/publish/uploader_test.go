@@ -12,35 +12,35 @@ func TestParseConfig(t *testing.T) {
 	}{
 		"good config multiple entries": { `
 			ohi:
-			  - src: "foo.tar.gz"
-			    dest: "/tmp"
- 				arch:
+			  - Src: "foo.tar.gz"
+			    Dest: "/tmp"
+ 				Arch:
 				  - amd64
 				  - 386
-			  - src: "{integration_name}_linux_{version}_{arch}.tar.gz"
-			    dest: "infrastructure_agent/binaries/linux/{arch}/"
- 				arch:
+			  - Src: "{integration_name}_linux_{version}_{Arch}.tar.gz"
+			    Dest: "infrastructure_agent/binaries/linux/{Arch}/"
+ 				Arch:
 				  - ppc
 		`, []uploadArtifactSchema{
 			{"foo.tar.gz", "/tmp", []string { "amd64", "386"}},
-			{"{integration_name}_linux_{version}_{arch}.tar.gz", "infrastructure_agent/binaries/linux/{arch}/", []string { "ppc" }},
+			{"{integration_name}_linux_{version}_{Arch}.tar.gz", "infrastructure_agent/binaries/linux/{Arch}/", []string { "ppc" }},
 		}, false},
-		"bad config: src is omitted": { `
+		"bad config: Src is omitted": { `
 			ohi:
-			  - dest: "/tmp"
- 				arch:
+			  - Dest: "/tmp"
+ 				Arch:
 				  - amd64
 		`, nil,true},
-		"bad config dest is omitted": { `
+		"bad config Dest is omitted": { `
 			ohi:
-			  - src: "foo.tar.gz"
- 				arch:
+			  - Src: "foo.tar.gz"
+ 				Arch:
 				  - amd64
 		`, nil,true},
-		"good config arch is omitted": { `
+		"good config Arch is omitted": { `
 			ohi:
-			  - src: "foo.tar.gz"
-			    dest: "/tmp"
+			  - Src: "foo.tar.gz"
+			    Dest: "/tmp"
 		`, []uploadArtifactSchema{
 			{"foo.tar.gz", "/tmp", nil},
 		},false},
