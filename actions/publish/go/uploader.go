@@ -7,7 +7,9 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+	"os"
 	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -81,7 +83,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	uploadArtifacts(conf, uploadSchema)
+	err = uploadArtifacts(conf, uploadSchema)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func readFileContent(filePath string) ([]byte, error) {
@@ -113,6 +119,13 @@ func uploadArtifact(conf config, schema uploadArtifactSchema) error {
 
 			srcPath = path.Join(conf.artifactsSrcFolder, srcPath)
 			destPath = path.Join(conf.artifactsDestFolder, destPath)
+
+			destDirectory := filepath.Dir(destPath)
+
+			if _, err := os.Stat(destDirectory); os.IsNotExist(err) {
+				// set right permissions
+				os.Mkdir(destDirectory, 0644)
+			}
 
 			input, err := ioutil.ReadFile(srcPath)
 			if err != nil {
