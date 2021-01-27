@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/stretchr/testify/assert"
+	"os"
 	"path"
 	"testing"
-	"os"
 )
 
 var (
@@ -104,7 +104,7 @@ func TestReplacePlaceholders(t *testing.T) {
 
 func TestUploadArtifacts(t *testing.T) {
 	schema := []uploadArtifactSchema{
-		{"{app_name}-{arch}-{version}", "{arch}/{app_name}/{src}", []string{"amd64"}},
+		{"{app_name}-{arch}-{version}.txt", "{arch}/{app_name}/{src}", []string{"amd64"}},
 	}
 
 	dest := t.TempDir()
@@ -117,10 +117,10 @@ func TestUploadArtifacts(t *testing.T) {
 		appName:              "nri-foobar",
 	}
 
-	file, err := os.Create(path.Join(src, "nri-foobar-amd64-2.0.0"))
+	file, err := os.Create(path.Join(src, "nri-foobar-amd64-2.0.0.txt"))
 	assert.NoError(t, err)
 
-	_, err = file.Write([]byte("test"));
+	_, err = file.Write([]byte("test"))
 	assert.NoError(t, err)
 
 	err = file.Close()
@@ -129,8 +129,8 @@ func TestUploadArtifacts(t *testing.T) {
 	err = uploadArtifacts(cfg, schema)
 	assert.NoError(t, err)
 
-	name := path.Join(dest, "amd64/nri-foobar/nri-foobar-amd64-2.0.0")
-	_, err = os.Stat(name);
+	name := path.Join(dest, "amd64/nri-foobar/nri-foobar-amd64-2.0.0.txt")
+	_, err = os.Stat(name)
 	assert.NoError(t, err)
 
 	//if _,  os.IsNotExist(err) {

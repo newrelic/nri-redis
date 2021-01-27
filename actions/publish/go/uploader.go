@@ -125,11 +125,13 @@ func uploadArtifact(conf config, schema uploadArtifactSchema) error {
 
 			if _, err := os.Stat(destDirectory); os.IsNotExist(err) {
 				// set right permissions
-				err = os.Mkdir(destDirectory, 0777)
+				err = os.MkdirAll(destDirectory, 0777)
 				if err != nil {
 					return err
 				}
 			}
+
+			log.Println("[ ] Copy " + srcPath + " into " + destPath)
 
 			input, err := ioutil.ReadFile(srcPath)
 			if err != nil {
@@ -140,6 +142,8 @@ func uploadArtifact(conf config, schema uploadArtifactSchema) error {
 			if err != nil {
 				return err
 			}
+
+			log.Println("[✔] Copy " + srcPath + " into " + destPath)
 
 		}
 	} else {

@@ -1,6 +1,6 @@
 ---
 - src: "newrelic-infra_linux_{version}.tar.gz"
-  dest: "infrastructure_agent/binaries/linux/{arch}/"
+  dest: "infrastructure_agent/binaries/linux/{arch}/{src}"
   arch:
     - 386
     - amd64
@@ -14,13 +14,13 @@
     - s390x
 
 - src: "newrelic-infra.{version}.msi"
-  dest: "infrastructure_agent/windows/"
+  dest: "infrastructure_agent/windows/{src}"
 
 - src: "newrelic-infra-386.{version}.msi"
-  dest: "infrastructure_agent/windows/386/"
+  dest: "infrastructure_agent/windows/386/{src}"
 
 - src: "newrelic-infra-386.{version}.zip"
-  dest: "infrastructure_agent/binaries/windows/386/"
+  dest: "infrastructure_agent/binaries/windows/386/{src}"
 
 - src: "newrelic-infra-amd64.{version}.zip"
-  dest: "infrastructure_agent/binaries/windows/amd64/"
+  dest: "infrastructure_agent/binaries/windows/amd64/{src}"
