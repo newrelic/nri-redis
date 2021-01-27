@@ -13,7 +13,7 @@ RUN mkdir $AWS_S3_MOUNT_DIRECTORY
 WORKDIR /home/gha
 
 ADD scripts ./scripts
-ADD go ./go
+ADD uploader ./go
 ADD schemas ./schemas
 ADD Makefile .
 

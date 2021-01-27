@@ -70,7 +70,7 @@ func main() {
 		appName:              getFirstNotEmpty(viper.GetString("appName"), viper.GetString("app_name")),
 	}
 
-	log.Println(fmt.Sprintf("%v", conf))
+	log.Println(fmt.Sprintf("config: %v", conf))
 
 	uploadSchemaContent, err := readFileContent(conf.uploadSchemaFilePath)
 
