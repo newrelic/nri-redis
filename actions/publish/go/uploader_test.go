@@ -78,9 +78,18 @@ func TestReplacePlaceholders(t *testing.T) {
 		srcOutput string
 		destOutput string
 	}{
-		"full replacement": { "{app_name}-{arch}-{version}", "/tmp/{arch}/{app_name}/{version}",
+		"dst no file replacement": { "{app_name}-{arch}-{version}", "/tmp/{arch}/{app_name}/{version}/file",
 			"nri-foobar", "1.2.3", "amd64",
-			"nri-foobar-amd64-1.2.3","/tmp/amd64/nri-foobar/1.2.3"},
+			"nri-foobar-amd64-1.2.3","/tmp/amd64/nri-foobar/1.2.3/file"},
+		"dst src replacement": { "{app_name}-{arch}-{version}", "/tmp/{arch}/{app_name}/{version}/{src}",
+			"nri-foobar", "1.2.3", "amd64",
+			"nri-foobar-amd64-1.2.3","/tmp/amd64/nri-foobar/1.2.3/nri-foobar-amd64-1.2.3"},
+		"dst multiple replacements": { "{app_name}-{arch}-{version}", "/tmp/{arch}/{app_name}/{version}/{app_name}-{arch}-{version}",
+			"nri-foobar", "1.2.3", "amd64",
+			"nri-foobar-amd64-1.2.3","/tmp/amd64/nri-foobar/1.2.3/nri-foobar-amd64-1.2.3"},
+		"src multiple replacements": { "{app_name}-{arch}-{version}-{app_name}-{arch}-{version}", "/tmp/{arch}/{app_name}/{version}/file",
+			"nri-foobar", "1.2.3", "amd64",
+			"nri-foobar-amd64-1.2.3-nri-foobar-amd64-1.2.3","/tmp/amd64/nri-foobar/1.2.3/file"},
 	}
 	for name, tt := range tests {
 		tt := tt
@@ -95,7 +104,7 @@ func TestReplacePlaceholders(t *testing.T) {
 
 func TestUploadArtifacts(t *testing.T) {
 	schema := []uploadArtifactSchema{
-		{"{app_name}-{arch}-{version}", "{arch}/{app_name}", []string{"amd64"}},
+		{"{app_name}-{arch}-{version}", "{arch}/{app_name}/{src}", []string{"amd64"}},
 	}
 
 	dest := t.TempDir()
@@ -110,13 +119,21 @@ func TestUploadArtifacts(t *testing.T) {
 
 	file, err := os.Create(path.Join(src, "nri-foobar-amd64-2.0.0"))
 	assert.NoError(t, err)
+
+	_, err = file.Write([]byte("test"));
+	assert.NoError(t, err)
+
 	err = file.Close()
 	assert.NoError(t, err)
 
-	uploadArtifacts(cfg, schema)
+	err = uploadArtifacts(cfg, schema)
+	assert.NoError(t, err)
 
-	//name := path.Join(dest, "amd64/nri-foobar/nri-foobar-amd64.2.0.0")
-	//if _, err := os.Stat(name); os.IsNotExist(err) {
+	name := path.Join(dest, "amd64/nri-foobar/nri-foobar-amd64-2.0.0")
+	_, err = os.Stat(name);
+	assert.NoError(t, err)
+
+	//if _,  os.IsNotExist(err) {
 	//	t.Fatalf("file %s doesn't exist", name)
 	//}
 }

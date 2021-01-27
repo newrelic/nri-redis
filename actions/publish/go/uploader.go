@@ -17,6 +17,7 @@ const (
 	placeholderForVersion = "{version}"
 	placeholderForArch    = "{arch}"
 	placeholderForAppName = "{app_name}"
+	placeholderForSrc     = "{src}"
 )
 
 type config struct {
@@ -124,7 +125,10 @@ func uploadArtifact(conf config, schema uploadArtifactSchema) error {
 
 			if _, err := os.Stat(destDirectory); os.IsNotExist(err) {
 				// set right permissions
-				os.Mkdir(destDirectory, 0644)
+				err = os.Mkdir(destDirectory, 0777)
+				if err != nil {
+					return err
+				}
 			}
 
 			input, err := ioutil.ReadFile(srcPath)
@@ -132,7 +136,7 @@ func uploadArtifact(conf config, schema uploadArtifactSchema) error {
 				return err
 			}
 
-			err = ioutil.WriteFile(destPath, input, 0644)
+			err = ioutil.WriteFile(destPath, input, 0777)
 			if err != nil {
 				return err
 			}
@@ -156,13 +160,14 @@ func uploadArtifacts(conf config, schema uploadArtifactsSchema) error {
 
 func replacePlaceholders(srcTemplate, destTemplate, arch, binaryName, version string) (string, string) {
 
-	srcFileName := strings.Replace(srcTemplate, placeholderForVersion, version, 1)
-	srcFileName = strings.Replace(srcFileName, placeholderForArch, arch, 1)
-	srcFileName = strings.Replace(srcFileName, placeholderForAppName, binaryName, 1)
+	srcFileName := strings.Replace(srcTemplate, placeholderForVersion, version, -1)
+	srcFileName = strings.Replace(srcFileName, placeholderForArch, arch, -1)
+	srcFileName = strings.Replace(srcFileName, placeholderForAppName, binaryName, -1)
 
-	destPath := strings.Replace(destTemplate, placeholderForVersion, version, 1)
-	destPath = strings.Replace(destPath, placeholderForArch, arch, 1)
-	destPath = strings.Replace(destPath, placeholderForAppName, binaryName, 1)
+	destPath := strings.Replace(destTemplate, placeholderForVersion, version, -1)
+	destPath = strings.Replace(destPath, placeholderForArch, arch, -1)
+	destPath = strings.Replace(destPath, placeholderForAppName, binaryName, -1)
+	destPath = strings.Replace(destPath, placeholderForSrc, srcFileName, -1)
 
 	return srcFileName, destPath
 }
