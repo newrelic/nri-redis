@@ -102,9 +102,24 @@ func TestReplacePlaceholders(t *testing.T) {
 	}
 }
 
+func writeDummyFile(path string) error {
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	_, err = file.Write([]byte("test"))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func TestUploadArtifacts(t *testing.T) {
 	schema := []uploadArtifactSchema{
-		{"{app_name}-{arch}-{version}.txt", "{arch}/{app_name}/{src}", []string{"amd64"}},
+		{"{app_name}-{arch}-{version}.txt", "{arch}/{app_name}/{src}", []string{"amd64", "386"}},
 	}
 
 	dest := t.TempDir()
@@ -117,23 +132,18 @@ func TestUploadArtifacts(t *testing.T) {
 		appName:              "nri-foobar",
 	}
 
-	file, err := os.Create(path.Join(src, "nri-foobar-amd64-2.0.0.txt"))
+	err := writeDummyFile(path.Join(src, "nri-foobar-amd64-2.0.0.txt"))
 	assert.NoError(t, err)
 
-	_, err = file.Write([]byte("test"))
-	assert.NoError(t, err)
-
-	err = file.Close()
+	err = writeDummyFile(path.Join(src, "nri-foobar-386-2.0.0.txt"))
 	assert.NoError(t, err)
 
 	err = uploadArtifacts(cfg, schema)
 	assert.NoError(t, err)
 
-	name := path.Join(dest, "amd64/nri-foobar/nri-foobar-amd64-2.0.0.txt")
-	_, err = os.Stat(name)
+	_, err = os.Stat(path.Join(dest, "amd64/nri-foobar/nri-foobar-amd64-2.0.0.txt"))
 	assert.NoError(t, err)
 
-	//if _,  os.IsNotExist(err) {
-	//	t.Fatalf("file %s doesn't exist", name)
-	//}
+	_, err = os.Stat(path.Join(dest, "386/nri-foobar/nri-foobar-386-2.0.0.txt"))
+	assert.NoError(t, err)
 }
