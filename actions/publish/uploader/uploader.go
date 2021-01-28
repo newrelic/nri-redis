@@ -16,19 +16,23 @@ import (
 )
 
 const (
-	placeholderForVersion = "{version}"
-	placeholderForArch    = "{arch}"
-	placeholderForAppName = "{app_name}"
-	placeholderForSrc     = "{src}"
+	placeholderForRepoName = "{repo_name}"
+	placeholderForAppName  = "{app_name}"
+	placeholderForArch     = "{arch}"
+	placeholderForTag      = "{tag}"
+	placeholderForVersion  = "{version}"
+	placeholderForSrc      = "{src}"
+	urlTemplate            = "https://github.com/{repo_name}/releases/download/{tag}/{src}"
 )
 
 type config struct {
-	version              string
+	repoName             string
+	appName              string
 	tag                  string
+	version              string
 	artifactsDestFolder  string
 	artifactsSrcFolder   string
 	uploadSchemaFilePath string
-	appName              string
 }
 
 type uploadArtifactSchema struct {
@@ -40,40 +44,7 @@ type uploadArtifactSchema struct {
 type uploadArtifactsSchema []uploadArtifactSchema
 
 func main() {
-
-	viper.BindEnv("tag")
-	viper.BindEnv("artifacts_dest_folder")
-	viper.BindEnv("artifacts_src_folder")
-	viper.BindEnv("uploadSchema_file_path")
-	viper.BindEnv("app_name")
-
-	pflag.String("tag", "v0.0.0", "asset git tag")
-	pflag.String("artifactsDestFolder", "", "artifacts destination folder")
-	pflag.String("artifactsSrcFolder", "", "artifacts source folder")
-	pflag.String("uploadSchemaFilePath", "", "upload schema file path")
-	pflag.String("appName", "", "app name")
-
-	pflag.Parse()
-
-	viper.BindPFlags(pflag.CommandLine)
-
-	getFirstNotEmpty := func(first, second string) string {
-		if first != "" {
-			return first
-		}
-
-		return second
-	}
-
-	conf := config{
-		version:              strings.Replace(viper.GetString("tag"), "v", "", -1),
-		tag:                  viper.GetString("tag"),
-		artifactsDestFolder:  getFirstNotEmpty(viper.GetString("artifactsDestFolder"), viper.GetString("artifacts_dest_folder")),
-		artifactsSrcFolder:   getFirstNotEmpty(viper.GetString("artifactsSrcFolder"), viper.GetString("artifacts_src_folder")),
-		uploadSchemaFilePath: getFirstNotEmpty(viper.GetString("uploadSchemaFilePath"), viper.GetString("uploadSchema_file_path")),
-		appName:              getFirstNotEmpty(viper.GetString("appName"), viper.GetString("app_name")),
-	}
-
+	conf := loadConfig()
 	log.Println(fmt.Sprintf("config: %v", conf))
 
 	uploadSchemaContent, err := readFileContent(conf.uploadSchemaFilePath)
@@ -101,6 +72,45 @@ func main() {
 	}
 }
 
+func loadConfig() config {
+	// TODO: make all the config required
+	viper.BindEnv("repo_name")
+	viper.BindEnv("app_name")
+	viper.BindEnv("tag")
+	viper.BindEnv("artifacts_dest_folder")
+	viper.BindEnv("artifacts_src_folder")
+	viper.BindEnv("uploadSchema_file_path")
+
+	pflag.String("repoName", "", "repo name")
+	pflag.String("appName", "", "app name")
+	pflag.String("tag", "v0.0.0", "asset git tag")
+	pflag.String("artifactsDestFolder", "", "artifacts destination folder")
+	pflag.String("artifactsSrcFolder", "", "artifacts source folder")
+	pflag.String("uploadSchemaFilePath", "", "upload schema file path")
+
+	pflag.Parse()
+
+	viper.BindPFlags(pflag.CommandLine)
+
+	getFirstNotEmpty := func(first, second string) string {
+		if first != "" {
+			return first
+		}
+
+		return second
+	}
+
+	return config{
+		repoName:             getFirstNotEmpty(viper.GetString("repoName"), viper.GetString("repo_name")),
+		appName:              getFirstNotEmpty(viper.GetString("appName"), viper.GetString("app_name")),
+		tag:                  viper.GetString("tag"),
+		version:              strings.Replace(viper.GetString("tag"), "v", "", -1),
+		artifactsDestFolder:  getFirstNotEmpty(viper.GetString("artifactsDestFolder"), viper.GetString("artifacts_dest_folder")),
+		artifactsSrcFolder:   getFirstNotEmpty(viper.GetString("artifactsSrcFolder"), viper.GetString("artifacts_src_folder")),
+		uploadSchemaFilePath: getFirstNotEmpty(viper.GetString("uploadSchemaFilePath"), viper.GetString("uploadSchema_file_path")),
+	}
+}
+
 func readFileContent(filePath string) ([]byte, error) {
 	fileContent, err := ioutil.ReadFile(filePath)
 
@@ -118,30 +128,32 @@ func parseUploadSchema(fileContent []byte) (uploadArtifactsSchema, error) {
 
 	}
 
+	for i, _ := range schema {
+		if schema[i].Arch == nil {
+			schema[i].Arch = []string{""}
+		}
+	}
+
 	return schema, nil
 }
 
 func downloadArtifact(conf config, schema uploadArtifactSchema) error {
+	for _, arch := range schema.Arch {
+		srcFile, _ := replaceSrcDestTemplates(schema.Src, schema.Dest, conf.repoName, conf.appName, arch, conf.tag, conf.version)
+		url := generateDownloadUrl(urlTemplate, conf.repoName, conf.appName, arch, conf.tag, conf.version, srcFile)
 
-	if len(schema.Arch) > 0 {
+		destPath := path.Join(conf.artifactsSrcFolder, srcFile)
 
-		for _, arch := range schema.Arch {
-			downloadUrl := ""
+		log.Println("[ ] Download " + url + " into " + destPath)
 
-			srcPath, _ := replacePlaceholders(schema.Src, schema.Dest, arch, conf.appName, conf.version)
-
-			srcPath = path.Join(conf.artifactsSrcFolder, srcPath)
-
-			log.Println("[ ] Download " + downloadUrl + " into " + srcPath)
-
-			// add download here
-
-			log.Println("[✔] Download " + downloadUrl + " into " + srcPath)
-
+		err := downloadFile(url, destPath)
+		if err != nil {
+			return err
 		}
-	} else {
-		replacePlaceholders(schema.Src, schema.Dest, "", conf.appName, conf.version)
+
+		log.Println("[✔] Download " + url + " into " + destPath)
 	}
+
 	return nil
 }
 
@@ -156,43 +168,37 @@ func downloadArtifacts(conf config, schema uploadArtifactsSchema) error {
 }
 
 func uploadArtifact(conf config, schema uploadArtifactSchema) error {
+	for _, arch := range schema.Arch {
+		srcPath, destPath := replaceSrcDestTemplates(schema.Src, schema.Dest, conf.repoName, conf.appName, arch, conf.tag, conf.version)
 
-	if len(schema.Arch) > 0 {
+		srcPath = path.Join(conf.artifactsSrcFolder, srcPath)
+		destPath = path.Join(conf.artifactsDestFolder, destPath)
 
-		for _, arch := range schema.Arch {
-			srcPath, destPath := replacePlaceholders(schema.Src, schema.Dest, arch, conf.appName, conf.version)
+		destDirectory := filepath.Dir(destPath)
 
-			srcPath = path.Join(conf.artifactsSrcFolder, srcPath)
-			destPath = path.Join(conf.artifactsDestFolder, destPath)
-
-			destDirectory := filepath.Dir(destPath)
-
-			if _, err := os.Stat(destDirectory); os.IsNotExist(err) {
-				// set right permissions
-				err = os.MkdirAll(destDirectory, 0777)
-				if err != nil {
-					return err
-				}
-			}
-
-			log.Println("[ ] Copy " + srcPath + " into " + destPath)
-
-			input, err := ioutil.ReadFile(srcPath)
+		if _, err := os.Stat(destDirectory); os.IsNotExist(err) {
+			// set right permissions
+			err = os.MkdirAll(destDirectory, 0744)
 			if err != nil {
 				return err
 			}
-
-			err = ioutil.WriteFile(destPath, input, 0777)
-			if err != nil {
-				return err
-			}
-
-			log.Println("[✔] Copy " + srcPath + " into " + destPath)
-
 		}
-	} else {
-		replacePlaceholders(schema.Src, schema.Dest, "", conf.appName, conf.version)
+
+		log.Println("[ ] Copy " + srcPath + " into " + destPath)
+
+		input, err := ioutil.ReadFile(srcPath)
+		if err != nil {
+			return err
+		}
+
+		err = ioutil.WriteFile(destPath, input, 0744)
+		if err != nil {
+			return err
+		}
+
+		log.Println("[✔] Copy " + srcPath + " into " + destPath)
 	}
+
 	return nil
 }
 
@@ -206,28 +212,32 @@ func uploadArtifacts(conf config, schema uploadArtifactsSchema) error {
 	return nil
 }
 
-func replacePlaceholders(srcTemplate, destTemplate, arch, appName, version string) (string, string) {
+func replacePlaceholders(template, repoName, appName, arch, tag, version string) (str string) {
+	str = strings.Replace(template, placeholderForRepoName, repoName, -1)
+	str = strings.Replace(str, placeholderForAppName, appName, -1)
+	str = strings.Replace(str, placeholderForArch, arch, -1)
+	str = strings.Replace(str, placeholderForTag, tag, -1)
+	str = strings.Replace(str, placeholderForVersion, version, -1)
 
-	srcFileName := strings.Replace(srcTemplate, placeholderForVersion, version, -1)
-	srcFileName = strings.Replace(srcFileName, placeholderForArch, arch, -1)
-	srcFileName = strings.Replace(srcFileName, placeholderForAppName, appName, -1)
-
-	destPath := strings.Replace(destTemplate, placeholderForVersion, version, -1)
-	destPath = strings.Replace(destPath, placeholderForArch, arch, -1)
-	destPath = strings.Replace(destPath, placeholderForAppName, appName, -1)
-	destPath = strings.Replace(destPath, placeholderForSrc, srcFileName, -1)
-
-	return srcFileName, destPath
+	return
 }
 
-// TAG = v1.1.1
-// VERSION = 1.1.1 (TAG.repalce(v,""))
+func replaceSrcDestTemplates(srcFileTemplate, destPathTemplate, repoName, appName, arch, tag, version string) (srcFile string, destPath string) {
+	srcFile = replacePlaceholders(srcFileTemplate, repoName, appName, arch, tag, version)
+	destPath = replacePlaceholders(destPathTemplate, repoName, appName, arch, tag, version)
+	destPath = strings.Replace(destPath, placeholderForSrc, srcFile, -1)
 
-func generateDownloadUrl(srcTemplate, arch, binaryName, version string) {
-	//template := "https://github.com/{app_name}/releases/download/${GH_TAG}/${PKG_NAME}"
+	return
 }
 
-func downloadFile(url, fileName string) error {
+func generateDownloadUrl(template, repoName, appName, arch, tag, version, srcFile string) (url string) {
+	url = replacePlaceholders(template, repoName, appName, arch, tag, version)
+	url = strings.Replace(url, placeholderForSrc, srcFile, -1)
+
+	return
+}
+
+func downloadFile(url, destPath string) error {
 
 	response, err := http.Get(url)
 	if err != nil {
@@ -236,10 +246,10 @@ func downloadFile(url, fileName string) error {
 	defer response.Body.Close()
 
 	if response.StatusCode != 200 {
-		return fmt.Errorf("error on download: %v", err)
+		return fmt.Errorf("error on download %s with status code %v", url, response.StatusCode)
 	}
 
-	file, err := os.Create(fileName)
+	file, err := os.Create(destPath)
 	if err != nil {
 		return err
 	}

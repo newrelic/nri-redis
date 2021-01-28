@@ -16,11 +16,11 @@
 - src: "{app_name}-amd64.{version}.msi"
   dest: "infrastructure_agent/windows/integrations/{app_name}/{src}"
 
-- src: "{app_name}-amd64.msi"
-  dest: "infrastructure_agent/windows/integrations/{app_name}/{src}"
+- src: "{app_name}-amd64.{version}.msi"
+  dest: "infrastructure_agent/windows/integrations/{app_name}/{app_name}-amd64.msi"
 
 - src: "{app_name}-386.{version}.msi"
   dest: "infrastructure_agent/windows/386/integrations/{app_name}/{src}"
 
-- src: "{app_name}-386.msi"
-  dest: "infrastructure_agent/windows/386/integrations/{app_name}/{src}"
+- src: "{app_name}-386.{version}.msi"
+  dest: "infrastructure_agent/windows/386/integrations/{app_name}/{app_name}-386.msi"

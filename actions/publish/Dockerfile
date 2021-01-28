@@ -12,7 +12,6 @@ RUN mkdir $AWS_S3_MOUNT_DIRECTORY
 
 WORKDIR /home/gha
 
-ADD scripts ./scripts
 ADD uploader ./go
 ADD schemas ./schemas
 ADD Makefile .
@@ -23,5 +22,4 @@ RUN cd ./go && go get -d -v && go build -o ../uploader uploader.go
 
 RUN chmod +x ./uploader
 
-RUN chmod -R 755 ./scripts
 CMD ["make"]

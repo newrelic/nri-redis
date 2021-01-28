@@ -10,9 +10,10 @@ docker run --rm --security-opt apparmor:unconfined \
         -e AWS_SECRET_ACCESS_KEY \
         -e AWS_ACCESS_KEY \
         -e AWS_S3_BUCKET_NAME \
+        -e REPO_NAME \
+        -e APP_NAME \
         -e TAG \
-        -e ARTIFACTS_DEST_FOLDER=/mnt/s3 \
+        -e ARTIFACTS_DEST_FOLDER=$AWS_S3_MOUNT_DIRECTORY \
         -e ARTIFACTS_SRC_FOLDER=/home/gha/assets \
         -e UPLOADSCHEMA_FILE_PATH=/home/gha/schemas/ohi.yml \
-        -e APP_NAME \
         newrelic/infrastructure-publish-action

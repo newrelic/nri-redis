@@ -14,8 +14,8 @@ var (
   arch:
     - amd64
     - 386
-- src: "foo-ARCH.zip"
-  dest: "infrastructure_agent/binaries/linux/{Arch}/"
+- src: "{integration_name}_linux_{version}_{arch}.tar.gz"
+  dest: "infrastructure_agent/binaries/linux/{arch}/"
   arch:
     - ppc`
 
@@ -42,18 +42,18 @@ func TestParseConfig(t *testing.T) {
 		schema string
 		output []uploadArtifactSchema
 	}{
-		"multiple entries": { schema, []uploadArtifactSchema{
-			{"foo.tar.gz", "/tmp", []string { "amd64", "386"}},
-			{"{integration_name}_linux_{version}_{Arch}.tar.gz", "infrastructure_agent/binaries/linux/{Arch}/", []string { "ppc" }},
+		"multiple entries": {schema, []uploadArtifactSchema{
+			{"foo.tar.gz", "/tmp", []string{"amd64", "386"}},
+			{"{integration_name}_linux_{version}_{arch}.tar.gz", "infrastructure_agent/binaries/linux/{arch}/", []string{"ppc"}},
 		}},
-		"src is omitted": { schemaNoSrc, []uploadArtifactSchema{
-			{"", "/tmp", []string { "amd64" }},
+		"src is omitted": {schemaNoSrc, []uploadArtifactSchema{
+			{"", "/tmp", []string{"amd64"}},
 		}},
-		"dest is omitted": { schemaNoDest, []uploadArtifactSchema{
-			{"foo.tar.gz", "", []string { "amd64" }},
+		"dest is omitted": {schemaNoDest, []uploadArtifactSchema{
+			{"foo.tar.gz", "", []string{"amd64"}},
 		}},
-		"arch is omitted": { schemaNoArch, []uploadArtifactSchema{
-			{"foo.tar.gz", "/tmp", nil},
+		"arch is omitted": {schemaNoArch, []uploadArtifactSchema{
+			{"foo.tar.gz", "/tmp", []string{""}},
 		}},
 	}
 	for name, tt := range tests {
@@ -70,32 +70,58 @@ func TestParseConfig(t *testing.T) {
 func TestReplacePlaceholders(t *testing.T) {
 	t.Parallel()
 	tests := map[string]struct {
-		srcTemplate string
+		srcTemplate  string
 		destTemplate string
-		appName string
-		version string
-		arch string
-		srcOutput string
-		destOutput string
+		repoName     string
+		appName      string
+		version      string
+		arch         string
+		srcOutput    string
+		destOutput   string
 	}{
-		"dst no file replacement": { "{app_name}-{arch}-{version}", "/tmp/{arch}/{app_name}/{version}/file",
-			"nri-foobar", "1.2.3", "amd64",
-			"nri-foobar-amd64-1.2.3","/tmp/amd64/nri-foobar/1.2.3/file"},
-		"dst src replacement": { "{app_name}-{arch}-{version}", "/tmp/{arch}/{app_name}/{version}/{src}",
-			"nri-foobar", "1.2.3", "amd64",
-			"nri-foobar-amd64-1.2.3","/tmp/amd64/nri-foobar/1.2.3/nri-foobar-amd64-1.2.3"},
-		"dst multiple replacements": { "{app_name}-{arch}-{version}", "/tmp/{arch}/{app_name}/{version}/{app_name}-{arch}-{version}",
-			"nri-foobar", "1.2.3", "amd64",
-			"nri-foobar-amd64-1.2.3","/tmp/amd64/nri-foobar/1.2.3/nri-foobar-amd64-1.2.3"},
-		"src multiple replacements": { "{app_name}-{arch}-{version}-{app_name}-{arch}-{version}", "/tmp/{arch}/{app_name}/{version}/file",
-			"nri-foobar", "1.2.3", "amd64",
-			"nri-foobar-amd64-1.2.3-nri-foobar-amd64-1.2.3","/tmp/amd64/nri-foobar/1.2.3/file"},
+		"dst no file replacement": {
+			"{app_name}-{arch}-{version}",
+			"/tmp/{arch}/{app_name}/{version}/file",
+			"newrelic/nri-foobar",
+			"nri-foobar",
+			"1.2.3",
+			"amd64",
+			"nri-foobar-amd64-1.2.3",
+			"/tmp/amd64/nri-foobar/1.2.3/file"},
+		"dst src replacement": {
+			"{app_name}-{arch}-{version}",
+			"/tmp/{arch}/{app_name}/{version}/{src}",
+			"newrelic/nri-foobar",
+			"nri-foobar",
+			"1.2.3",
+			"amd64",
+			"nri-foobar-amd64-1.2.3",
+			"/tmp/amd64/nri-foobar/1.2.3/nri-foobar-amd64-1.2.3"},
+		"dst multiple replacements": {
+			"{app_name}-{arch}-{version}",
+			"/tmp/{arch}/{app_name}/{version}/{app_name}-{arch}-{version}",
+			"newrelic/nri-foobar",
+			"nri-foobar",
+			"1.2.3",
+			"amd64",
+			"nri-foobar-amd64-1.2.3",
+			"/tmp/amd64/nri-foobar/1.2.3/nri-foobar-amd64-1.2.3"},
+		"src multiple replacements": {
+			"{app_name}-{arch}-{version}-{app_name}-{arch}-{version}",
+			"/tmp/{arch}/{app_name}/{version}/file",
+			"newrelic/nri-foobar",
+			"nri-foobar",
+			"1.2.3",
+			"amd64",
+			"nri-foobar-amd64-1.2.3-nri-foobar-amd64-1.2.3",
+			"/tmp/amd64/nri-foobar/1.2.3/file"},
 	}
 	for name, tt := range tests {
 		tt := tt
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			src, dest := replacePlaceholders(tt.srcTemplate, tt.destTemplate, tt.arch, tt.appName, tt.version)
+			tag := "v" + tt.version
+			src, dest := replaceSrcDestTemplates(tt.srcTemplate, tt.destTemplate, "newrelic/foobar", tt.appName, tt.arch, tag, tt.version)
 			assert.EqualValues(t, tt.srcOutput, src)
 			assert.EqualValues(t, tt.destOutput, dest)
 		})
@@ -120,6 +146,7 @@ func writeDummyFile(path string) error {
 func TestUploadArtifacts(t *testing.T) {
 	schema := []uploadArtifactSchema{
 		{"{app_name}-{arch}-{version}.txt", "{arch}/{app_name}/{src}", []string{"amd64", "386"}},
+		{"{app_name}-{arch}-{version}.txt", "{arch}/{app_name}/{src}", nil},
 	}
 
 	dest := t.TempDir()

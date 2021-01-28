@@ -1,4 +1,4 @@
-module github.com/newrelic/nri-redis/actions/publish/go
+module github.com/newrelic/nri-redis/actions/publish/uploader
 
 go 1.15
 
