@@ -24,3 +24,10 @@ runs:
   steps:
     - run: ./actions/publish/action-run-ohi.sh
       shell: bash
+      env:
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws_secret_access_key }}
+        AWS_ACCESS_KEY: ${{ inputs.aws_access_key }}
+        AWS_S3_BUCKET_NAME: ${{ inputs.aws_s3_bucket_name }}
+        REPO_NAME: ${{ inputs.repo_name }}
+        APP_NAME: ${{ inputs.app_name }}
+        TAG: ${{ inputs.tag }}
