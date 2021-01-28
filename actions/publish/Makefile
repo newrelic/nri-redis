@@ -1,7 +1,5 @@
 SHELL := /bin/bash
 
-AWS_S3_MOUNT_DIRECTORY ?= /mnt/s3
-
 default: check-env prepare-secrets mount-s3 mount-s3-check upload-artifacts download-from-gh-check
 
 check-env:
@@ -22,7 +20,7 @@ prepare-secrets:
 
 mount-s3:
 	@echo "Mounting S3 into $(AWS_S3_MOUNT_DIRECTORY)"
-	@s3fs $(AWS_S3_BUCKET_NAME) $(AWS_S3_MOUNT_DIRECTORY)
+	@s3fs $(AWS_S3_BUCKET_NAME) $(ARTIFACTS_DEST_FOLDER)
 
 mount-s3-check:
 	@echo "List files from s3 bucket to confirm mount"
