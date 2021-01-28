@@ -12,14 +12,14 @@ RUN mkdir $AWS_S3_MOUNT_DIRECTORY
 
 WORKDIR /home/gha
 
-ADD uploader ./go
+ADD publisher ./publisher
 ADD schemas ./schemas
 ADD Makefile .
 
 RUN mkdir ./assets
 
-RUN cd ./go && go get -d -v && go build -o ../uploader uploader.go
+RUN cd ./publisher && go get -d -v && go build -o /bin/publisher publisher.go
 
-RUN chmod +x ./uploader
+RUN chmod +x /bin/publisher
 
 CMD ["make"]

@@ -19,10 +19,13 @@ inputs:
   tag:
     description: Tag pointing to the release
     required: true
+  schema:
+    description: Name of the schema describing the packages to be published (i.e. infra-agent, ohi or nrjmx)
+    required: true
 runs:
   using: "composite"
   steps:
-    - run: ./actions/publish/action-run-ohi.sh
+    - run: ./actions/publish/action-run.sh
       shell: bash
       env:
         AWS_SECRET_ACCESS_KEY: ${{ inputs.aws_secret_access_key }}
@@ -31,3 +34,4 @@ runs:
         REPO_NAME: ${{ inputs.repo_name }}
         APP_NAME: ${{ inputs.app_name }}
         TAG: ${{ inputs.tag }}
+        SCHEMA: ${{ inputs.schema }}

@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-default: check-env prepare-secrets mount-s3 mount-s3-check upload-artifacts download-from-gh-check
+default: check-env prepare-secrets mount-s3 mount-s3-check publish-artifacts download-from-gh-check unmount-s3
 
 check-env:
 ifndef AWS_SECRET_ACCESS_KEY
@@ -22,6 +22,10 @@ mount-s3:
 	@echo "Mounting S3 into $(AWS_S3_MOUNT_DIRECTORY)"
 	@s3fs $(AWS_S3_BUCKET_NAME) $(ARTIFACTS_DEST_FOLDER)
 
+unmount-s3:
+	@echo "Unmounting S3"
+	@umount $(ARTIFACTS_DEST_FOLDER)
+
 mount-s3-check:
 	@echo "List files from s3 bucket to confirm mount"
 	@ls -la $(AWS_S3_MOUNT_DIRECTORY)
@@ -30,21 +34,8 @@ download-from-gh-check:
 	@echo "List all downloaded assets"
 	@ls -la $(CURDIR)/assets
 
-upload-artifacts:
-	@echo "Upload artifacts"
-	@./uploader
+publish-artifacts:
+	@echo "Publish artifacts"
+	@/bin/publisher
 
-# jmx
-# repos
-# nrjmx_1.5.2-1_amd64.deb => infrastructure_agent/linux/apt/pool/main/n/nrjmx/
-# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/5/x86_64/
-# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/6/x86_64/
-# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/7/x86_64/
-# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/8/x86_64/
-# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/11.4/x86_64/
-# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.1/x86_64/
-# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.2/x86_64/
-# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.3/x86_64/
-# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.4/x86_64/
-
-.PHONY: prepare-secrets mount-s3 mount-s3-check upload-artifacts download-from-gh-check
+.PHONY: prepare-secrets mount-s3 mount-s3-check publish-artifacts download-from-gh-check unmount-s3

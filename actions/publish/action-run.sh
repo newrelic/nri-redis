@@ -1,6 +1,17 @@
 #!/bin/bash
 
-env
+case $SCHEMA in
+  infra-agent)
+    ;;
+  ohi)
+    ;;
+  nrjmx)
+    ;;
+  *)
+    echo "error: \"${SCHEMA}\" is not valid schema"
+    exit 1
+    ;;
+esac
 
 # build docker image form Dockerfile
 docker build -t newrelic/infrastructure-publish-action -f ./actions/publish/Dockerfile ./actions/publish
@@ -17,5 +28,5 @@ docker run --rm --security-opt apparmor:unconfined \
         -e TAG \
         -e ARTIFACTS_DEST_FOLDER=/mnt/s3 \
         -e ARTIFACTS_SRC_FOLDER=/home/gha/assets \
-        -e UPLOADSCHEMA_FILE_PATH=/home/gha/schemas/ohi.yml \
+        -e UPLOADSCHEMA_FILE_PATH=/home/gha/schemas/${SCHEMA}.yml \
         newrelic/infrastructure-publish-action

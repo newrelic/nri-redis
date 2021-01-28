@@ -1,17 +1,34 @@
 ---
-- src: "nrjmx_linux_{version}_{arch}.tar.gz"
+- src: "{app_name}_linux_{version}_{arch}.tar.gz"
   dest: "infrastructure_agent/binaries/linux/{arch}/{src}"
   arch:
     - amd64
     - noarch
 
-- src: "nrjmx-{arch}.{version}.zip"
+- src: "{app_name}_windows_{version}_{arch}.zip"
   dest: "infrastructure_agent/binaries/windows/{arch}/{src}"
   arch:
     - amd64
 
-- src: "nrjmx-amd64.{version}.msi"
-  dest: "infrastructure_agent/windows/integrations/nrjmx/{src}"
+- src: "{app_name}-{arch}.{version}.msi"
+  dest: "infrastructure_agent/windows/integrations/{app_name}/{src}"
+  arch:
+    - amd64
 
-- src: "nrjmx-amd64.msi"
-  dest: "infrastructure_agent/windows/integrations/nrjmx/{src}"
+- src: "{app_name}-{arch}.{version}.msi"
+  dest: "infrastructure_agent/windows/integrations/{app_name}/{app_name}-{arch}.msi"
+  arch:
+    - amd64
+
+# jmx
+# repos
+# nrjmx_1.5.2-1_amd64.deb => infrastructure_agent/linux/apt/pool/main/n/nrjmx/
+# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/5/x86_64/
+# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/6/x86_64/
+# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/7/x86_64/
+# nrjmx-1.5.2-1.x86_64.rpm => infrastructure_agent/linux/yum/el/8/x86_64/
+# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/11.4/x86_64/
+# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.1/x86_64/
+# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.2/x86_64/
+# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.3/x86_64/
+# nrjmx-1.6.2-1.x86_64.rpm => infrastructure_agent/linux/zypp/sles/12.4/x86_64/
