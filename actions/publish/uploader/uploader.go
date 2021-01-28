@@ -83,7 +83,7 @@ func loadConfig() config {
 
 	pflag.String("repoName", "", "repo name")
 	pflag.String("appName", "", "app name")
-	pflag.String("tag", "v0.0.0", "asset git tag")
+	pflag.String("tag", "", "asset git tag")
 	pflag.String("artifactsDestFolder", "", "artifacts destination folder")
 	pflag.String("artifactsSrcFolder", "", "artifacts source folder")
 	pflag.String("uploadSchemaFilePath", "", "upload schema file path")
