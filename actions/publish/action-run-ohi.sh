@@ -1,5 +1,7 @@
 #!/bin/bash
 
+env
+
 # build docker image form Dockerfile
 docker build -t newrelic/infrastructure-publish-action -f ./actions/publish/Dockerfile ./actions/publish
 
