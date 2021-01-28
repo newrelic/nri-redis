@@ -1,14 +1,24 @@
 name: 'Publish to S3'
 description: 'Publish artifacts to S3 bucket'
-#inputs:
-#  who-to-greet:  # id of input
-#    description: 'Who to greet'
-#    required: true
-#    default: 'World 1'
-#outputs:
-#  random-number:
-#    description: "Random number"
-#    value: ${{ steps.random-number-generator.outputs.random-id }}
+inputs:
+  aws_secret_access_key:
+    description: AWS secret access key
+    required: true
+  aws_access_key:
+    description: AWS access key
+    required: true
+  aws_s3_bucket_name:
+    description: Name of the S3 bucket
+    required: true
+  repo_name:
+    description: Combination of organization and repository (i.e. newrelic/nri-redis)
+    required: true
+  app_name:
+    description: Name of the package (i.e. nri-redis)
+    required: true
+  tag:
+    description: Tag pointing to the release
+    required: true
 runs:
   using: "composite"
   steps:

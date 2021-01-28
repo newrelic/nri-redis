@@ -6,14 +6,14 @@ on:
       - s3_publish_packages
 
 env:
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.TEST_AWS_SECRET }}
-  AWS_ACCESS_KEY: ${{ secrets.TEST_AWS_ACCESS_KEY }}
-  AWS_S3_BUCKET_NAME: ${{ secrets.TEST_AWS_BUCKET }}
+#  AWS_SECRET_ACCESS_KEY: ${{ secrets.TEST_AWS_SECRET }}
+#  AWS_ACCESS_KEY: ${{ secrets.TEST_AWS_ACCESS_KEY }}
+#  AWS_S3_BUCKET_NAME: ${{ secrets.TEST_AWS_BUCKET }}
   DOCKER_HUB_ID: ${{ secrets.OHAI_DOCKER_HUB_ID }}
   DOCKER_HUB_PASSWORD: ${{ secrets.OHAI_DOCKER_HUB_PASSWORD }}
-  TAG: "v1.6.0"
-  APP_NAME: "nri-redis"
-  REPO_NAME: "newrelic/nri-redis"
+#  TAG: "v1.6.0"
+#  APP_NAME: "nri-redis"
+#  REPO_NAME: "newrelic/nri-redis"
 
 jobs:
 
@@ -29,3 +29,10 @@ jobs:
           password: ${{ env.DOCKER_HUB_PASSWORD }}
       - name: Publish to S3 action
         uses: ./actions/publish
+        with:
+          aws_secret_access_key: ${{ secrets.TEST_AWS_SECRET }}
+          aws_access_key: ${{ secrets.TEST_AWS_ACCESS_KEY }}
+          aws_s3_bucket_name: ${{ secrets.TEST_AWS_BUCKET }}
+          tag: "v1.6.0"
+          app_name: "nri-redis"
+          repo_name: "newrelic/nri-redis"
