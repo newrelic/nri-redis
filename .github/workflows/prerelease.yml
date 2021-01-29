@@ -136,6 +136,11 @@ jobs:
           slack-bot-user-oauth-access-token: ${{ env.SLACK_TOKEN }}
           slack-channel: ${{ env.SLACK_CHANNEL }}
           slack-text: ":shit: Repo: ${{ env.REPO_FULL_NAME }}, prerelease for nix FAILURE!"
+      - name: Test package installability
+        uses: newrelic/integrations-pkg-test-action/linux@v1
+        with:
+          tag: ${{ env.TAG }}
+          integration: nri-${{ env.INTEGRATION }}
 
   package-win:
     name: Create MSI & Upload into GH Release assets
