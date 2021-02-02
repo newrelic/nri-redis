@@ -97,7 +97,7 @@ archives:
       - nri-win
     name_template: "{{ .ProjectName }}-{{ .Arch }}.{{ .Version }}_dirty"
     files:
-      - redis-config.yml.sample
+      - redis-win-config.yml.sample
       - redis-win-definition.yml
     format: zip
 
