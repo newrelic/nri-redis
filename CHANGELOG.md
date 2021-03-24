@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.6.0 (2020-10-29)
 ### Added
-- Add print integration version from cli using.
+- Add print integration version from cli using  `-show_version` flag
 
 ## 1.5.1 (2020-09-26)
 ### Added

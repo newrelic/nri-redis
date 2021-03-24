@@ -33,8 +33,6 @@ jobs:
   snyk:
     name: Run security checks via snyk
     runs-on: ubuntu-20.04
-    env:
-      SNYK_TOKEN: ${{ secrets.COREINT_SNYK_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Login to DockerHub
