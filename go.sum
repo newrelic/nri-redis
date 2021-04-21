@@ -5,8 +5,8 @@ github.com/bitly/go-simplejson v0.5.1-0.20181114203107-9db4a59bd4d8/go.mod h1:cX
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/garyburd/redigo v1.1.0 h1:kTY6M1SUxdOiFU4rbXWTtDBsTnfsXo4vDhXzhGMjdwk=
-github.com/garyburd/redigo v1.1.0/go.mod h1:NR3MbYisc3/PwhQ00EMzDiPmrwpPxAn5GI05/YaO1SY=
+github.com/gomodule/redigo v1.8.4 h1:Z5JUg94HMTR1XpwBaSH4vq3+PNSIykBLxMdglbw10gg=
+github.com/gomodule/redigo v1.8.4/go.mod h1:P9dn9mFrCBvWhGE1wpxx6fgq7BAeLBk+UUUzlpkBYO0=
 github.com/newrelic/infra-integrations-sdk v3.6.7+incompatible h1:dOsTM3DT6piFLpWLroIFw1Yy5ZqHpnS0HoS6B6WOV7k=
 github.com/newrelic/infra-integrations-sdk v3.6.7+incompatible/go.mod h1:tMUHRMq6mJS0YyBnbWrTXAnREnQqC1AGO6Lu45u5xAM=
 github.com/pkg/errors v0.8.2-0.20190109061628-ffb6e22f0193 h1:0+zEoO0EfrvcxHtYt+VS+OGlNllWCScvxyiUupfkbXY=

@@ -3,14 +3,10 @@ golang:
     license: MIT
     license_url: github.com/newrelic/nri-redis/vendor/github.com/Sirupsen/logrus/LICENSE
     project_url: github.com/newrelic/nri-redis/vendor/github.com/Sirupsen/logrus
-  github.com/newrelic/nri-redis/vendor/github.com/garyburd/redigo/internal:
+  github.com/newrelic/nri-redis/vendor/github.com/gomodule/redigo/redis:
     license: Apache-2.0
-    license_url: github.com/newrelic/nri-redis/vendor/github.com/garyburd/redigo/LICENSE
-    project_url: github.com/newrelic/nri-redis/vendor/github.com/garyburd/redigo/internal
-  github.com/newrelic/nri-redis/vendor/github.com/garyburd/redigo/redis:
-    license: Apache-2.0
-    license_url: github.com/newrelic/nri-redis/vendor/github.com/garyburd/redigo/LICENSE
-    project_url: github.com/newrelic/nri-redis/vendor/github.com/garyburd/redigo/redis
+    license_url: github.com/newrelic/nri-redis/vendor/github.com/gomodule/redigo/LICENSE
+    project_url: github.com/newrelic/nri-redis/vendor/github.com/gomodule/redigo/redis
   github.com/newrelic/nri-redis/vendor/github.com/newrelic/infra-integrations-sdk/args:
     license: Unknown
     license_url: github.com/newrelic/nri-redis/vendor/github.com/newrelic/infra-integrations-sdk/LICENSE

@@ -13,7 +13,7 @@ can be found at github.com/newrelic/nri-redis.
 ## Contents
  
 * [newrelic/infra-integrations-sdk](#newrelicinfra-integrations-sdk)
-* [garyburd/redigo](#garyburdredigo)
+* [gomodule/redigo](#gomoduleredigo)
 * [Sirupsen/logrus](#Sirupsenlogrus)
 
 ## newrelic/infra-integrations-sdk
@@ -72,9 +72,9 @@ punitive damages or for lost profits or data.
 ```
 
 
-## garyburd/redigo
+## gomodule/redigo
 
-* Web: github.com/garyburd/redigo
+* Web: github.com/gomodule/redigo
 * License: Apache-2.0
 
 ```
