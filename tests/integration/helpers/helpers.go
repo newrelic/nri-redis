@@ -3,7 +3,7 @@ package helpers
 import (
 	"bytes"
 	"fmt"
-	"github.com/Sirupsen/logrus"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -52,7 +52,7 @@ func ExecInContainer(container string, command []string, envVars ...string) (str
 	cmdLine = append(cmdLine, container)
 	cmdLine = append(cmdLine, command...)
 
-	logrus.Debugf("executing: docker %s", strings.Join(cmdLine, " "))
+	log.Printf("executing: docker %s", strings.Join(cmdLine, " "))
 
 	fmt.Println(cmdLine)
 	cmd := exec.Command("docker", cmdLine...)
