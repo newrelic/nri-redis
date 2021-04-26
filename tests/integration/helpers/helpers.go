@@ -7,9 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"reflect"
 	"strings"
-	"testing"
 
 	"github.com/bitly/go-simplejson"
 	"github.com/xeipuuv/gojsonschema"
@@ -105,12 +103,6 @@ func ValidateJSONSchema(schemaJsonFileName string, input string) error {
 	}
 	fmt.Printf("\n")
 	return fmt.Errorf("The output of the integration doesn't have expected JSON format")
-}
-
-// GetTestName returns the name of the running test.
-func GetTestName(t *testing.T) interface{} {
-	v := reflect.ValueOf(*t)
-	return v.FieldByName("name")
 }
 
 // Deprecated: Instead, use jsonschema.ValidationField
