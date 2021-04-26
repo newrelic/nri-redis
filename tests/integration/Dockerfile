@@ -1,4 +1,4 @@
-FROM golang:1.9.7 as builder
+FROM golang:1.16 as builder
 ARG CGO_ENABLED=0
 WORKDIR /go/src/github.com/newrelic/nri-redis
 COPY . .

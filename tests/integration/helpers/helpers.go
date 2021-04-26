@@ -3,13 +3,11 @@ package helpers
 import (
 	"bytes"
 	"fmt"
-	"github.com/Sirupsen/logrus"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"reflect"
 	"strings"
-	"testing"
 
 	"github.com/bitly/go-simplejson"
 	"github.com/xeipuuv/gojsonschema"
@@ -52,7 +50,7 @@ func ExecInContainer(container string, command []string, envVars ...string) (str
 	cmdLine = append(cmdLine, container)
 	cmdLine = append(cmdLine, command...)
 
-	logrus.Debugf("executing: docker %s", strings.Join(cmdLine, " "))
+	log.Printf("executing: docker %s", strings.Join(cmdLine, " "))
 
 	fmt.Println(cmdLine)
 	cmd := exec.Command("docker", cmdLine...)
@@ -105,12 +103,6 @@ func ValidateJSONSchema(schemaJsonFileName string, input string) error {
 	}
 	fmt.Printf("\n")
 	return fmt.Errorf("The output of the integration doesn't have expected JSON format")
-}
-
-// GetTestName returns the name of the running test.
-func GetTestName(t *testing.T) interface{} {
-	v := reflect.ValueOf(*t)
-	return v.FieldByName("name")
 }
 
 // Deprecated: Instead, use jsonschema.ValidationField

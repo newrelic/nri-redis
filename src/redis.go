@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
+	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
@@ -130,14 +131,14 @@ func metricSet(e *integration.Entity, eventType, hostname string, port int, remo
 	if remote {
 		return e.NewMetricSet(
 			eventType,
-			metric.Attr("hostname", hostname),
-			metric.Attr("port", strPort),
+			attribute.Attr("hostname", hostname),
+			attribute.Attr("port", strPort),
 		)
 	}
 
 	return e.NewMetricSet(
 		eventType,
-		metric.Attr("port", strPort),
+		attribute.Attr("port", strPort),
 	)
 }
 

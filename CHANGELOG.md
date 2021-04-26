@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.6.2 (2021-04-22)
+### Added
+- Upgrade dependency manager to use go mod
+- Bumps sdk to v3.6.7 solving multi-instance storage overlapping
+- Bumps redigo to v1.8 (redis client library)
+
 ## 1.6.1 (2021-03-24)
 ### Added
 - Add arm packages and binaries

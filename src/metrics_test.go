@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/persist"
 	"github.com/stretchr/testify/assert"
@@ -234,7 +235,7 @@ func TestPopulateMetrics(t *testing.T) {
 	rawMetrics, rawKeyspace, err := getRawMetrics(readInfoSample())
 	assert.NoError(t, err)
 
-	attr := metric.Attr("metricsTestSample", "test")
+	attr := attribute.Attr("metricsTestSample", "test")
 	ms := metric.NewSet("metricsTestSample", persist.NewInMemoryStore(), attr)
 
 	assert.NoError(t, populateMetrics(ms, rawMetrics, metricsDefinition))

@@ -9,7 +9,7 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  GO_VERSION: '1.9.7'
+  GO_VERSION: '1.16'
   INTEGRATION: "redis"
   ORIGINAL_REPO_NAME: 'newrelic/nri-redis'
   REPO_FULL_NAME: ${{ github.event.repository.full_name }}
@@ -29,6 +29,14 @@ jobs:
           password: ${{ secrets.OHAI_DOCKER_HUB_PASSWORD }}
       - name: Validate code
         run: make ci/validate
+
+  golangci-lint:
+    name: Validate code
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v2
 
   snyk:
     name: Run security checks via snyk

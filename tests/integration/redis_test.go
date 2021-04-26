@@ -63,7 +63,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestRedisIntegration(t *testing.T) {
-	testName := helpers.GetTestName(t)
+	testName := t.Name()
 	stdout, stderr := runIntegration(t, fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName))
 
 	schemaPath := filepath.Join("json-schema-files", "redis-schema.json")
@@ -75,7 +75,7 @@ func TestRedisIntegration(t *testing.T) {
 }
 
 func TestRedisIntegration_WithRemoteEntity(t *testing.T) {
-	testName := helpers.GetTestName(t)
+	testName := t.Name()
 	stdout, stderr := runIntegration(t, fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName), "REMOTE_MONITORING=true")
 
 	schemaPath := filepath.Join("json-schema-files", "redis-schema-remote-entity.json")
@@ -87,7 +87,7 @@ func TestRedisIntegration_WithRemoteEntity(t *testing.T) {
 }
 
 func TestRedisIntegration_OnlyMetrics(t *testing.T) {
-	testName := helpers.GetTestName(t)
+	testName := t.Name()
 
 	stdout, stderr := runIntegration(t, fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName))
 
@@ -100,7 +100,7 @@ func TestRedisIntegration_OnlyMetrics(t *testing.T) {
 }
 
 func TestRedisIntegration_OnlyInventory(t *testing.T) {
-	testName := helpers.GetTestName(t)
+	testName := t.Name()
 
 	stdout, stderr := runIntegration(t, fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName))
 
@@ -118,7 +118,7 @@ func TestRedisIntegration_OnlyInventory(t *testing.T) {
 }
 
 func TestRedisIntegration_SkipConfig(t *testing.T) {
-	testName := helpers.GetTestName(t)
+	testName := t.Name()
 
 	stdout, _ := runIntegration(t,
 		fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName),
