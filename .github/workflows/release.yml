@@ -25,7 +25,7 @@ jobs:
           username: ${{ secrets.OHAI_DOCKER_HUB_ID }}
           password: ${{ secrets.OHAI_DOCKER_HUB_PASSWORD }}
       - name: Publish to S3 action
-        uses: newrelic/infrastructure-publish-action@v1
+        uses: newrelic/infrastructure-publish-action@v0.1
         env:
           AWS_S3_BUCKET_NAME: "nr-downloads-main"
           AWS_S3_LOCK_BUCKET_NAME: "onhost-ci-lock"
