@@ -154,13 +154,13 @@ jobs:
         shell: pwsh
         run: |
           build\windows\package_msi.ps1 -integration "$env:INTEGRATION" -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_passphrase "$env:PFX_PASSPHRASE" -pfx_certificate_description "$env:PFX_CERTIFICATE_DESCRIPTION"
-      - name: Test win packages installation
-        uses: newrelic/integrations-pkg-test-action/windows@v1
-        with:
-          tag: ${{ env.TAG }}
-          integration: nri-${{ env.INTEGRATION }}
-          arch: ${{ matrix.goarch }}
-          upgrade: ${{ matrix.test-upgrade }}
+#      - name: Test win packages installation
+#        uses: newrelic/integrations-pkg-test-action/windows@v1
+#        with:
+#          tag: ${{ env.TAG }}
+#          integration: nri-${{ env.INTEGRATION }}
+#          arch: ${{ matrix.goarch }}
+#          upgrade: ${{ matrix.test-upgrade }}
       - name: Upload MSI to GH
         if: startsWith(matrix.test-upgrade, 'false')
         shell: bash
