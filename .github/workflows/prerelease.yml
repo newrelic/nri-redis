@@ -109,11 +109,11 @@ jobs:
           GPG_MAIL: 'infrastructure-eng@newrelic.com'
           GPG_PASSPHRASE: ${{ secrets.OHAI_GPG_PASSPHRASE }}
           GPG_PRIVATE_KEY_BASE64: ${{ secrets.OHAI_GPG_PRIVATE_KEY_BASE64 }} # base64 encoded
-#      - name: Test package installability
-#        uses: newrelic/integrations-pkg-test-action/linux@v1
-#        with:
-#          tag: ${{ env.TAG }}
-#          integration: nri-${{ env.INTEGRATION }}
+      - name: Test package installability
+        uses: newrelic/integrations-pkg-test-action/linux@v1
+        with:
+          tag: ${{ env.TAG }}
+          integration: nri-${{ env.INTEGRATION }}
       - name: Notify failure via Slack
         if: ${{ failure() }}
         uses: archive/github-actions-slack@master
@@ -154,13 +154,13 @@ jobs:
         shell: pwsh
         run: |
           build\windows\package_msi.ps1 -integration "$env:INTEGRATION" -arch ${{ matrix.goarch }} -tag "$env:TAG" -pfx_passphrase "$env:PFX_PASSPHRASE" -pfx_certificate_description "$env:PFX_CERTIFICATE_DESCRIPTION"
-#      - name: Test win packages installation
-#        uses: newrelic/integrations-pkg-test-action/windows@v1
-#        with:
-#          tag: ${{ env.TAG }}
-#          integration: nri-${{ env.INTEGRATION }}
-#          arch: ${{ matrix.goarch }}
-#          upgrade: ${{ matrix.test-upgrade }}
+      - name: Test win packages installation
+        uses: newrelic/integrations-pkg-test-action/windows@v1
+        with:
+          tag: ${{ env.TAG }}
+          integration: nri-${{ env.INTEGRATION }}
+          arch: ${{ matrix.goarch }}
+          upgrade: ${{ matrix.test-upgrade }}
       - name: Upload MSI to GH
         if: startsWith(matrix.test-upgrade, 'false')
         shell: bash
@@ -185,7 +185,7 @@ jobs:
           username: ${{ secrets.OHAI_DOCKER_HUB_ID }}
           password: ${{ secrets.OHAI_DOCKER_HUB_PASSWORD }}
       - name: Publish to S3 action
-        uses: newrelic/infrastructure-publish-action@v0.1
+        uses: newrelic/infrastructure-publish-action@v1
         env:
           AWS_S3_BUCKET_NAME: "nr-downloads-ohai-staging"
           AWS_S3_LOCK_BUCKET_NAME: "onhost-ci-lock-staging"
