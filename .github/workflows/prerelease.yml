@@ -109,11 +109,11 @@ jobs:
           GPG_MAIL: 'infrastructure-eng@newrelic.com'
           GPG_PASSPHRASE: ${{ secrets.OHAI_GPG_PASSPHRASE }}
           GPG_PRIVATE_KEY_BASE64: ${{ secrets.OHAI_GPG_PRIVATE_KEY_BASE64 }} # base64 encoded
-      - name: Test package installability
-        uses: newrelic/integrations-pkg-test-action/linux@v1
-        with:
-          tag: ${{ env.TAG }}
-          integration: nri-${{ env.INTEGRATION }}
+#      - name: Test package installability
+#        uses: newrelic/integrations-pkg-test-action/linux@v1
+#        with:
+#          tag: ${{ env.TAG }}
+#          integration: nri-${{ env.INTEGRATION }}
       - name: Notify failure via Slack
         if: ${{ failure() }}
         uses: archive/github-actions-slack@master
