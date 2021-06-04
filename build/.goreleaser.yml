@@ -79,6 +79,8 @@ nfpms:
       rpm:
         replacements:
           amd64: 1.x86_64
+          arm: 1.arm
+          arm64: 1.arm64
 
 archives:
   - id: nri-nix
