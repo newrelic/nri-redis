@@ -65,7 +65,7 @@ nfpms:
         replacements:
           amd64: x86_64
 
-      # Formats to be generated.
+    # Formats to be generated.
     formats:
       - deb
       - rpm
