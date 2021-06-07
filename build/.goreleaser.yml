@@ -63,9 +63,7 @@ nfpms:
       rpm:
         file_name_template: "{{ .ProjectName }}-{{ .Version }}-1.{{ .Arch }}"
         replacements:
-          amd64: 1.x86_64
-          arm: 1.arm
-          arm64: 1.arm64
+          amd64: x86_64
 
       # Formats to be generated.
     formats:
