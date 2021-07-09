@@ -43,7 +43,6 @@ func (c configConnectionError) Error() string {
 }
 
 func newRedisCon(hostname string, port int, unixSocket string, password string, renamedCommands map[string]string) (conn, error) {
-
 	connectTimeout := redis.DialConnectTimeout(time.Second * 5)
 	readTimeout := redis.DialReadTimeout(time.Second * 5)
 	writeTimeout := redis.DialWriteTimeout(time.Second * 5)
