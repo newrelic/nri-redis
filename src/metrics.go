@@ -232,6 +232,32 @@ func getDbAndKeys(keysFlag sdkArgs.JSON) map[string][]string {
 	return databaseKeys
 }
 
+// getRenamedCommands returns a map of command and renamed command pair
+// Example: '{"CONFIG":"ZmtlbmZ3ZWZl-CONFIG"}'
+func getRenamedCommands(renamedCommandsFlag sdkArgs.JSON) map[string]string {
+	renamedCommands := make(map[string]string)
+
+	convertF := func(stringInterface interface{}) string {
+		str := ""
+		if _, ok := stringInterface.(string); ok {
+			str = stringInterface.(string)
+		} else {
+			log.Warn("Not expected type for key: %v, string type required", stringInterface)
+		}
+		return str
+	}
+
+	switch source := renamedCommandsFlag.Get().(type) {
+	case map[string]interface{}:
+		for cmd, alias := range source {
+			renamedCommands[cmd] = convertF(alias)
+		}
+	default:
+		log.Warn("Invalid format, value of keys flag: %v ", renamedCommandsFlag)
+	}
+	return renamedCommands
+}
+
 func removeDuplicates(elements []string) []string {
 	found := map[string]struct{}{}
 	result := []string{}

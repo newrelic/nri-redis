@@ -20,6 +20,13 @@ type conn interface {
 
 type redisConn struct {
 	c redis.Conn
+
+	// renamedCommands is the custom Redis command used throughout nri-redis
+	// This is used to allow usage of renamed-command in Redis server.
+	// Example Redis server config:
+	//     rename-command CONFIG "SUPER-SECRET-CONFIG-COMMAND"
+	// We will have renamedCommands["CONFIG"] = "SUPER-SECRET-CONFIG-COMMAND"
+	renamedCommands map[string]string
 }
 
 type keyInfo struct {
@@ -35,7 +42,7 @@ func (c configConnectionError) Error() string {
 	return "can't execute redis 'CONFIG' command: " + c.cause.Error()
 }
 
-func newRedisCon(hostname string, port int, unixSocket string, password string) (conn, error) {
+func newRedisCon(hostname string, port int, unixSocket string, password string, renamedCommands map[string]string) (conn, error) {
 
 	connectTimeout := redis.DialConnectTimeout(time.Second * 5)
 	readTimeout := redis.DialReadTimeout(time.Second * 5)
@@ -62,11 +69,11 @@ func newRedisCon(hostname string, port int, unixSocket string, password string) 
 	default:
 		return nil, fmt.Errorf("Redis connection failed, cannot connect either through TCP or Unix Socket")
 	}
-	return redisConn{c}, nil
+	return redisConn{c, renamedCommands}, nil
 }
 
 func (r redisConn) GetInfo() (string, error) {
-	if err := r.c.Send("INFO"); err != nil {
+	if err := r.c.Send(r.getCommand("INFO")); err != nil {
 		return "", fmt.Errorf("can't write INFO Redis command: %v", err.Error())
 	}
 	if err := r.c.Flush(); err != nil {
@@ -76,7 +83,7 @@ func (r redisConn) GetInfo() (string, error) {
 }
 
 func (r redisConn) GetConfig() (map[string]string, error) {
-	if err := r.c.Send("CONFIG", "GET", "*"); err != nil {
+	if err := r.c.Send(r.getCommand("CONFIG"), "GET", "*"); err != nil {
 		return nil, configConnectionError{cause: err}
 	}
 	if err := r.c.Flush(); err != nil {
@@ -91,13 +98,13 @@ func (r redisConn) Close() {
 
 func (r redisConn) setKeysType(db string, keys []string, info map[string]keyInfo) error {
 
-	_, err := r.c.Do("SELECT", db)
+	_, err := r.c.Do(r.getCommand("SELECT"), db)
 	if err != nil {
 		return fmt.Errorf("Cannot connect to db: %s, information for keys: %v will not be reported, got error: %v ", db, keys, err)
 	}
 
 	for _, key := range keys {
-		if err = r.c.Send("TYPE", key); err != nil {
+		if err = r.c.Send(r.getCommand("TYPE"), key); err != nil {
 			log.Warn("Cannot get a type for key: %s, got error: %v", key, err)
 		}
 	}
@@ -123,7 +130,7 @@ func (r redisConn) setKeysType(db string, keys []string, info map[string]keyInfo
 
 func (r redisConn) setKeysLength(db string, keys []string, info map[string]keyInfo) error {
 
-	_, err := r.c.Do("SELECT", db)
+	_, err := r.c.Do(r.getCommand("SELECT"), db)
 	if err != nil {
 		return fmt.Errorf("Cannot connect to db: %s, information for keys: %v will not be reported, got error: %v ", db, keys, err)
 	}
@@ -131,19 +138,19 @@ func (r redisConn) setKeysLength(db string, keys []string, info map[string]keyIn
 	for _, key := range keys {
 		switch info[key].keyType {
 		case "list":
-			if err = r.c.Send("LLEN", key); err != nil {
+			if err = r.c.Send(r.getCommand("LLEN"), key); err != nil {
 				log.Warn("Cannot retrieve a length of the key: %s from db: %s, got error: %v", key, db, err)
 			}
 		case "set":
-			if err = r.c.Send("SCARD", key); err != nil {
+			if err = r.c.Send(r.getCommand("SCARD"), key); err != nil {
 				log.Warn("Cannot retrieve a length of the key: %s from db: %s, got error: %v", key, db, err)
 			}
 		case "zset":
-			if err = r.c.Send("ZCOUNT", key, "-inf", "+inf"); err != nil {
+			if err = r.c.Send(r.getCommand("ZCOUNT"), key, "-inf", "+inf"); err != nil {
 				log.Warn("Cannot retrieve a length of the key: %s from db: %s, got error: %v", key, db, err)
 			}
 		case "hash":
-			if err = r.c.Send("HLEN", key); err != nil {
+			if err = r.c.Send(r.getCommand("HLEN"), key); err != nil {
 				log.Warn("Cannot retrieve a length of the key: %s from db: %s, got error: %v", key, db, err)
 			}
 		case "string":
@@ -193,4 +200,14 @@ func (r redisConn) GetRawCustomKeys(databaseKeys map[string][]string) (map[strin
 	}
 
 	return customKeysMetric, nil
+}
+
+// getCommand returns alias of 'command' if exists
+// Redis server security model supports disabling/renaming of specific commands
+// Ref: https://redis.io/topics/security
+func (r redisConn) getCommand(command string) string {
+	if alias, ok := r.renamedCommands[command]; ok {
+		return alias
+	}
+	return command
 }

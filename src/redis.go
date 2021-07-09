@@ -27,6 +27,7 @@ type argumentList struct {
 	Password         string       `help:"Password to use when connecting to the Redis server."`
 	UseUnixSocket    bool         `default:"false" help:"Adds the UnixSocketPath value to the entity. If you are monitoring more than one Redis instance on the same host using Unix sockets, then you should set it to true."`
 	RemoteMonitoring bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
+	RenamedCommands  sdkArgs.JSON `default:"" help:"List of Redis commands that are configured with rename-command"`
 	ConfigInventory  bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
 	ShowVersion      bool         `default:"false" help:"Print build information and exit"`
 }
@@ -59,7 +60,13 @@ func main() {
 		os.Exit(0)
 	}
 
-	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password)
+	renamedCommands := make(map[string]string)
+	if args.RenamedCommands.Get() != nil {
+		renamedCommands = getRenamedCommands(args.RenamedCommands)
+		log.Debug("Parsed renamed redis commands: %#v", renamedCommands)
+	}
+
+	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password, renamedCommands)
 	if err != nil {
 		log.Fatal(err)
 	}
