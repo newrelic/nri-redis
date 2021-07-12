@@ -60,17 +60,21 @@ func main() {
 		os.Exit(0)
 	}
 
-	renamedCommands := make(map[string]string)
-	if args.RenamedCommands.Get() != nil {
-		renamedCommands = getRenamedCommands(args.RenamedCommands)
-		log.Debug("Parsed renamed redis commands: %#v", renamedCommands)
-	}
-
-	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password, renamedCommands)
+	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer conn.Close()
+
+	// Support using renamed commands
+	if args.RenamedCommands.Get() != nil {
+		renamedCommands, err := getRenamedCommands(args.RenamedCommands)
+		if err != nil {
+			log.Error("Renamed commands argument is invalid: %v", err)
+		} else {
+			conn.RenameCommands(renamedCommands)
+		}
+	}
 
 	info, err := conn.GetInfo()
 	fatalIfErr(err)

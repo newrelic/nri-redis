@@ -40,7 +40,7 @@ func (f fakeConn) Do(_ string, _ ...interface{}) (interface{}, error) { return n
 func (f fakeConn) Flush() error                                       { return nil }
 func (f fakeConn) Receive() (interface{}, error)                      { return nil, nil }
 
-func Test_redisConn_getCommand(t *testing.T) {
+func Test_redisConn_command(t *testing.T) {
 	renamedCommands := make(map[string]string)
 	renamedCommands["NON-RENAMED-COMMAND"] = "NON-RENAMED-COMMAND"
 	renamedCommands["RENAMED-CONFIG"] = "NEW-RENAMED-CONFIG"
@@ -80,8 +80,8 @@ func Test_redisConn_getCommand(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.fields.c.getCommand(tt.args.command); got != tt.want {
-				t.Errorf("redisConn.getCommand() = %v, want %v", got, tt.want)
+			if got := tt.fields.c.command(tt.args.command); got != tt.want {
+				t.Errorf("redisConn.command() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -232,30 +232,35 @@ func getDbAndKeys(keysFlag sdkArgs.JSON) map[string][]string {
 	return databaseKeys
 }
 
-// getRenamedCommands returns a map of command and renamed command pair
-// Example: '{"CONFIG":"ZmtlbmZ3ZWZl-CONFIG"}'
-func getRenamedCommands(renamedCommandsFlag sdkArgs.JSON) map[string]string {
+// getRenamedCommands returns a map containing command and renamed command pairs
+// Example flag value: '{"CONFIG":"ZmtlbmZ3ZWZl-CONFIG"}'
+func getRenamedCommands(renamedCommandsFlag sdkArgs.JSON) (map[string]string, error) {
 	renamedCommands := make(map[string]string)
 
-	convertF := func(stringInterface interface{}) string {
+	convertF := func(stringInterface interface{}) (string, error) {
 		str := ""
 		if _, ok := stringInterface.(string); ok {
 			str = stringInterface.(string)
 		} else {
-			log.Warn("Not expected type for key: %v, string type required", stringInterface)
+			return "", fmt.Errorf("Not expected type for key: %v, string type required", stringInterface)
 		}
-		return str
+		return str, nil
 	}
 
 	switch source := renamedCommandsFlag.Get().(type) {
 	case map[string]interface{}:
 		for cmd, alias := range source {
-			renamedCommands[cmd] = convertF(alias)
+			if renamedCmd, err := convertF(alias); err == nil {
+				renamedCommands[cmd] = renamedCmd
+			} else {
+				log.Warn("Invalid format, value of a renamed command: %v=%v", cmd, alias)
+			}
 		}
 	default:
-		log.Warn("Invalid format, value of keys flag: %v ", renamedCommandsFlag)
+		return renamedCommands, fmt.Errorf("Invalid format, value of renamed commands flag: %v", renamedCommandsFlag)
 	}
-	return renamedCommands
+
+	return renamedCommands, nil
 }
 
 func removeDuplicates(elements []string) []string {
