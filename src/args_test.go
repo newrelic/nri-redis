@@ -92,3 +92,52 @@ func TestValidateKeysFlagExceedLimit(t *testing.T) {
 		t.Error()
 	}
 }
+
+func Test_getRenamedCommands(t *testing.T) {
+	type args struct {
+		renamedCommandsFlag sdkArgs.JSON
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    map[string]string
+		wantErr bool
+	}{
+		{
+			"Rename one command",
+			args{*sdkArgs.NewJSON(map[string]interface{}{"CONFIG": "ZmtlbmZ3ZWZl-CONFIG"})},
+			map[string]string{"CONFIG": "ZmtlbmZ3ZWZl-CONFIG"},
+			false,
+		},
+		{
+			"Rename multiple commands",
+			args{*sdkArgs.NewJSON(map[string]interface{}{"NON-RENAMED-COMMAND": "NON-RENAMED-COMMAND", "RENAMED-CONFIG": "NEW-RENAMED-CONFIG"})},
+			map[string]string{"NON-RENAMED-COMMAND": "NON-RENAMED-COMMAND", "RENAMED-CONFIG": "NEW-RENAMED-CONFIG"},
+			false,
+		},
+		{
+			"An invalid renamed command value should be skipped",
+			args{*sdkArgs.NewJSON(map[string]interface{}{"RENAMED-COMMAND": 1})},
+			map[string]string{},
+			false,
+		},
+		{
+			"An invalid renamed command key should return error",
+			args{*sdkArgs.NewJSON(map[int]interface{}{1: "RENAMED-COMMAND"})},
+			map[string]string{},
+			true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := getRenamedCommands(tt.args.renamedCommandsFlag)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("getRenamedCommands() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("getRenamedCommands() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
