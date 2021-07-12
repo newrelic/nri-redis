@@ -111,8 +111,16 @@ func Test_getRenamedCommands(t *testing.T) {
 		},
 		{
 			"Rename multiple commands",
-			args{*sdkArgs.NewJSON(map[string]interface{}{"NON-RENAMED-COMMAND": "NON-RENAMED-COMMAND", "RENAMED-CONFIG": "NEW-RENAMED-CONFIG"})},
-			map[string]string{"NON-RENAMED-COMMAND": "NON-RENAMED-COMMAND", "RENAMED-CONFIG": "NEW-RENAMED-CONFIG"},
+			args{
+				*sdkArgs.NewJSON(map[string]interface{}{
+					"NON-RENAMED-COMMAND": "NON-RENAMED-COMMAND",
+					"RENAMED-CONFIG":      "NEW-RENAMED-CONFIG"},
+				),
+			},
+			map[string]string{
+				"NON-RENAMED-COMMAND": "NON-RENAMED-COMMAND",
+				"RENAMED-CONFIG":      "NEW-RENAMED-CONFIG",
+			},
 			false,
 		},
 		{
