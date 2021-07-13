@@ -7,7 +7,7 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
-func getDbAndKeys(keysFlag sdkArgs.JSON) map[string][]string {
+func getDBAndKeys(keysFlag sdkArgs.JSON) map[string][]string {
 	databaseKeys := make(map[string][]string)
 
 	convertF := func(listInterface []interface{}) []string {

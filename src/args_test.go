@@ -15,7 +15,7 @@ func TestGetDbAndKeys(t *testing.T) {
 		"2": {"key2", "key3"},
 	}
 
-	databaseKey := getDbAndKeys(*keysFlag)
+	databaseKey := getDBAndKeys(*keysFlag)
 	if !reflect.DeepEqual(databaseKey, expectedValue) {
 		t.Error()
 	}
@@ -26,7 +26,7 @@ func TestGetDbAndKeysDb0(t *testing.T) {
 	expectedValue := map[string][]string{
 		"0": {"key1", "key2"},
 	}
-	databaseKey := getDbAndKeys(*keysFlag)
+	databaseKey := getDBAndKeys(*keysFlag)
 	if !reflect.DeepEqual(databaseKey, expectedValue) {
 		t.Error()
 	}
@@ -35,7 +35,7 @@ func TestGetDbAndKeysDb0(t *testing.T) {
 func TestGetDbAndKeysEmpty(t *testing.T) {
 	keysFlag := sdkArgs.NewJSON(nil)
 
-	databaseKey := getDbAndKeys(*keysFlag)
+	databaseKey := getDBAndKeys(*keysFlag)
 	if len(databaseKey) != 0 {
 		t.Error()
 	}

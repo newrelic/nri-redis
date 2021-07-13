@@ -110,7 +110,7 @@ func main() {
 		keysFlagPresent := args.Keys.Get() != nil
 
 		if keysFlagPresent {
-			databaseKeys := getDbAndKeys(args.Keys)
+			databaseKeys := getDBAndKeys(args.Keys)
 			_, keysFlagErr := validateKeysFlag(databaseKeys, args.KeysLimit)
 
 			if keysFlagErr != nil {
