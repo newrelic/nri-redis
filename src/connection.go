@@ -71,10 +71,7 @@ func newRedisCon(hostname string, port int, unixSocket string, password string) 
 		return nil, fmt.Errorf("Redis connection failed, cannot connect either through TCP or Unix Socket")
 	}
 
-	return redisConn{
-		c:               c,
-		renamedCommands: make(map[string]string),
-	}, nil
+	return redisConn{c, nil}, nil
 }
 
 func (r redisConn) GetInfo() (string, error) {
@@ -99,9 +96,7 @@ func (r redisConn) GetConfig() (map[string]string, error) {
 
 // RenameCommands will populate internal renamedCommands mapping
 func (r redisConn) RenameCommands(renamedCommands map[string]string) {
-	if renamedCommands != nil {
-		r.renamedCommands = renamedCommands
-	}
+	r.renamedCommands = renamedCommands
 }
 
 func (r redisConn) Close() {
