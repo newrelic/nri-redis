@@ -41,12 +41,12 @@ func (f fakeConn) Flush() error                                       { return n
 func (f fakeConn) Receive() (interface{}, error)                      { return nil, nil }
 
 func Test_redisConn_command(t *testing.T) {
-	renamedCommands := make(map[string]string)
-	renamedCommands["NON-RENAMED-COMMAND"] = "NON-RENAMED-COMMAND"
-	renamedCommands["RENAMED-CONFIG"] = "NEW-RENAMED-CONFIG"
-	renamedCommands["DISABLED-COMMAND"] = ""
+	renamedCommandsTestCase := make(map[string]string)
+	renamedCommandsTestCase["NON-RENAMED-COMMAND"] = "NON-RENAMED-COMMAND"
+	renamedCommandsTestCase["RENAMED-CONFIG"] = "NEW-RENAMED-CONFIG"
+	renamedCommandsTestCase["DISABLED-COMMAND"] = ""
 
-	c := redisConn{c: fakeConn{}, renamedCommands: renamedCommands}
+	c := redisConn{c: fakeConn{}, renamedCommands: renamedCommandsTestCase}
 
 	type fields struct {
 		c redisConn
@@ -62,7 +62,7 @@ func Test_redisConn_command(t *testing.T) {
 	}
 	// Test cases
 	tests := []testcase{}
-	for cmd, alias := range renamedCommands {
+	for cmd, alias := range renamedCommandsTestCase {
 		tests = append(tests, testcase{
 			fmt.Sprintf("rename-command %v %v", cmd, alias),
 			fields{c},
@@ -70,13 +70,6 @@ func Test_redisConn_command(t *testing.T) {
 			alias,
 		})
 	}
-	// Extra test case where the command is not specified the renamedCommands
-	tests = append(tests, testcase{
-		"rename-command UNSPECIFIED UNSPECIFIED",
-		fields{c},
-		args{"UNSPECIFIED"},
-		"UNSPECIFIED",
-	})
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

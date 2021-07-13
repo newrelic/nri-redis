@@ -104,6 +104,12 @@ func Test_getRenamedCommands(t *testing.T) {
 		wantErr bool
 	}{
 		{
+			"An empty renamed command should be fine",
+			args{*sdkArgs.NewJSON(map[string]interface{}{})},
+			map[string]string{},
+			false,
+		},
+		{
 			"Rename one command",
 			args{*sdkArgs.NewJSON(map[string]interface{}{"CONFIG": "ZmtlbmZ3ZWZl-CONFIG"})},
 			map[string]string{"CONFIG": "ZmtlbmZ3ZWZl-CONFIG"},
@@ -113,13 +119,15 @@ func Test_getRenamedCommands(t *testing.T) {
 			"Rename multiple commands",
 			args{
 				*sdkArgs.NewJSON(map[string]interface{}{
-					"NON-RENAMED-COMMAND": "NON-RENAMED-COMMAND",
-					"RENAMED-CONFIG":      "NEW-RENAMED-CONFIG"},
+					"NON-RENAMED-COMMAND":    "NON-RENAMED-COMMAND",
+					"RENAMED-CONFIG":         "NEW-RENAMED-CONFIG",
+					"ANOTHER-RENAMED-CONFIG": "ANOTHER-RENAMED-CONFIG"},
 				),
 			},
 			map[string]string{
-				"NON-RENAMED-COMMAND": "NON-RENAMED-COMMAND",
-				"RENAMED-CONFIG":      "NEW-RENAMED-CONFIG",
+				"NON-RENAMED-COMMAND":    "NON-RENAMED-COMMAND",
+				"RENAMED-CONFIG":         "NEW-RENAMED-CONFIG",
+				"ANOTHER-RENAMED-CONFIG": "ANOTHER-RENAMED-CONFIG",
 			},
 			false,
 		},
