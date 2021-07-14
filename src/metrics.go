@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
@@ -202,58 +201,6 @@ func populateCustomKeysMetric(sample *metric.Set, rawCustomKeys map[string]keyIn
 			log.Warn("Error setting value: %s", err)
 		}
 	}
-}
-
-func getDbAndKeys(keysFlag sdkArgs.JSON) map[string][]string {
-	databaseKeys := make(map[string][]string)
-
-	convertF := func(listInterface []interface{}) []string {
-		listString := make([]string, 0)
-		for _, elem := range listInterface {
-			if _, ok := elem.(string); ok {
-				listString = append(listString, elem.(string))
-			} else {
-				log.Warn("Not expected type for key: %v, string type required", elem)
-			}
-		}
-		return listString
-	}
-
-	switch source := keysFlag.Get().(type) {
-	case []interface{}:
-		databaseKeys["0"] = removeDuplicates(convertF(source))
-	case map[string]interface{}:
-		for db, keys := range source {
-			databaseKeys[db] = removeDuplicates(convertF(keys.([]interface{})))
-		}
-	default:
-		log.Warn("Invalid format, value of keys flag: %v ", keysFlag)
-	}
-	return databaseKeys
-}
-
-func removeDuplicates(elements []string) []string {
-	found := map[string]struct{}{}
-	result := []string{}
-
-	for v := range elements {
-		if _, ok := found[elements[v]]; !ok {
-			found[elements[v]] = struct{}{}
-			result = append(result, elements[v])
-		}
-	}
-	return result
-}
-
-func validateKeysFlag(databaseKeys map[string][]string, keysLimit int) (int, error) {
-	keysNumber := 0
-	for _, keys := range databaseKeys {
-		keysNumber += len(keys)
-	}
-	if keysNumber > keysLimit {
-		return keysNumber, fmt.Errorf("Keys limit was exceeded; keys limit: %d, keys number: %d", keysNumber, keysLimit)
-	}
-	return keysNumber, nil
 }
 
 func microsecondsToMilliseconds(source string) manipulator {

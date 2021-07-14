@@ -27,6 +27,7 @@ type argumentList struct {
 	Password         string       `help:"Password to use when connecting to the Redis server."`
 	UseUnixSocket    bool         `default:"false" help:"Adds the UnixSocketPath value to the entity. If you are monitoring more than one Redis instance on the same host using Unix sockets, then you should set it to true."`
 	RemoteMonitoring bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
+	RenamedCommands  sdkArgs.JSON `default:"" help:"Map of default redis commands to their renamed form, if rename-command config has been used in the redis server."`
 	ConfigInventory  bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
 	ShowVersion      bool         `default:"false" help:"Print build information and exit"`
 }
@@ -65,6 +66,14 @@ func main() {
 	}
 	defer conn.Close()
 
+	// Support using renamed form of redis commands, if 'renamed-command' config is used in Redis server
+	if args.RenamedCommands.Get() != nil {
+		renamedCommands, err := getRenamedCommands(args.RenamedCommands)
+		fatalIfErr(err)
+
+		conn.RenameCommands(renamedCommands)
+	}
+
 	info, err := conn.GetInfo()
 	fatalIfErr(err)
 
@@ -101,7 +110,7 @@ func main() {
 		keysFlagPresent := args.Keys.Get() != nil
 
 		if keysFlagPresent {
-			databaseKeys := getDbAndKeys(args.Keys)
+			databaseKeys := getDBAndKeys(args.Keys)
 			_, keysFlagErr := validateKeysFlag(databaseKeys, args.KeysLimit)
 
 			if keysFlagErr != nil {

@@ -19,5 +19,10 @@
           PORT: 6379
           KEYS: '{"0":["<KEY_1>"],"1":["<KEY_2>"]}'
           REMOTE_MONITORING: true
+
+          # Rename certain commands according to Redis server's rename-command configuration
+          # Example config entry in /etc/redis/redis-server.conf:
+          #   rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
+          # RENAMED_COMMANDS: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
         labels:
           env: production

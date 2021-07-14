@@ -20,6 +20,12 @@ instances:
       # New users should leave this property as `true`, to uniquely identify the monitored entities when using
       # Unix sockets.
       use_unix_socket: true
+
+      # Rename certain commands according to Redis server's rename-command configuration
+      # Example config entry in /etc/redis/redis-server.conf:
+      #   rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
+      # Users may want to set this config if Redis server is using 'rename-command', to ensure nri-redis functionality
+      # renamed_commands: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
     labels:
       environment: production
 
@@ -41,5 +47,11 @@ instances:
       # New users should leave this property as `true`, to uniquely identify the monitored entities when using
       # Unix sockets.
       use_unix_socket: true
+
+      # Rename certain commands according to Redis server's rename-command configuration
+      # Example config entry in /etc/redis/redis-server.conf:
+      #   rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
+      # Users may want to set this config if Redis server is using 'rename-command', to ensure nri-redis functionality
+      # renamed_commands: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
     labels:
       environment: production
