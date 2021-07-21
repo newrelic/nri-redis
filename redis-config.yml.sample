@@ -1,9 +1,8 @@
-integration_name: com.newrelic.redis
-
-instances:
+integrations:
   - name: redis-metrics
+    integration_name: com.newrelic.redis
     command: metrics
-    arguments:
+    cli_args:
       hostname: localhost
       port: 6379
       keys: '{"0":["<KEY_1>"],"1":["<KEY_2>"]}'
@@ -28,10 +27,10 @@ instances:
       # renamed_commands: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
     labels:
       environment: production
-
   - name: redis-inventory
+    integration_name: com.newrelic.redis
     command: inventory
-    arguments:
+    cli_args:
       hostname: localhost
       port: 6379
 
