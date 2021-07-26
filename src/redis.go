@@ -30,6 +30,8 @@ type argumentList struct {
 	RenamedCommands  sdkArgs.JSON `default:"" help:"Map of default redis commands to their renamed form, if rename-command config has been used in the redis server."`
 	ConfigInventory  bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
 	ShowVersion      bool         `default:"false" help:"Print build information and exit"`
+	UseTLS           bool         `default:"false" help:"Use TLS when communicating with the Redis server."`
+	SkipTLSVerify    bool         `default:"false" help:"Disable server name verification when connecting over TLS"`
 }
 
 const (
@@ -60,7 +62,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password)
+	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password, args.UseTLS, args.SkipTLSVerify)
 	if err != nil {
 		log.Fatal(err)
 	}

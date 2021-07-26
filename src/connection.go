@@ -44,11 +44,14 @@ func (c configConnectionError) Error() string {
 	return "can't execute redis 'CONFIG' command: " + c.cause.Error()
 }
 
-func newRedisCon(hostname string, port int, unixSocket string, password string) (conn, error) {
+func newRedisCon(hostname string, port int, unixSocket string, password string, useTLS bool, skipTLSVerify bool) (conn, error) {
 	connectTimeout := redis.DialConnectTimeout(time.Second * 5)
 	readTimeout := redis.DialReadTimeout(time.Second * 5)
 	writeTimeout := redis.DialWriteTimeout(time.Second * 5)
 	redisPass := redis.DialPassword(password)
+	redisTLSTimeout := redis.DialTLSHandshakeTimeout(time.Second * 5)
+	redisUseTLS := redis.DialUseTLS(useTLS)
+	redisSkipTLSVerify := redis.DialTLSSkipVerify(skipTLSVerify)
 
 	var c redis.Conn
 	var err error
@@ -62,7 +65,7 @@ func newRedisCon(hostname string, port int, unixSocket string, password string) 
 		log.Debug("Connected to Redis through Unix Socket")
 	case hostname != "" && port > 0:
 		URL := hostname + ":" + strconv.Itoa(port)
-		c, err = redis.Dial("tcp", URL, connectTimeout, readTimeout, writeTimeout, redisPass)
+		c, err = redis.Dial("tcp", URL, connectTimeout, readTimeout, writeTimeout, redisPass, redisTLSTimeout, redisUseTLS, redisSkipTLSVerify)
 		if err != nil {
 			return nil, fmt.Errorf("Redis connection through TCP failed, got error: %v", err)
 		}
