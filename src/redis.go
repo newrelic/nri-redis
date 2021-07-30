@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"net"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/data/attribute"
@@ -59,6 +60,8 @@ func main() {
 			buildDate)
 		os.Exit(0)
 	}
+
+	args.Hostname = hostnameIpv6Formater(args.Hostname)
 
 	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password)
 	if err != nil {
@@ -178,6 +181,17 @@ func entity(i *integration.Integration, args *argumentList) (*integration.Entity
 	}
 
 	return i.LocalEntity(), nil
+}
+
+func hostnameIpv6Formater(hostname string) (string) {
+	// Format backend parameters
+	ip := net.ParseIP(hostname)
+
+	if ip.To16() != nil {
+		return fmt.Sprintf("[%v]", ip)
+	}
+
+	return hostname
 }
 
 func fatalIfErr(err error) {
