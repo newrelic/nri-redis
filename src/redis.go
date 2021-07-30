@@ -61,9 +61,9 @@ func main() {
 		os.Exit(0)
 	}
 
-	args.Hostname = hostnameIpv6Formater(args.Hostname)
+	redisURL := net.JoinHostPort(args.Hostname, strconv.Itoa(args.Port))
 
-	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password)
+	conn, err := newRedisCon(redisURL, args.UnixSocketPath, args.Password)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -175,23 +175,12 @@ func entity(i *integration.Integration, args *argumentList) (*integration.Entity
 		if args.UseUnixSocket && args.UnixSocketPath != "" {
 			n = fmt.Sprintf("%s:%s", args.Hostname, args.UnixSocketPath)
 		} else {
-			n = fmt.Sprintf("%s:%d", args.Hostname, args.Port)
+			n = net.JoinHostPort(args.Hostname, strconv.Itoa(args.Port))
 		}
 		return i.Entity(n, entityRemoteType)
 	}
 
 	return i.LocalEntity(), nil
-}
-
-func hostnameIpv6Formater(hostname string) (string) {
-	// Format backend parameters
-	ip := net.ParseIP(hostname)
-
-	if ip.To16() != nil {
-		return fmt.Sprintf("[%v]", ip)
-	}
-
-	return hostname
 }
 
 func fatalIfErr(err error) {
