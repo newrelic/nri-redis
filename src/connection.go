@@ -43,7 +43,7 @@ func (c configConnectionError) Error() string {
 	return "can't execute redis 'CONFIG' command: " + c.cause.Error()
 }
 
-func newRedisCon(URL string, unixSocket string, password string) (conn, error) {
+func newRedisCon(redisURL string, unixSocket string, password string) (conn, error) {
 	connectTimeout := redis.DialConnectTimeout(time.Second * 5)
 	readTimeout := redis.DialReadTimeout(time.Second * 5)
 	writeTimeout := redis.DialWriteTimeout(time.Second * 5)
@@ -59,8 +59,8 @@ func newRedisCon(URL string, unixSocket string, password string) (conn, error) {
 			return nil, fmt.Errorf("Redis connection through Unix Socket failed, got error: %v", err)
 		}
 		log.Debug("Connected to Redis through Unix Socket")
-	case URL != "":
-		c, err = redis.Dial("tcp", URL, connectTimeout, readTimeout, writeTimeout, redisPass)
+	case redisURL != "":
+		c, err = redis.Dial("tcp", redisURL, connectTimeout, readTimeout, writeTimeout, redisPass)
 		if err != nil {
 			return nil, fmt.Errorf("Redis connection through TCP failed, got error: %v", err)
 		}
