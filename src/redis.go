@@ -4,11 +4,11 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"os"
 	"runtime"
 	"strconv"
 	"strings"
-	"net"
 
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/data/attribute"
