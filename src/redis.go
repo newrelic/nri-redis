@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"os"
 	"runtime"
 	"strconv"
@@ -60,7 +61,9 @@ func main() {
 		os.Exit(0)
 	}
 
-	conn, err := newRedisCon(args.Hostname, args.Port, args.UnixSocketPath, args.Password)
+	redisURL := net.JoinHostPort(args.Hostname, strconv.Itoa(args.Port))
+
+	conn, err := newRedisCon(redisURL, args.UnixSocketPath, args.Password)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -172,7 +175,7 @@ func entity(i *integration.Integration, args *argumentList) (*integration.Entity
 		if args.UseUnixSocket && args.UnixSocketPath != "" {
 			n = fmt.Sprintf("%s:%s", args.Hostname, args.UnixSocketPath)
 		} else {
-			n = fmt.Sprintf("%s:%d", args.Hostname, args.Port)
+			n = net.JoinHostPort(args.Hostname, strconv.Itoa(args.Port))
 		}
 		return i.Entity(n, entityRemoteType)
 	}
