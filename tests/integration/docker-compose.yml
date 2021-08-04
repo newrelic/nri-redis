@@ -3,13 +3,26 @@ version: '3.1'
 
 services:
   redis:
-    image: redis:4.0.5-alpine
+    image: redis:6.2.5-alpine
     hostname: redis
     ports:
       - "6379:6379"
     restart: always
     links:
       - nri-redis
+
+  redis-tls:
+    image: redis:6.2.5-alpine
+    hostname: redis-tls
+    ports:
+      - "6380:6379"
+    restart: always
+    volumes:
+      - ./tls_cert:/tls
+    links:
+      - nri-redis
+    entrypoint: ["redis-server","--tls-auth-clients no","--tls-port 6379", "--port 0","--tls-cert-file /tls/redis.crt","--tls-key-file /tls/redis.key","--tls-ca-cert-file /tls/ca.crt"]
+
 
   nri-redis:
     container_name: integration_nri-redis_1

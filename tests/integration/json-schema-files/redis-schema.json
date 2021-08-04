@@ -1130,8 +1130,6 @@
                   "db.syncPartialOk",
                   "event_type",
                   "net.blockedClients",
-                  "net.clientBiggestInputBufBytes",
-                  "net.clientLongestOutputList",
                   "net.commandsProcessedPerSecond",
                   "net.connectedClients",
                   "net.connectionsReceivedPerSecond",
