@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	errorConNetworkFailed = errors.New("redis connection failed, hostname is empty or port is negative")
+	errorConNetworkFailed = errors.New("redis connection failed, redisURL is empty")
 	errorConSocketFailed  = errors.New("redis connection failed, unixSocket is empty and UseUnixSocket is specified")
 )
 
@@ -64,7 +64,9 @@ func newSocketRedisCon(unixSocket string, options ...redis.DialOption) (conn, er
 }
 
 func newNetworkRedisCon(redisURL string, options ...redis.DialOption) (conn, error) {
-
+	if redisURL == "" {
+		return nil, errorConNetworkFailed
+	}
 	c, err := redis.Dial("tcp", redisURL, options...)
 	if err != nil {
 		return nil, fmt.Errorf("redis connection through TCP failed, got error: %w", err)
