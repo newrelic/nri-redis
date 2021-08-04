@@ -1,17 +1,11 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"time"
 
 	"github.com/gomodule/redigo/redis"
 	"github.com/newrelic/infra-integrations-sdk/log"
-)
-
-var (
-	errorConNetworkFailed = errors.New("redis connection failed, redisURL is empty")
-	errorConSocketFailed  = errors.New("redis connection failed, unixSocket is empty and UseUnixSocket is specified")
 )
 
 const defaultTimeout = time.Second * 5
@@ -52,31 +46,25 @@ func (c configConnectionError) Error() string {
 }
 
 func newSocketRedisCon(unixSocket string, options ...redis.DialOption) (conn, error) {
-	if unixSocket == "" {
-		return nil, errorConSocketFailed
-	}
 	c, err := redis.Dial("unix", unixSocket, options...)
 	if err != nil {
-		return nil, fmt.Errorf("redis connection through Unix Socket failed, got error: %w", err)
+		return nil, fmt.Errorf("connecting through Unix Socket: %w\", err", err)
 	}
 	log.Debug("Connected to Redis through Unix Socket")
 	return redisConn{c, nil}, nil
 }
 
 func newNetworkRedisCon(redisURL string, options ...redis.DialOption) (conn, error) {
-	if redisURL == "" {
-		return nil, errorConNetworkFailed
-	}
 	c, err := redis.Dial("tcp", redisURL, options...)
 	if err != nil {
-		return nil, fmt.Errorf("redis connection through TCP failed, got error: %w", err)
+		return nil, fmt.Errorf("connecting through TCP: %w", err)
 	}
 	log.Debug("Connected to Redis through TCP")
 
 	return redisConn{c, nil}, nil
 }
 
-func getStandardDialOptions(password string) []redis.DialOption {
+func standardDialOptions(password string) []redis.DialOption {
 	return []redis.DialOption{
 		redis.DialConnectTimeout(defaultTimeout),
 		redis.DialReadTimeout(defaultTimeout),
@@ -84,7 +72,7 @@ func getStandardDialOptions(password string) []redis.DialOption {
 		redis.DialPassword(password)}
 }
 
-func getTLSDialOptions(useTLS bool, tlsInsecureSkipVerify bool) []redis.DialOption {
+func tlsDialOptions(useTLS bool, tlsInsecureSkipVerify bool) []redis.DialOption {
 	return []redis.DialOption{
 		redis.DialTLSHandshakeTimeout(defaultTimeout),
 		redis.DialUseTLS(useTLS),

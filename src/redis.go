@@ -3,6 +3,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"os"
@@ -45,6 +46,10 @@ var (
 	integrationVersion = "0.0.0"
 	gitCommit          = ""
 	buildDate          = ""
+
+	errorArgsNetworkPort     = errors.New("UseUnixSocket is false, but port is empty")
+	errorArgsNetworkHostname = errors.New("UseUnixSocket is false, but hostname is empty")
+	errorArgsUnixSocket      = errors.New("UseUnixSocket is true, but unixSocket is empty")
 )
 
 func main() {
@@ -52,33 +57,28 @@ func main() {
 	fatalIfErr(err)
 
 	if args.ShowVersion {
-		fmt.Printf(
-			"New Relic %s integration Version: %s, Platform: %s, GoVersion: %s, GitCommit: %s, BuildDate: %s\n",
-			strings.Title(strings.Replace(integrationName, "com.newrelic.", "", 1)),
-			integrationVersion,
-			fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
-			runtime.Version(),
-			gitCommit,
-			buildDate)
+		printVersion()
 		os.Exit(0)
 	}
 
-	dialOptions := getStandardDialOptions(args.Password)
-	tlsDialOptions := getTLSDialOptions(args.UseTLS, args.TLSInsecureSkipVerify)
+	err = validateArgs()
+	fatalIfErr(err)
+
+	dialOptions := standardDialOptions(args.Password)
 
 	var c conn
 	if args.UseUnixSocket {
 		c, err = newSocketRedisCon(args.UnixSocketPath, dialOptions...)
+		fatalIfErr(err)
 	} else {
-		dialOptions = append(dialOptions, tlsDialOptions...)
+		if args.UseTLS {
+			tlsDialOptions := tlsDialOptions(args.UseTLS, args.TLSInsecureSkipVerify)
+			dialOptions = append(dialOptions, tlsDialOptions...)
+		}
 		redisURL := net.JoinHostPort(args.Hostname, strconv.Itoa(args.Port))
 		c, err = newNetworkRedisCon(redisURL, dialOptions...)
+		fatalIfErr(err)
 	}
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	defer c.Close()
 
 	// Support using renamed form of redis commands, if 'renamed-command' config is used in Redis server
@@ -148,6 +148,33 @@ func main() {
 	}
 
 	fatalIfErr(i.Publish())
+}
+
+func validateArgs() error {
+	if args.UseUnixSocket && args.UnixSocketPath == "" {
+		return errorArgsUnixSocket
+	}
+
+	if !args.UseUnixSocket && args.Hostname == "" {
+		return errorArgsNetworkHostname
+	}
+
+	if !args.UseUnixSocket && args.Port == 0 {
+		return errorArgsNetworkPort
+	}
+
+	return nil
+}
+
+func printVersion() {
+	fmt.Printf(
+		"New Relic %s integration Version: %s, Platform: %s, GoVersion: %s, GitCommit: %s, BuildDate: %s\n",
+		strings.Title(strings.Replace(integrationName, "com.newrelic.", "", 1)),
+		integrationVersion,
+		fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
+		runtime.Version(),
+		gitCommit,
+		buildDate)
 }
 
 func metricSet(e *integration.Entity, eventType, hostname string, port int, remote bool) *metric.Set {
