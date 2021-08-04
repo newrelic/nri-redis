@@ -1,9 +1,7 @@
-integration_name: com.newrelic.redis
-
-instances:
-  - name: redis-metrics
-    command: metrics
-    arguments:
+integrations:
+  - name: nri-redis
+    env:
+      metrics: true
       hostname: localhost
       port: 6379
       keys: '{"0":["<KEY_1>"],"1":["<KEY_2>"]}'
@@ -26,12 +24,12 @@ instances:
       #   rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
       # Users may want to set this config if Redis server is using 'rename-command', to ensure nri-redis functionality
       # renamed_commands: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
+    interval: 15
     labels:
       environment: production
-
-  - name: redis-inventory
-    command: inventory
-    arguments:
+  - name: nri-redis
+    env:
+      inventory: true
       hostname: localhost
       port: 6379
 
@@ -53,5 +51,7 @@ instances:
       #   rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
       # Users may want to set this config if Redis server is using 'rename-command', to ensure nri-redis functionality
       # renamed_commands: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
+    inventory_source: config/redis
+    interval: 60
     labels:
       environment: production
