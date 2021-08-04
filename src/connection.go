@@ -8,6 +8,8 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/log"
 )
 
+const defaultTimeout = time.Second * 5
+
 type conn interface {
 	GetInfo() (string, error)
 	GetConfig() (map[string]string, error)
@@ -43,33 +45,39 @@ func (c configConnectionError) Error() string {
 	return "can't execute redis 'CONFIG' command: " + c.cause.Error()
 }
 
-func newRedisCon(redisURL string, unixSocket string, password string) (conn, error) {
-	connectTimeout := redis.DialConnectTimeout(time.Second * 5)
-	readTimeout := redis.DialReadTimeout(time.Second * 5)
-	writeTimeout := redis.DialWriteTimeout(time.Second * 5)
-	redisPass := redis.DialPassword(password)
-
-	var c redis.Conn
-	var err error
-
-	switch {
-	case unixSocket != "":
-		c, err = redis.Dial("unix", unixSocket, connectTimeout, readTimeout, writeTimeout, redisPass)
-		if err != nil {
-			return nil, fmt.Errorf("Redis connection through Unix Socket failed, got error: %v", err)
-		}
-		log.Debug("Connected to Redis through Unix Socket")
-	case redisURL != "":
-		c, err = redis.Dial("tcp", redisURL, connectTimeout, readTimeout, writeTimeout, redisPass)
-		if err != nil {
-			return nil, fmt.Errorf("Redis connection through TCP failed, got error: %v", err)
-		}
-		log.Debug("Connected to Redis through TCP")
-	default:
-		return nil, fmt.Errorf("Redis connection failed, cannot connect either through TCP or Unix Socket")
+func newSocketRedisCon(unixSocket string, options ...redis.DialOption) (conn, error) {
+	c, err := redis.Dial("unix", unixSocket, options...)
+	if err != nil {
+		return nil, fmt.Errorf("connecting through Unix Socket: %w\", err", err)
 	}
+	log.Debug("Connected to Redis through Unix Socket %s", unixSocket)
+	return redisConn{c, nil}, nil
+}
+
+func newNetworkRedisCon(redisURL string, options ...redis.DialOption) (conn, error) {
+	c, err := redis.Dial("tcp", redisURL, options...)
+	if err != nil {
+		return nil, fmt.Errorf("connecting through TCP: %w", err)
+	}
+	log.Debug("Connected to Redis through TCP %s", redisURL)
 
 	return redisConn{c, nil}, nil
+}
+
+func standardDialOptions(password string) []redis.DialOption {
+	return []redis.DialOption{
+		redis.DialConnectTimeout(defaultTimeout),
+		redis.DialReadTimeout(defaultTimeout),
+		redis.DialWriteTimeout(defaultTimeout),
+		redis.DialPassword(password)}
+}
+
+func tlsDialOptions(useTLS bool, tlsInsecureSkipVerify bool) []redis.DialOption {
+	return []redis.DialOption{
+		redis.DialTLSHandshakeTimeout(defaultTimeout),
+		redis.DialUseTLS(useTLS),
+		redis.DialTLSSkipVerify(tlsInsecureSkipVerify),
+	}
 }
 
 func (r redisConn) GetInfo() (string, error) {

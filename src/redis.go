@@ -3,6 +3,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"os"
@@ -20,17 +21,19 @@ import (
 
 type argumentList struct {
 	sdkArgs.DefaultArgumentList
-	Hostname         string       `default:"localhost" help:"Hostname or IP where Redis server is running."`
-	Port             int          `default:"6379" help:"Port on which Redis server is listening."`
-	UnixSocketPath   string       `default:"" help:"Unix socket path on which Redis server is listening."`
-	Keys             sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
-	KeysLimit        int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
-	Password         string       `help:"Password to use when connecting to the Redis server."`
-	UseUnixSocket    bool         `default:"false" help:"Adds the UnixSocketPath value to the entity. If you are monitoring more than one Redis instance on the same host using Unix sockets, then you should set it to true."`
-	RemoteMonitoring bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
-	RenamedCommands  sdkArgs.JSON `default:"" help:"Map of default redis commands to their renamed form, if rename-command config has been used in the redis server."`
-	ConfigInventory  bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
-	ShowVersion      bool         `default:"false" help:"Print build information and exit"`
+	Hostname              string       `default:"localhost" help:"Hostname or IP where Redis server is running."`
+	Port                  int          `default:"6379" help:"Port on which Redis server is listening."`
+	UnixSocketPath        string       `default:"" help:"Unix socket path on which Redis server is listening."`
+	Keys                  sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
+	KeysLimit             int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
+	Password              string       `help:"Password to use when connecting to the Redis server."`
+	UseUnixSocket         bool         `default:"false" help:"Adds the UnixSocketPath value to the entity. If you are monitoring more than one Redis instance on the same host using Unix sockets, then you should set it to true."`
+	RemoteMonitoring      bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
+	RenamedCommands       sdkArgs.JSON `default:"" help:"Map of default redis commands to their renamed form, if rename-command config has been used in the redis server."`
+	ConfigInventory       bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
+	ShowVersion           bool         `default:"false" help:"Print build information and exit"`
+	UseTLS                bool         `default:"false" help:"Use TLS when communicating with the Redis server."`
+	TLSInsecureSkipVerify bool         `default:"false" help:"Disable server name verification when connecting over TLS"`
 }
 
 const (
@@ -43,6 +46,10 @@ var (
 	integrationVersion = "0.0.0"
 	gitCommit          = ""
 	buildDate          = ""
+
+	errorArgsNetworkPort     = errors.New("UseUnixSocket is false, but port is empty")
+	errorArgsNetworkHostname = errors.New("UseUnixSocket is false, but hostname is empty")
+	errorArgsUnixSocket      = errors.New("UseUnixSocket is true, but unixSocket is empty")
 )
 
 func main() {
@@ -50,34 +57,39 @@ func main() {
 	fatalIfErr(err)
 
 	if args.ShowVersion {
-		fmt.Printf(
-			"New Relic %s integration Version: %s, Platform: %s, GoVersion: %s, GitCommit: %s, BuildDate: %s\n",
-			strings.Title(strings.Replace(integrationName, "com.newrelic.", "", 1)),
-			integrationVersion,
-			fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
-			runtime.Version(),
-			gitCommit,
-			buildDate)
+		printVersion()
 		os.Exit(0)
 	}
 
-	redisURL := net.JoinHostPort(args.Hostname, strconv.Itoa(args.Port))
+	err = validateArgs()
+	fatalIfErr(err)
 
-	conn, err := newRedisCon(redisURL, args.UnixSocketPath, args.Password)
-	if err != nil {
-		log.Fatal(err)
+	dialOptions := standardDialOptions(args.Password)
+
+	var c conn
+	if args.UseUnixSocket {
+		c, err = newSocketRedisCon(args.UnixSocketPath, dialOptions...)
+		fatalIfErr(err)
+	} else {
+		if args.UseTLS {
+			tlsDialOptions := tlsDialOptions(args.UseTLS, args.TLSInsecureSkipVerify)
+			dialOptions = append(dialOptions, tlsDialOptions...)
+		}
+		redisURL := net.JoinHostPort(args.Hostname, strconv.Itoa(args.Port))
+		c, err = newNetworkRedisCon(redisURL, dialOptions...)
+		fatalIfErr(err)
 	}
-	defer conn.Close()
+	defer c.Close()
 
 	// Support using renamed form of redis commands, if 'renamed-command' config is used in Redis server
 	if args.RenamedCommands.Get() != nil {
 		renamedCommands, err := getRenamedCommands(args.RenamedCommands)
 		fatalIfErr(err)
 
-		conn.RenameCommands(renamedCommands)
+		c.RenameCommands(renamedCommands)
 	}
 
-	info, err := conn.GetInfo()
+	info, err := c.GetInfo()
 	fatalIfErr(err)
 
 	rawMetrics, rawKeyspaceMetrics, metricsErr := getRawMetrics(info)
@@ -88,7 +100,7 @@ func main() {
 	if args.HasInventory() {
 		var config map[string]string
 		if args.ConfigInventory {
-			config, err = conn.GetConfig()
+			config, err = c.GetConfig()
 			if err != nil {
 				fmtStr := "%v. Configuration inventory won't be reported"
 				if _, ok := err.(configConnectionError); ok {
@@ -119,7 +131,7 @@ func main() {
 			if keysFlagErr != nil {
 				log.Warn("Error processing keys flag: %v", keysFlagErr)
 			} else {
-				rawCustomKeysMetric, err = conn.GetRawCustomKeys(databaseKeys)
+				rawCustomKeysMetric, err = c.GetRawCustomKeys(databaseKeys)
 				if err != nil {
 					log.Warn("Got error: %v", err)
 				}
@@ -136,6 +148,33 @@ func main() {
 	}
 
 	fatalIfErr(i.Publish())
+}
+
+func validateArgs() error {
+	if args.UseUnixSocket && args.UnixSocketPath == "" {
+		return errorArgsUnixSocket
+	}
+
+	if !args.UseUnixSocket && args.Hostname == "" {
+		return errorArgsNetworkHostname
+	}
+
+	if !args.UseUnixSocket && args.Port == 0 {
+		return errorArgsNetworkPort
+	}
+
+	return nil
+}
+
+func printVersion() {
+	fmt.Printf(
+		"New Relic %s integration Version: %s, Platform: %s, GoVersion: %s, GitCommit: %s, BuildDate: %s\n",
+		strings.Title(strings.Replace(integrationName, "com.newrelic.", "", 1)),
+		integrationVersion,
+		fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
+		runtime.Version(),
+		gitCommit,
+		buildDate)
 }
 
 func metricSet(e *integration.Entity, eventType, hostname string, port int, remote bool) *metric.Set {

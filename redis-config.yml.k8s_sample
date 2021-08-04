@@ -24,5 +24,11 @@
           # Example config entry in /etc/redis/redis-server.conf:
           #   rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
           # RENAMED_COMMANDS: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
+
+          # Use TLS connection with Redis instance
+          # USE_TLS: true
+          # Skip TLS verification
+          # TLS_INSECURE_SKIP_VERIFY: true
+
         labels:
           env: production
