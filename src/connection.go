@@ -50,7 +50,7 @@ func newSocketRedisCon(unixSocket string, options ...redis.DialOption) (conn, er
 	if err != nil {
 		return nil, fmt.Errorf("connecting through Unix Socket: %w\", err", err)
 	}
-	log.Debug("Connected to Redis through Unix Socket")
+	log.Debug("Connected to Redis through Unix Socket %s", unixSocket)
 	return redisConn{c, nil}, nil
 }
 
@@ -59,7 +59,7 @@ func newNetworkRedisCon(redisURL string, options ...redis.DialOption) (conn, err
 	if err != nil {
 		return nil, fmt.Errorf("connecting through TCP: %w", err)
 	}
-	log.Debug("Connected to Redis through TCP")
+	log.Debug("Connected to Redis through TCP %s", redisURL)
 
 	return redisConn{c, nil}, nil
 }
