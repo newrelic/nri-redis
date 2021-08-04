@@ -1,5 +1,5 @@
 name: com.newrelic.redis
-description: Reports status and metrics for redis service
+description: Reports status and metrics for redis service. Legacy file kept for compatibility.
 protocol_version: 3
 os: windows
 
