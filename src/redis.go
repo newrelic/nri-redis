@@ -62,7 +62,7 @@ func main() {
 	dialOptions := standardDialOptions(args.Password)
 
 	var c conn
-	if args.UseUnixSocket && args.UnixSocketPath != "" {
+	if args.UnixSocketPath != "" {
 		c, err = newSocketRedisCon(args.UnixSocketPath, dialOptions...)
 		fatalIfErr(err)
 	} else if args.Hostname != "" && args.Port > 0 {
