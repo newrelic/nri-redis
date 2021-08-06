@@ -47,9 +47,7 @@ var (
 	gitCommit          = ""
 	buildDate          = ""
 
-	errorArgsNetworkPort     = errors.New("UseUnixSocket is false, but port is empty")
-	errorArgsNetworkHostname = errors.New("UseUnixSocket is false, but hostname is empty")
-	errorArgsUnixSocket      = errors.New("UseUnixSocket is true, but unixSocket is empty")
+	errorArgs = errors.New("no connection method available, UnixSocketPath or Hostname and Port should be populated")
 )
 
 func main() {
@@ -61,16 +59,17 @@ func main() {
 		os.Exit(0)
 	}
 
-	err = validateArgs()
-	fatalIfErr(err)
-
 	dialOptions := standardDialOptions(args.Password)
 
 	var c conn
-	if args.UseUnixSocket {
+	switch {
+	// Notice that we are not checking UseUnixSocket since it is not used to define how to connect, but merely the entity name.
+	// There are users having use_unix_socket=true and then connecting with hostname and port,
+	// or use_unix_socket=false and then connecting with the unix socket.
+	case args.UnixSocketPath != "":
 		c, err = newSocketRedisCon(args.UnixSocketPath, dialOptions...)
 		fatalIfErr(err)
-	} else {
+	case args.Hostname != "" && args.Port > 0:
 		if args.UseTLS {
 			tlsDialOptions := tlsDialOptions(args.UseTLS, args.TLSInsecureSkipVerify)
 			dialOptions = append(dialOptions, tlsDialOptions...)
@@ -78,7 +77,10 @@ func main() {
 		redisURL := net.JoinHostPort(args.Hostname, strconv.Itoa(args.Port))
 		c, err = newNetworkRedisCon(redisURL, dialOptions...)
 		fatalIfErr(err)
+	default:
+		log.Fatal(errorArgs)
 	}
+
 	defer c.Close()
 
 	// Support using renamed form of redis commands, if 'renamed-command' config is used in Redis server
@@ -148,22 +150,6 @@ func main() {
 	}
 
 	fatalIfErr(i.Publish())
-}
-
-func validateArgs() error {
-	if args.UseUnixSocket && args.UnixSocketPath == "" {
-		return errorArgsUnixSocket
-	}
-
-	if !args.UseUnixSocket && args.Hostname == "" {
-		return errorArgsNetworkHostname
-	}
-
-	if !args.UseUnixSocket && args.Port == 0 {
-		return errorArgsNetworkPort
-	}
-
-	return nil
 }
 
 func printVersion() {
