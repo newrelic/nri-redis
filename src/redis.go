@@ -63,6 +63,9 @@ func main() {
 
 	var c conn
 	switch {
+	// Notice that we are not checking UseUnixSocket since it is not used to define how to connect, but merely the entity name.
+	// There are users having use_unix_socket=true and then connecting with hostname and port,
+	// or use_unix_socket=false and then connecting with the unix socket.
 	case args.UnixSocketPath != "":
 		c, err = newSocketRedisCon(args.UnixSocketPath, dialOptions...)
 		fatalIfErr(err)
