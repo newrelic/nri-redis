@@ -62,10 +62,11 @@ func main() {
 	dialOptions := standardDialOptions(args.Password)
 
 	var c conn
-	if args.UnixSocketPath != "" {
+	switch {
+	case args.UnixSocketPath != "":
 		c, err = newSocketRedisCon(args.UnixSocketPath, dialOptions...)
 		fatalIfErr(err)
-	} else if args.Hostname != "" && args.Port > 0 {
+	case args.Hostname != "" && args.Port > 0:
 		if args.UseTLS {
 			tlsDialOptions := tlsDialOptions(args.UseTLS, args.TLSInsecureSkipVerify)
 			dialOptions = append(dialOptions, tlsDialOptions...)
@@ -73,7 +74,7 @@ func main() {
 		redisURL := net.JoinHostPort(args.Hostname, strconv.Itoa(args.Port))
 		c, err = newNetworkRedisCon(redisURL, dialOptions...)
 		fatalIfErr(err)
-	} else {
+	default:
 		log.Fatal(errorArgs)
 	}
 
