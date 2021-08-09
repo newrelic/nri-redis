@@ -64,11 +64,12 @@ func newNetworkRedisCon(redisURL string, options ...redis.DialOption) (conn, err
 	return redisConn{c, nil}, nil
 }
 
-func standardDialOptions(password string) []redis.DialOption {
+func standardDialOptions(username string, password string) []redis.DialOption {
 	return []redis.DialOption{
 		redis.DialConnectTimeout(defaultTimeout),
 		redis.DialReadTimeout(defaultTimeout),
 		redis.DialWriteTimeout(defaultTimeout),
+		redis.DialUsername(username),
 		redis.DialPassword(password)}
 }
 
