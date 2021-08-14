@@ -59,7 +59,16 @@ func main() {
 		os.Exit(0)
 	}
 
+	redisConfig := redisConfig{}
 	dialOptions := standardDialOptions(args.Password)
+
+	// Support using renamed form of redis commands, if 'renamed-command' config is used in Redis server
+	if args.RenamedCommands.Get() != nil {
+		renamedCommands, err := getRenamedCommands(args.RenamedCommands)
+		fatalIfErr(err)
+
+		redisConfig.renamedCommands = renamedCommands
+	}
 
 	var c conn
 	switch {
@@ -67,7 +76,7 @@ func main() {
 	// There are users having use_unix_socket=true and then connecting with hostname and port,
 	// or use_unix_socket=false and then connecting with the unix socket.
 	case args.UnixSocketPath != "":
-		c, err = newSocketRedisCon(args.UnixSocketPath, dialOptions...)
+		c, err = newSocketRedisCon(args.UnixSocketPath, redisConfig, dialOptions...)
 		fatalIfErr(err)
 	case args.Hostname != "" && args.Port > 0:
 		if args.UseTLS {
@@ -75,21 +84,13 @@ func main() {
 			dialOptions = append(dialOptions, tlsDialOptions...)
 		}
 		redisURL := net.JoinHostPort(args.Hostname, strconv.Itoa(args.Port))
-		c, err = newNetworkRedisCon(redisURL, dialOptions...)
+		c, err = newNetworkRedisCon(redisURL, redisConfig, dialOptions...)
 		fatalIfErr(err)
 	default:
 		log.Fatal(errorArgs)
 	}
 
 	defer c.Close()
-
-	// Support using renamed form of redis commands, if 'renamed-command' config is used in Redis server
-	if args.RenamedCommands.Get() != nil {
-		renamedCommands, err := getRenamedCommands(args.RenamedCommands)
-		fatalIfErr(err)
-
-		c.RenameCommands(renamedCommands)
-	}
 
 	info, err := c.GetInfo()
 	fatalIfErr(err)
