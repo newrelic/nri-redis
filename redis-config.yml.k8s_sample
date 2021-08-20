@@ -8,6 +8,8 @@
         # --namespaces: Comma separated list of namespaces to discover pods on
         # --tls: Use secure (TLS) connection
         # --port: Port used to connect to the kubelet. Default is 10255
+        # --username: Username to be used for Authentication
+        # --password: Password to be used for Authentication
         exec: /var/db/newrelic-infra/nri-discovery-kubernetes
         match:
           label.app: redis
@@ -29,6 +31,11 @@
           # USE_TLS: true
           # Skip TLS verification
           # TLS_INSECURE_SKIP_VERIFY: true
+          
+          # Username is optional and available only with Redis v6+ https://redis.io/commands/auth
+          # USERNAME: admin
+          # Password is optional
+          # PASSWORD: admin
 
         labels:
           env: production
