@@ -10,28 +10,26 @@ import (
 
 const defaultTimeout = time.Second * 5
 
+// renamedCommands is the renamed-version of Redis commands used throughout nri-redis
+// This is used to allow usage of 'renamed-command' in Redis server.
+// Example Redis server config:
+//     rename-command CONFIG "SUPER-SECRET-CONFIG-COMMAND"
+// We will have renamedCommands["CONFIG"] = "SUPER-SECRET-CONFIG-COMMAND"
+// Ref: https://redis.io/topics/security
+var renamedCommands map[string]string
+
 type conn interface {
 	GetInfo() (string, error)
 	GetConfig() (map[string]string, error)
 	setKeysType(string, []string, map[string]keyInfo) error
 	setKeysLength(string, []string, map[string]keyInfo) error
 	GetRawCustomKeys(map[string][]string) (map[string]map[string]keyInfo, error)
+	RenameCommands(map[string]string)
 	Close()
 }
 
 type redisConn struct {
-	c   redis.Conn
-	cfg redisConfig
-}
-
-type redisConfig struct {
-	// renamedCommands is the renamed-version of Redis commands used throughout nri-redis
-	// This is used to allow usage of 'renamed-command' in Redis server.
-	// Example Redis server config:
-	//     rename-command CONFIG "SUPER-SECRET-CONFIG-COMMAND"
-	// We will have renamedCommands["CONFIG"] = "SUPER-SECRET-CONFIG-COMMAND"
-	// Ref: https://redis.io/topics/security
-	renamedCommands map[string]string
+	c redis.Conn
 }
 
 type keyInfo struct {
@@ -47,23 +45,23 @@ func (c configConnectionError) Error() string {
 	return "can't execute redis 'CONFIG' command: " + c.cause.Error()
 }
 
-func newSocketRedisCon(unixSocket string, cfg redisConfig, options ...redis.DialOption) (conn, error) {
+func newSocketRedisCon(unixSocket string, options ...redis.DialOption) (conn, error) {
 	c, err := redis.Dial("unix", unixSocket, options...)
 	if err != nil {
 		return nil, fmt.Errorf("connecting through Unix Socket: %w\", err", err)
 	}
 	log.Debug("Connected to Redis through Unix Socket %s", unixSocket)
-	return redisConn{c, cfg}, nil
+	return redisConn{c}, nil
 }
 
-func newNetworkRedisCon(redisURL string, cfg redisConfig, options ...redis.DialOption) (conn, error) {
+func newNetworkRedisCon(redisURL string, options ...redis.DialOption) (conn, error) {
 	c, err := redis.Dial("tcp", redisURL, options...)
 	if err != nil {
 		return nil, fmt.Errorf("connecting through TCP: %w", err)
 	}
 	log.Debug("Connected to Redis through TCP %s", redisURL)
 
-	return redisConn{c, cfg}, nil
+	return redisConn{c}, nil
 }
 
 func standardDialOptions(password string) []redis.DialOption {
@@ -100,6 +98,11 @@ func (r redisConn) GetConfig() (map[string]string, error) {
 		return nil, configConnectionError{cause: err}
 	}
 	return redis.StringMap(r.c.Receive())
+}
+
+// RenameCommands will populate the global renamedCommands mapping
+func (r redisConn) RenameCommands(renamedCommandsOverride map[string]string) {
+	renamedCommands = renamedCommandsOverride
 }
 
 func (r redisConn) Close() {
@@ -216,7 +219,7 @@ func (r redisConn) GetRawCustomKeys(databaseKeys map[string][]string) (map[strin
 // Supports:
 //   - Renamed version of 'command' if exists
 func (r redisConn) command(command string) string {
-	if renamedCommand, ok := r.cfg.renamedCommands[command]; ok {
+	if renamedCommand, ok := renamedCommands[command]; ok {
 		return renamedCommand
 	}
 	return command

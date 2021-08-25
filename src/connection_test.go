@@ -46,7 +46,9 @@ func Test_redisConn_command(t *testing.T) {
 	renamedCommandsTestCase["RENAMED-CONFIG"] = "NEW-RENAMED-CONFIG"
 	renamedCommandsTestCase["DISABLED-COMMAND"] = ""
 
-	c := redisConn{c: fakeConn{}, cfg: redisConfig{renamedCommands: renamedCommandsTestCase}}
+	c := redisConn{c: fakeConn{}}
+
+	c.RenameCommands(renamedCommandsTestCase)
 
 	type fields struct {
 		c redisConn
