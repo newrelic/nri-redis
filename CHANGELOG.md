@@ -8,9 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.8.1 (2021-08-27)
 ### Fixed
 
-Added unit notation to default interval in config sample.
+Added unit notation to the default interval in the config sample.
 
-Added missing config parameters in config sample.
+Added missing config parameters in the config sample.
 
 ## 1.8.0 (2021-08-27)
 ### Added
