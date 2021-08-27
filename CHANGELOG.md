@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.8.0 (2021-08-27)
+### Added
+
+Moved default config.sample to [V4](https://docs.newrelic.com/docs/create-integrations/infrastructure-integrations-sdk/specifications/host-integrations-newer-configuration-format/), added a dependency for infra-agent version 1.20.0 https://github.com/newrelic/nri-nginx/pull/83
+Please notice that old [V3](https://docs.newrelic.com/docs/create-integrations/infrastructure-integrations-sdk/specifications/host-integrations-standard-configuration-format/) configuration format is deprecated, but still supported.
+
+## 1.7.1 (2021-08-6)
+### Added
+
+A stricter validation of args was introduced without noticing that use_unix_socket was false in defaults, but true in the sample config.
+
+There are users having use_unix_socket=true and then connecting with hostname and port, or use_unix_socket=false and then connecting with the unix socket.
+
+Arg use_unix_socket is not used to define how to connect, but merely the entity name.:
+
+```
+Adds the UnixSocketPath value to the entity. If you are monitoring more than one Redis instance on the same host using Unix sockets, then you should set it to true.
+```
+
+## 1.7.0 (2021-08-4)
+### Added
+- Allows Usages of rename-command on Redis Server Installation 
+- Support to IPv6 address family as hostname argument 
+- Support TLS connections to Redis 
+
+## 1.6.3 (2021-06-7)
+### Added
+- Added support for ARM and ARM64.
+
 ## 1.6.2 (2021-04-22)
 ### Added
 - Upgrade dependency manager to use go mod
