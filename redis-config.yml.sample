@@ -30,7 +30,14 @@ integrations:
       # Skip TLS verification
       # TLS_INSECURE_SKIP_VERIFY: true
 
-    interval: 15
+      # Use unixSocketPath to connect to redis thorugh the Unix socket path on which Redis 
+      # server is listening instead of hostname and port
+      # UNIX_SOCKET_PATH: ""
+
+      # Max number of the keys to retrieve
+      # KEYS_LIMIT: 30
+
+    interval: 15s
     labels:
       environment: production
   - name: nri-redis
@@ -57,7 +64,10 @@ integrations:
       #   rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
       # Users may want to set this config if Redis server is using 'rename-command', to ensure nri-redis functionality
       # RENAMED_COMMANDS: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
+
+      # Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)
+      # CONFIG_INVENTORY: true
     inventory_source: config/redis
-    interval: 60
+    interval: 60s
     labels:
       environment: production
