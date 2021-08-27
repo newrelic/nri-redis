@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.8.0 (2021-08-27)
 ### Added
 
-Moved default config.sample to [V4](https://docs.newrelic.com/docs/create-integrations/infrastructure-integrations-sdk/specifications/host-integrations-newer-configuration-format/), added a dependency for infra-agent version 1.20.0 https://github.com/newrelic/nri-nginx/pull/83
+Moved default config.sample to [V4](https://docs.newrelic.com/docs/create-integrations/infrastructure-integrations-sdk/specifications/host-integrations-newer-configuration-format/), added a dependency for infra-agent version 1.20.0
 Please notice that old [V3](https://docs.newrelic.com/docs/create-integrations/infrastructure-integrations-sdk/specifications/host-integrations-standard-configuration-format/) configuration format is deprecated, but still supported.
 
 ## 1.7.1 (2021-08-6)
