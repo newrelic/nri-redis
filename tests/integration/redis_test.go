@@ -31,7 +31,7 @@ var (
 	binPath   = flag.String("bin", defaultBinPath, "Integration binary path")
 )
 
-func runIntegration(t *testing.T, host string, port int, enableTLS bool, envVars ...string) (string, string) {
+func runIntegration(t *testing.T, host string, port int, enableTLS bool, username string, password string, envVars ...string) (string, string) {
 	t.Helper()
 
 	command := make([]string, 0)
@@ -40,6 +40,12 @@ func runIntegration(t *testing.T, host string, port int, enableTLS bool, envVars
 	command = append(command, "--port", strconv.Itoa(port))
 	command = append(command, fmt.Sprintf("--use_tls=%s", strconv.FormatBool(enableTLS)))
 	command = append(command, fmt.Sprintf("--tls_insecure_skip_verify=%s", strconv.FormatBool(enableTLS)))
+	if password != "" {
+		command = append(command, "--password", password)
+		if username != "" {
+			command = append(command, "--username", username)
+		}
+	}
 
 	stdout, stderr, err := helpers.ExecInContainer(*container, command, envVars...)
 
@@ -64,7 +70,7 @@ func TestRedisIntegration(t *testing.T) {
 	testName := t.Name()
 
 	envVars := []string{fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName)}
-	stdout, stderr := runIntegration(t, defaultHost, defaultPort, false, envVars...)
+	stdout, stderr := runIntegration(t, defaultHost, defaultPort, false, "", "", envVars...)
 
 	schemaPath := filepath.Join("json-schema-files", "redis-schema.json")
 
@@ -78,7 +84,21 @@ func TestRedisIntegration_With_TLS(t *testing.T) {
 	testName := t.Name()
 
 	envVars := []string{fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName)}
-	stdout, stderr := runIntegration(t, defaultHost+"-tls", defaultPort, true, envVars...)
+	stdout, stderr := runIntegration(t, defaultHost+"-tls", defaultPort, true, "", "", envVars...)
+
+	schemaPath := filepath.Join("json-schema-files", "redis-schema.json")
+
+	err := jsonschema.Validate(schemaPath, stdout)
+
+	assert.NoError(t, err, "The output of Redis integration doesn't have expected format")
+	assert.NotNil(t, stderr, "unexpected stderr")
+}
+
+func TestRedisIntegration_With_ACL(t *testing.T) {
+	testName := t.Name()
+
+	envVars := []string{fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName)}
+	stdout, stderr := runIntegration(t, defaultHost+"-acl", defaultPort, false, "testUsername", "testPassword", envVars...)
 
 	schemaPath := filepath.Join("json-schema-files", "redis-schema.json")
 
@@ -92,7 +112,7 @@ func TestRedisIntegration_WithRemoteEntity(t *testing.T) {
 	testName := t.Name()
 
 	envVars := []string{fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName), "REMOTE_MONITORING=true"}
-	stdout, stderr := runIntegration(t, defaultHost, defaultPort, false, envVars...)
+	stdout, stderr := runIntegration(t, defaultHost, defaultPort, false, "", "", envVars...)
 
 	schemaPath := filepath.Join("json-schema-files", "redis-schema-remote-entity.json")
 
@@ -106,7 +126,7 @@ func TestRedisIntegration_OnlyMetrics(t *testing.T) {
 	testName := t.Name()
 
 	envVars := []string{fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName)}
-	stdout, stderr := runIntegration(t, defaultHost, defaultPort, false, envVars...)
+	stdout, stderr := runIntegration(t, defaultHost, defaultPort, false, "", "", envVars...)
 
 	schemaPath := filepath.Join("json-schema-files", "redis-schema-metrics.json")
 
@@ -120,7 +140,7 @@ func TestRedisIntegration_OnlyInventory(t *testing.T) {
 	testName := t.Name()
 
 	envVars := []string{fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName)}
-	stdout, stderr := runIntegration(t, defaultHost, defaultPort, false, envVars...)
+	stdout, stderr := runIntegration(t, defaultHost, defaultPort, false, "", "", envVars...)
 
 	schemaPath := filepath.Join("json-schema-files", "redis-schema-inventory.json")
 
@@ -139,7 +159,7 @@ func TestRedisIntegration_SkipConfig(t *testing.T) {
 	testName := t.Name()
 
 	envVars := []string{fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName), "CONFIG_INVENTORY=false"}
-	stdout, _ := runIntegration(t, defaultHost, defaultPort, false, envVars...)
+	stdout, _ := runIntegration(t, defaultHost, defaultPort, false, "", "", envVars...)
 
 	// Verify that the CONFIG inventory is NOT retrieved
 	inventory := extractInventory(t, stdout)
