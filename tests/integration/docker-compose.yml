@@ -23,6 +23,18 @@ services:
       - nri-redis
     entrypoint: ["redis-server","--tls-auth-clients no","--tls-port 6379", "--port 0","--tls-cert-file /tls/redis.crt","--tls-key-file /tls/redis.key","--tls-ca-cert-file /tls/ca.crt"]
 
+  redis-acl:
+    image: redis:6.2.5-alpine
+    hostname: redis-acl
+
+    ports:
+      - "6381:6379"
+    restart: always
+    volumes: 
+      - ./acl-config/redis.conf:/usr/local/etc/redis/redis.conf
+    links:
+      - nri-redis
+    entrypoint: ["redis-server", "/usr/local/etc/redis/redis.conf"]
 
   nri-redis:
     container_name: integration_nri-redis_1
