@@ -2,17 +2,15 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+	"reflect"
 	"testing"
 
 	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/persist"
 	"github.com/stretchr/testify/assert"
-
-	"io/ioutil"
-	"os"
-
-	"reflect"
 )
 
 var expectedRawInfoFromSample = map[string]interface{}{

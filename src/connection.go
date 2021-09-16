@@ -70,7 +70,8 @@ func standardDialOptions(username string, password string) []redis.DialOption {
 		redis.DialReadTimeout(defaultTimeout),
 		redis.DialWriteTimeout(defaultTimeout),
 		redis.DialUsername(username),
-		redis.DialPassword(password)}
+		redis.DialPassword(password),
+	}
 }
 
 func tlsDialOptions(useTLS bool, tlsInsecureSkipVerify bool) []redis.DialOption {
@@ -111,7 +112,6 @@ func (r redisConn) Close() {
 }
 
 func (r redisConn) setKeysType(db string, keys []string, info map[string]keyInfo) error {
-
 	_, err := r.c.Do(r.command("SELECT"), db)
 	if err != nil {
 		return fmt.Errorf("Cannot connect to db: %s, information for keys: %v will not be reported, got error: %v ", db, keys, err)
@@ -143,7 +143,6 @@ func (r redisConn) setKeysType(db string, keys []string, info map[string]keyInfo
 }
 
 func (r redisConn) setKeysLength(db string, keys []string, info map[string]keyInfo) error {
-
 	_, err := r.c.Do(r.command("SELECT"), db)
 	if err != nil {
 		return fmt.Errorf("Cannot connect to db: %s, information for keys: %v will not be reported, got error: %v ", db, keys, err)

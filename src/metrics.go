@@ -98,7 +98,6 @@ func populateMetrics(sample *metric.Set, metrics map[string]interface{}, definit
 			continue
 		}
 		err := sample.SetMetric(metricName, rawMetric, metricType)
-
 		if err != nil {
 			log.Warn("Error setting value: %s", err)
 			continue
