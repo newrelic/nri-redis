@@ -121,7 +121,8 @@ func Test_getRenamedCommands(t *testing.T) {
 				*sdkArgs.NewJSON(map[string]interface{}{
 					"NON-RENAMED-COMMAND":    "NON-RENAMED-COMMAND",
 					"RENAMED-CONFIG":         "NEW-RENAMED-CONFIG",
-					"ANOTHER-RENAMED-CONFIG": "ANOTHER-RENAMED-CONFIG"},
+					"ANOTHER-RENAMED-CONFIG": "ANOTHER-RENAMED-CONFIG",
+				},
 				),
 			},
 			map[string]string{

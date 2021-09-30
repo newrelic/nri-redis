@@ -10,16 +10,6 @@ import (
 
 const defaultTimeout = time.Second * 5
 
-type conn interface {
-	GetInfo() (string, error)
-	GetConfig() (map[string]string, error)
-	setKeysType(string, []string, map[string]keyInfo) error
-	setKeysLength(string, []string, map[string]keyInfo) error
-	GetRawCustomKeys(map[string][]string) (map[string]map[string]keyInfo, error)
-	RenameCommands(map[string]string)
-	Close()
-}
-
 type redisConn struct {
 	c redis.Conn
 
@@ -45,23 +35,23 @@ func (c configConnectionError) Error() string {
 	return "can't execute redis 'CONFIG' command: " + c.cause.Error()
 }
 
-func newSocketRedisCon(unixSocket string, options ...redis.DialOption) (conn, error) {
+func newSocketRedisCon(unixSocket string, options ...redis.DialOption) (*redisConn, error) {
 	c, err := redis.Dial("unix", unixSocket, options...)
 	if err != nil {
 		return nil, fmt.Errorf("connecting through Unix Socket: %w\", err", err)
 	}
 	log.Debug("Connected to Redis through Unix Socket %s", unixSocket)
-	return redisConn{c, nil}, nil
+	return &redisConn{c, nil}, nil
 }
 
-func newNetworkRedisCon(redisURL string, options ...redis.DialOption) (conn, error) {
+func newNetworkRedisCon(redisURL string, options ...redis.DialOption) (*redisConn, error) {
 	c, err := redis.Dial("tcp", redisURL, options...)
 	if err != nil {
 		return nil, fmt.Errorf("connecting through TCP: %w", err)
 	}
 	log.Debug("Connected to Redis through TCP %s", redisURL)
 
-	return redisConn{c, nil}, nil
+	return &redisConn{c, nil}, nil
 }
 
 func standardDialOptions(username string, password string) []redis.DialOption {
@@ -70,7 +60,8 @@ func standardDialOptions(username string, password string) []redis.DialOption {
 		redis.DialReadTimeout(defaultTimeout),
 		redis.DialWriteTimeout(defaultTimeout),
 		redis.DialUsername(username),
-		redis.DialPassword(password)}
+		redis.DialPassword(password),
+	}
 }
 
 func tlsDialOptions(useTLS bool, tlsInsecureSkipVerify bool) []redis.DialOption {
@@ -102,16 +93,15 @@ func (r redisConn) GetConfig() (map[string]string, error) {
 }
 
 // RenameCommands will populate internal renamedCommands mapping
-func (r redisConn) RenameCommands(renamedCommands map[string]string) {
+func (r *redisConn) RenameCommands(renamedCommands map[string]string) {
 	r.renamedCommands = renamedCommands
 }
 
-func (r redisConn) Close() {
-	r.c.Close()
+func (r redisConn) Close() error {
+	return r.c.Close()
 }
 
 func (r redisConn) setKeysType(db string, keys []string, info map[string]keyInfo) error {
-
 	_, err := r.c.Do(r.command("SELECT"), db)
 	if err != nil {
 		return fmt.Errorf("Cannot connect to db: %s, information for keys: %v will not be reported, got error: %v ", db, keys, err)
@@ -143,7 +133,6 @@ func (r redisConn) setKeysType(db string, keys []string, info map[string]keyInfo
 }
 
 func (r redisConn) setKeysLength(db string, keys []string, info map[string]keyInfo) error {
-
 	_, err := r.c.Do(r.command("SELECT"), db)
 	if err != nil {
 		return fmt.Errorf("Cannot connect to db: %s, information for keys: %v will not be reported, got error: %v ", db, keys, err)
