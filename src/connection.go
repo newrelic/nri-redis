@@ -35,23 +35,23 @@ func (c configConnectionError) Error() string {
 	return "can't execute redis 'CONFIG' command: " + c.cause.Error()
 }
 
-func newSocketRedisCon(unixSocket string, options ...redis.DialOption) (redisConn, error) {
+func newSocketRedisCon(unixSocket string, options ...redis.DialOption) (*redisConn, error) {
 	c, err := redis.Dial("unix", unixSocket, options...)
 	if err != nil {
-		return redisConn{}, fmt.Errorf("connecting through Unix Socket: %w\", err", err)
+		return nil, fmt.Errorf("connecting through Unix Socket: %w\", err", err)
 	}
 	log.Debug("Connected to Redis through Unix Socket %s", unixSocket)
-	return redisConn{c, nil}, nil
+	return &redisConn{c, nil}, nil
 }
 
-func newNetworkRedisCon(redisURL string, options ...redis.DialOption) (redisConn, error) {
+func newNetworkRedisCon(redisURL string, options ...redis.DialOption) (*redisConn, error) {
 	c, err := redis.Dial("tcp", redisURL, options...)
 	if err != nil {
-		return redisConn{}, fmt.Errorf("connecting through TCP: %w", err)
+		return nil, fmt.Errorf("connecting through TCP: %w", err)
 	}
 	log.Debug("Connected to Redis through TCP %s", redisURL)
 
-	return redisConn{c, nil}, nil
+	return &redisConn{c, nil}, nil
 }
 
 func standardDialOptions(username string, password string) []redis.DialOption {

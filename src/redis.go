@@ -62,7 +62,7 @@ func main() {
 
 	dialOptions := standardDialOptions(args.Username, args.Password)
 
-	var c redisConn
+	var c *redisConn
 	switch {
 	// Notice that we are not checking UseUnixSocket since it is not used to define how to connect, but merely the entity name.
 	// There are users having use_unix_socket=true and then connecting with hostname and port,
