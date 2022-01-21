@@ -1,0 +1,11 @@
+---
+apiVersion: ctlptl.dev/v1alpha1
+kind: Registry
+name: ctlptl-registry
+port: 50101
+---
+apiVersion: ctlptl.dev/v1alpha1
+kind: Cluster
+name: kind-nri-redis-dev
+product: kind
+registry: ctlptl-registry

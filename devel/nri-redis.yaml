@@ -1,0 +1,78 @@
+integrations:
+  - name: nri-redis
+    env:
+      METRICS: true
+      HOSTNAME: localhost
+      PORT: 6379
+      KEYS: '{"0":["<KEY_1>"],"1":["<KEY_2>"]}'
+
+      # Username is optional and available only with Redis v6+ https://redis.io/commands/auth
+      # USERNAME: newrelic
+      # Password is optional
+      # PASSWORD: your_password
+
+      # New users should leave this property as `true`, to identify the
+      # monitored entities as `remote`. Setting this property to `false` (the
+      # default value) is deprecated and will be removed soon, disallowing
+      # entities that are identified as `local`.
+      # Please check the documentation to get more information about local
+      # versus remote entities:
+      # https://github.com/newrelic/infra-integrations-sdk/blob/master/docs/entity-definition.md
+      REMOTE_MONITORING: true
+
+      # New users should leave this property as `true`, to uniquely identify the monitored entities when using
+      # Unix sockets.
+      USE_UNIX_SOCKET: true
+
+      # Rename certain commands according to Redis server's rename-command configuration
+      # Example config entry in /etc/redis/redis-server.conf:
+      #   rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
+      # Users may want to set this config if Redis server is using 'rename-command', to ensure nri-redis functionality
+      # RENAMED_COMMANDS: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
+
+      # Use TLS connection with Redis instance
+      # USE_TLS: true
+      # Skip TLS verification
+      # TLS_INSECURE_SKIP_VERIFY: true
+
+      # Use unixSocketPath to connect to redis thorugh the Unix socket path on which Redis
+      # server is listening instead of hostname and port
+      # UNIX_SOCKET_PATH: ""
+
+      # Max number of the keys to retrieve
+      # KEYS_LIMIT: 30
+
+    interval: 15s
+    labels:
+      environment: production
+  - name: nri-redis
+    env:
+      INVENTORY: true
+      HOSTNAME: localhost
+      PORT: 6379
+
+      # New users should leave this property as `true`, to identify the
+      # monitored entities as `remote`. Setting this property to `false` (the
+      # default value) is deprecated and will be removed soon, disallowing
+      # entities that are identified as `local`.
+      # Please check the documentation to get more information about local
+      # versus remote entities:
+      # https://github.com/newrelic/infra-integrations-sdk/blob/master/docs/entity-definition.md
+      REMOTE_MONITORING: true
+
+      # New users should leave this property as `true`, to uniquely identify the monitored entities when using
+      # Unix sockets.
+      USE_UNIX_SOCKET: true
+
+      # Rename certain commands according to Redis server's rename-command configuration
+      # Example config entry in /etc/redis/redis-server.conf:
+      #   rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
+      # Users may want to set this config if Redis server is using 'rename-command', to ensure nri-redis functionality
+      # RENAMED_COMMANDS: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
+
+      # Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)
+      # CONFIG_INVENTORY: true
+    inventory_source: config/redis
+    interval: 60s
+    labels:
+      environment: production

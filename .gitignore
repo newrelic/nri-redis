@@ -46,3 +46,6 @@ dist/
 # build files
 src/versioninfo.json
 src/resource.syso
+
+# tilt_modules
+tilt_modules
