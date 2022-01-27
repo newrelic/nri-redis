@@ -47,5 +47,7 @@ dist/
 src/versioninfo.json
 src/resource.syso
 
-# tilt_modules
+# tilt and local values
 tilt_modules
+/values-local.yaml
+/tools/values-*-local.yaml

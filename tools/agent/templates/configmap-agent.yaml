@@ -1,0 +1,11 @@
+{{ with .Values.agent }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "integration.fullname" $ }}-agent
+  labels:
+    {{- include "integration.labels" $ | nindent 4 }}
+data:
+  newrelic-infra.yml: |
+    {{- toYaml . | nindent 4 }}
+{{- end }}

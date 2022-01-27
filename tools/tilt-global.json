@@ -1,0 +1,11 @@
+{
+  "project_name": "nri-redis",
+  "kind_cluster_name": "nri-redis-dev",
+  "mode": "agent",
+  "default_registry": "localhost:50101",
+  "contexts": [
+    "kind-nri-redis-dev",
+    "aws-nri-redis-dev",
+    "gcp-nri-redis-dev"
+  ]
+}

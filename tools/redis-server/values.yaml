@@ -1,0 +1,8 @@
+image:
+  repository: redis
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""

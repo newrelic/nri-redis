@@ -1,0 +1,43 @@
+load("ext://restart_process", "docker_build_with_restart")
+
+def run(settings):
+    # ###############################################################
+    # Reload Mechanism & docker building
+
+    binary_name = settings.get("binary_name", settings.get("project_name"))
+    docker_build_with_restart(
+        settings.get("image_name", "%s-agent-dev" % settings.get("project_name")),
+        ".",
+        dockerfile="tools/agent/Dockerfile",
+        entrypoint=settings.get("entrypoint"),
+        live_update=[
+            sync("./bin/%s" % binary_name, "/var/db/newrelic-infra/newrelic-integrations/bin/%s" % binary_name),
+        ],
+    )
+
+    # ###############################################################
+    # Resources to create
+    # integration binary
+    local_resource(
+        "integration-binary",
+        "GOOS=linux make compile",
+        deps=[
+            "./src",
+        ]
+    )
+
+    # integration chart deployment
+    k8s_yaml(
+        helm(
+            settings.get("integration_agent_chart_path", "tools/agent"),
+            name="integration-deployment",
+            values=[
+                "values-local.yaml"
+            ]
+        )
+    )
+
+    k8s_resource(
+        "integration-deployment",
+        port_forwards = settings.get("port_forwards")
+    )

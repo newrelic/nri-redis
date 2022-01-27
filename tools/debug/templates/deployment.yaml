@@ -22,8 +22,11 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: redis
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
           resources: {}
+          {{- with .Values.integrationsEnv }}
+          env:
+          {{- range $k, $v := . }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+          {{- end }}
+          {{- end }}

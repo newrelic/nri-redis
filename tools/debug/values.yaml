@@ -1,0 +1,40 @@
+image:
+  repository: nri-redis-dev
+  pullPolicy: Always
+  tag: latest
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+integrationsEnv:
+  METRICS: true
+  HOSTNAME: redis-server-deployment
+  PORT: 6379
+  KEYS: '{"0":["<KEY_1>"],"1":["<KEY_2>"]}'
+
+  # USERNAME: newrelic
+  # PASSWORD: your_password
+
+  REMOTE_MONITORING: true
+
+  # RENAMED_COMMANDS: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
+
+  # USE_TLS: true
+  # TLS_INSECURE_SKIP_VERIFY: true
+
+  # Max number of the keys to retrieve
+  # KEYS_LIMIT: 30
+
+
+#################################################################################
+# Inventory testing
+
+# integrationsEnv:
+#     INVENTORY: true
+#     HOSTNAME: localhost
+#     PORT: 6379
+#     REMOTE_MONITORING: true
+#     USE_UNIX_SOCKET: true
+#     # RENAMED_COMMANDS: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
+#     # CONFIG_INVENTORY: true

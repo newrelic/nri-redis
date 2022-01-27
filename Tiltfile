@@ -1,52 +1,28 @@
 # ###############################################################
 # Settings and defaults.
 
+# Load from flags or defaults from tilt_config
+config.define_string("mode", args=True)
+cfg = config.parse()
+
+# Load the desired mode
+symbols = load_dynamic("./tools/tilt-%s.starlark" % cfg["mode"])
+run = symbols["run"]
+
+
+# Setting up defaults and overrides for the selected mode
 settings = {}
-settings.update(read_json("tilt_settings.json", default={}))
-settings.update(read_json("devel/tilt_settings.json", default={}))
+settings.update(read_json("tools/tilt-%s.json" % "global",    default={}))
+settings.update(read_json("tools/tilt-%s.json" % cfg["mode"], default={}))
+settings.update(read_json("tools/tilt-%s.json" % "local",     default={}))
 
 default_registry(settings.get("default_registry"))
-allow_k8s_contexts(
-    settings.get("allowed_contexts", settings.get("kind_cluster_name")),
-)
 
-# ###############################################################
-# Reload Mechanism
+allow_k8s_contexts(settings.get("contexts", []))
 
-load("ext://restart_process", "docker_build_with_restart")
-docker_build_with_restart(
-    settings.get("image_name", "%s-dev" % settings.get("project_name")),
-    ".",
-    dockerfile="devel/Dockerfile",
-    entrypoint=settings.get("entrypoint"),
-    live_update=[
-        sync("./bin/%s" % settings.get("binary_name", settings.get("project_name")), "/var/db/newrelic-infra/newrelic-integrations/bin/%s" % settings.get("project_name")),
-    ],
-)
 
-# ###############################################################
-# Resources to create
-# integration binary
-local_resource(
-    "integration-binary",
-    "GOOS=linux make compile",
-    deps=[
-        "./src",
-    ]
-)
+# Run the desired mode
+load("./tools/tilt-global.starlark", global_run="run")
 
-# integration chart deployment
-k8s_yaml(
-    helm(
-        settings.get("chart_path", "devel/charts/integration"),
-        name="integration-deployment",
-        values=[
-            "devel/values-local.yaml"
-        ]
-    )
-)
-
-k8s_resource(
-    "integration-deployment",
-    port_forwards = settings.get("port_forwards")
-)
+global_run(settings)
+run(settings)
