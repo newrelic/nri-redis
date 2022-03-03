@@ -1,0 +1,12 @@
+###############################################################################
+# This sample file will forward redis error logs to NR once                   #
+#   it is renamed to redis-log.yml                                            #
+# On Linux systems no restart is needed after it is renamed                   #
+# Source: redis error log file                                                #
+# Available customization parameters: attributes, max_line_kb, pattern        #
+###############################################################################
+logs:
+  - name: "redislog"
+    file: /var/log/redis/redis-server.log
+    attributes:
+      logtype: redis
