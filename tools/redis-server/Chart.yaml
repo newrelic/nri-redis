@@ -1,0 +1,8 @@
+apiVersion: v2
+name: redis-server
+description: A Helm chart for Kubernetes
+
+type: application
+
+version: 1.0.0-beta
+appVersion: "6.2"

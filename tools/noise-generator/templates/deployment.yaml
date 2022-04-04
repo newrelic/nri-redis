@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "noise-generator.fullname" . }}
+  labels:
+    {{- include "noise-generator.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "noise-generator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "noise-generator.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - bash
+            - -c
+            - |
+              while true; do
+                MAX_KEYS=10000
+                KEY=$(((RANDOM % $MAX_KEYS)))
+                VALUE=$(cat /dev/random | head -n 1 | base64)
+                redis-cli -e -h redis-server-deployment set "$KEY" "$VALUE" >/dev/null
+                KEY=$(((RANDOM % $MAX_KEYS)))
+                redis-cli -e -h redis-server-deployment get "$KEY" >/dev/null
+                KEY=$(((RANDOM % $MAX_KEYS)))
+                redis-cli -e -h redis-server-deployment del "$KEY" >/dev/null
+                sleep $(((RANDOM % 2)))
+              done

@@ -1,0 +1,33 @@
+def run(settings):
+    # redis server
+    k8s_yaml(
+        helm(
+            settings.get("redis_server_chart_path", "tools/redis-server"),
+            name="redis-server-deployment",
+            values=[
+                "tools/values-redis-server-local.yaml"
+            ]
+        )
+    )
+    k8s_resource(
+        "redis-server-deployment",
+        auto_init=False,
+        port_forwards = [
+            "6379:6379"
+        ]
+    )
+
+    # redis noise generator
+    k8s_yaml(
+        helm(
+            settings.get("noise_generator_chart_path", "tools/noise-generator"),
+            name="noise-generator-deployment",
+            values=[
+                "tools/values-noise-generator-local.yaml"
+            ]
+        )
+    )
+    k8s_resource(
+        "noise-generator-deployment",
+        auto_init=False,
+    )

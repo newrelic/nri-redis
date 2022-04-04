@@ -46,3 +46,8 @@ dist/
 # build files
 src/versioninfo.json
 src/resource.syso
+
+# tilt and local values
+tilt_modules
+/values-local.yaml
+/tools/values-*-local.yaml

@@ -1,0 +1,17 @@
+{
+  "port_forwards": [
+    "50100:50100"
+  ],
+  "entrypoint":[
+    "dlv",
+    "--listen=0.0.0.0:50100",
+    "--headless=true",
+    "--api-version=2",
+    "--check-go-version=false",
+    "--only-same-user=false",
+    "--accept-multiclient",
+    "exec",
+    "/go/bin/nri-redis",
+    "--"
+  ]
+}

@@ -1,0 +1,12 @@
+{{ with .Values.integrations }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "integration.fullname" $ }}-integrations
+  labels:
+    {{- include "integration.labels" $ | nindent 4 }}
+data:
+  integrations.yml: |
+    integrations:
+      {{- toYaml . | nindent 6 }}
+{{- end }}

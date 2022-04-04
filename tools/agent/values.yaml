@@ -1,0 +1,53 @@
+image:
+  repository: nri-redis-agent-dev
+  pullPolicy: Always
+  tag: latest
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+agent:
+  display_name: redis-agent-dev
+  custom_attributes:
+    project: redis-integration-development
+    owning_team: coreint
+
+integrations:
+  - name: nri-redis
+  # exec: dlv --listen=0.0.0.0:50100 --headless=true --api-version=2 --check-go-version=false --only-same-user=false exec /var/db/newrelic-infra/newrelic-integrations/bin/nri-redis --
+    env:
+      METRICS: true
+      HOSTNAME: redis-server-deployment
+      PORT: 6379
+      KEYS: '{"0":["<KEY_1>"],"1":["<KEY_2>"]}'
+
+      # USERNAME: newrelic
+      # PASSWORD: your_password
+
+      REMOTE_MONITORING: true
+
+      # RENAMED_COMMANDS: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
+
+      # USE_TLS: true
+      # TLS_INSECURE_SKIP_VERIFY: true
+
+      # Max number of the keys to retrieve
+      # KEYS_LIMIT: 30
+
+    interval: 15s
+    labels:
+      environment: devel
+# - name: nri-redis
+#   env:
+#     INVENTORY: true
+#     HOSTNAME: localhost
+#     PORT: 6379
+#     REMOTE_MONITORING: true
+#     USE_UNIX_SOCKET: true
+#     # RENAMED_COMMANDS: '{"CONFIG":"b840fc02d524045429941cc15f59e41cb7be6c52"}'
+#     # CONFIG_INVENTORY: true
+#   inventory_source: config/redis
+#   interval: 60s
+#   labels:
+#     environment: devel

@@ -1,0 +1,11 @@
+{
+  "port_forwards": [
+    "50100:50100"
+  ],
+  "entrypoint":[
+    "/sbin/tini",
+    "-s",
+    "--",
+    "/usr/bin/newrelic-infra-service"
+  ]
+}
