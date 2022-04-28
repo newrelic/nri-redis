@@ -17,6 +17,7 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 	"github.com/newrelic/infra-integrations-sdk/persist"
+	selfInstrumentation "github.com/newrelic/nri-redis/src/instrumentation"
 )
 
 type argumentList struct {
@@ -59,6 +60,8 @@ func main() {
 		printVersion()
 		os.Exit(0)
 	}
+
+	selfInstrumentation.InitSelfInstrumentation(c, agt.Context.HostnameResolver())
 
 	dialOptions := standardDialOptions(args.Username, args.Password)
 
