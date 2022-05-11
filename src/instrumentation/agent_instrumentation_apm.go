@@ -2,7 +2,10 @@ package instrumentation
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/newrelic/newrelic-telemetry-sdk-go/telemetry"
@@ -13,6 +16,7 @@ const transactionInContextKey = iota
 const (
 	appName                = "New Relic Redis Integration"
 	apmInstrumentationName = "newrelic"
+	waitForConnTimeout     = 5 * time.Second
 )
 
 type agentInstrumentationApm struct {
@@ -30,9 +34,15 @@ func NewAgentInstrumentationApm(license, apmEndpoint, telemetryEndpoint string) 
 				c.Host = apmEndpoint
 			}
 		},
+		newrelic.ConfigDebugLogger(os.Stderr),
 	)
 	if err != nil {
 		return nil, err
+	}
+
+	// Wait for the application to connect.
+	if err = nrApp.WaitForConnection(waitForConnTimeout); nil != err {
+		fmt.Println(err)
 	}
 
 	harvester, err := telemetry.NewHarvester(
@@ -76,6 +86,10 @@ func (a *agentInstrumentationApm) StartTransaction(ctx context.Context, name str
 	return ctx, txn
 }
 
+func (a *agentInstrumentationApm) Shutdown(timeout time.Duration) {
+	a.nrApp.Shutdown(timeout)
+}
+
 type TransactionApm struct {
 	nrTxn *newrelic.Transaction
 }
@@ -94,6 +108,10 @@ func (t *TransactionApm) StartExternalSegment(ctx context.Context, name string, 
 
 func (t *TransactionApm) NoticeError(err error) {
 	t.nrTxn.NoticeError(err)
+}
+
+func (t *TransactionApm) AcceptDistributedTraceHeaders(_ newrelic.TransportType, payload http.Header) {
+	t.nrTxn.AcceptDistributedTraceHeaders(newrelic.TransportOther, payload)
 }
 
 func (t *TransactionApm) End() {

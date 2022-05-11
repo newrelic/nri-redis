@@ -3,39 +3,48 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net"
+	"net/http"
 	"os"
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 
+	"github.com/newrelic/go-agent/v3/newrelic"
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 	"github.com/newrelic/infra-integrations-sdk/persist"
-	selfInstrumentation "github.com/newrelic/nri-redis/src/instrumentation"
+	"github.com/newrelic/nri-redis/src/instrumentation"
 )
 
 type argumentList struct {
 	sdkArgs.DefaultArgumentList
-	Hostname              string       `default:"localhost" help:"Hostname or IP where Redis server is running."`
-	Port                  int          `default:"6379" help:"Port on which Redis server is listening."`
-	UnixSocketPath        string       `default:"" help:"Unix socket path on which Redis server is listening."`
-	Keys                  sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
-	KeysLimit             int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
-	Username              string       `help:"Username to use when connecting to the Redis server."`
-	Password              string       `help:"Password to use when connecting to the Redis server."`
-	UseUnixSocket         bool         `default:"false" help:"Adds the UnixSocketPath value to the entity. If you are monitoring more than one Redis instance on the same host using Unix sockets, then you should set it to true."`
-	RemoteMonitoring      bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
-	RenamedCommands       sdkArgs.JSON `default:"" help:"Map of default redis commands to their renamed form, if rename-command config has been used in the redis server."`
-	ConfigInventory       bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
-	ShowVersion           bool         `default:"false" help:"Print build information and exit"`
-	UseTLS                bool         `default:"false" help:"Use TLS when communicating with the Redis server."`
-	TLSInsecureSkipVerify bool         `default:"false" help:"Disable server name verification when connecting over TLS"`
+	Hostname                             string       `default:"localhost" help:"Hostname or IP where Redis server is running."`
+	Port                                 int          `default:"6379" help:"Port on which Redis server is listening."`
+	UnixSocketPath                       string       `default:"" help:"Unix socket path on which Redis server is listening."`
+	Keys                                 sdkArgs.JSON `default:"" help:"List of the keys for retrieving their lengths"`
+	KeysLimit                            int          `default:"30" help:"Max number of the keys to retrieve their lengths"`
+	Username                             string       `help:"Username to use when connecting to the Redis server."`
+	Password                             string       `help:"Password to use when connecting to the Redis server."`
+	UseUnixSocket                        bool         `default:"false" help:"Adds the UnixSocketPath value to the entity. If you are monitoring more than one Redis instance on the same host using Unix sockets, then you should set it to true."`
+	RemoteMonitoring                     bool         `default:"false" help:"Allows to monitor multiple instances as 'remote' entity. Set to 'FALSE' value for backwards compatibility otherwise set to 'TRUE'"`
+	RenamedCommands                      sdkArgs.JSON `default:"" help:"Map of default redis commands to their renamed form, if rename-command config has been used in the redis server."`
+	ConfigInventory                      bool         `default:"true" help:"Provides CONFIG inventory information. Set it to 'false' in environments where the Redis CONFIG command is prohibited (e.g. AWS ElastiCache)"`
+	ShowVersion                          bool         `default:"false" help:"Print build information and exit"`
+	UseTLS                               bool         `default:"false" help:"Use TLS when communicating with the Redis server."`
+	TLSInsecureSkipVerify                bool         `default:"false" help:"Disable server name verification when connecting over TLS"`
+	SelfInstrumentation                  string       `default:"" help:"self instrumentation to be used. Valid values: newrelic"`
+	SelfInstrumentationPayload           string       `default:"" help:"distributed payload headers"`
+	SelfInstrumentationApmHost           string       `default:"staging-collector.newrelic.com" help:"url for APM collector host"`
+	SelfInstrumentationTelemetryEndpoint string       `default:"" help:"OpenTelemetry endpoint for self instrumentation"`
+	NriaLicenseKey                       string       `default:"" help:"LicenseKey required inf selfInstrumentation is 'newrelic'"`
 }
 
 const (
@@ -61,7 +70,22 @@ func main() {
 		os.Exit(0)
 	}
 
-	selfInstrumentation.InitSelfInstrumentation(c, agt.Context.HostnameResolver())
+	instrumentation.InitSelfInstrumentation(
+		args.SelfInstrumentation,
+		args.NriaLicenseKey,
+		"staging-collector.newrelic.com",
+		args.SelfInstrumentationTelemetryEndpoint,
+	)
+
+	ctx := context.Background()
+	ctx, txn := instrumentation.SelfInstrumentation.StartTransaction(ctx, "redis.publish")
+	defer func() {
+		hdrs := http.Header{}
+		hdrs.Set(newrelic.DistributedTraceNewRelicHeader, args.SelfInstrumentationPayload)
+		txn.AcceptDistributedTraceHeaders(newrelic.TransportOther, hdrs)
+		txn.End()
+		instrumentation.SelfInstrumentation.Shutdown(10 * time.Second)
+	}()
 
 	dialOptions := standardDialOptions(args.Username, args.Password)
 

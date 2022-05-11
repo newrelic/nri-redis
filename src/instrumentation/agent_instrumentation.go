@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 	"time"
+
+	"github.com/newrelic/go-agent/v3/newrelic"
 )
 
 var SelfInstrumentation AgentInstrumentation = noopInstrumentation{}
@@ -36,9 +38,11 @@ func NewGaugeWithAttributes(name string, val float64, attrs map[string]interface
 type AgentInstrumentation interface {
 	StartTransaction(ctx context.Context, name string) (context.Context, Transaction)
 	RecordMetric(ctx context.Context, metric metric)
+	Shutdown(timeout time.Duration)
 }
 
 type Transaction interface {
+	AcceptDistributedTraceHeaders(t newrelic.TransportType, hdrs http.Header)
 	StartSegment(ctx context.Context, name string) (context.Context, Segment)
 	StartExternalSegment(ctx context.Context, name string, req *http.Request) (context.Context, Segment)
 	AddAttribute(key string, value interface{})
@@ -59,6 +63,10 @@ func (n noopInstrumentation) StartTransaction(ctx context.Context, name string) 
 }
 
 func (n noopInstrumentation) RecordMetric(ctx context.Context, metric metric) {
+	//intentionally left empty
+}
+
+func (n noopInstrumentation) Shutdown(_ time.Duration) {
 	//intentionally left empty
 }
 
@@ -83,6 +91,10 @@ func (n NoopTransaction) AddAttribute(key string, value interface{}) {
 }
 
 func (n NoopTransaction) NoticeError(_ error) {
+	//intentionally left empty
+}
+
+func (n NoopTransaction) AcceptDistributedTraceHeaders(t newrelic.TransportType, hdrs http.Header) {
 	//intentionally left empty
 }
 
