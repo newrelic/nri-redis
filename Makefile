@@ -26,7 +26,7 @@ validate:
 
 bin/$(BINARY_NAME):
 	@echo "=== $(INTEGRATION) === [ compile ]: building $(BINARY_NAME)..."
-	@GOOS=linux GOARCH=amd64 go build -v -o bin/$(BINARY_NAME) $(GO_FILES)
+	@go build -v -o bin/$(BINARY_NAME) $(GO_FILES)
 
 compile: bin/$(BINARY_NAME)
 
