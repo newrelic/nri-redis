@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 1.9.1  (2022-06-23)
 
-## Changed
+### Changed
  - Bump dependencies
-## Added
+### Added
  - Added support for more distributions:
     RHEL(EL) 9
     Ubuntu 22.04
