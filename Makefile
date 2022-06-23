@@ -1,7 +1,6 @@
 INTEGRATION     := redis
 BINARY_NAME      = nri-$(INTEGRATION)
 SRC_DIR          = ./src/
-TEST_DEPS        = github.com/axw/gocov/gocov github.com/AlekSi/gocov-xml
 INTEGRATIONS_DIR = /var/db/newrelic-infra/newrelic-integrations/
 CONFIG_DIR       = /etc/newrelic-infra/integrations.d
 GO_FILES        := ./src/
@@ -13,8 +12,8 @@ all: build
 build: clean compile test
 
 clean:
-	@echo "=== $(INTEGRATION) === [ clean ]: removing binaries and coverage file..."
-	@rm -rfv bin coverage.xml $(TARGET)
+	@echo "=== $(INTEGRATION) === [ clean ]: removing binaries..."
+	@rm -rfv bin $(TARGET)
 
 bin/$(BINARY_NAME):
 	@echo "=== $(INTEGRATION) === [ compile ]: building $(BINARY_NAME)..."
