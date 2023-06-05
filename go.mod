@@ -1,11 +1,11 @@
 module github.com/newrelic/nri-redis
 
-go 1.18
+go 1.20
 
 require (
-	github.com/gomodule/redigo v1.8.8
+	github.com/gomodule/redigo v1.8.9
 	github.com/newrelic/infra-integrations-sdk v3.7.3+incompatible
-	github.com/stretchr/testify v1.7.4
+	github.com/stretchr/testify v1.8.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 )
 

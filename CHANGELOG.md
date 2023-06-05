@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.10.0 (2023-06-06)
+# Changed
+- Upgrade Go version to 1.20
+
 ## 1.9.1  (2022-06-23)
 
 ### Changed
