@@ -46,3 +46,7 @@ dist/
 # build files
 src/versioninfo.json
 src/resource.syso
+
+# Release toolkit
+CHANGELOG.partial.md
+
