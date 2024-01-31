@@ -3,7 +3,7 @@ version: '3.1'
 
 services:
   redis:
-    image: redis:7.2.3-alpine
+    image: redis:7.2.4-alpine
     hostname: redis
     ports:
       - "6379:6379"
@@ -12,7 +12,7 @@ services:
       - nri-redis
 
   redis-tls:
-    image: redis:7.2.3-alpine
+    image: redis:7.2.4-alpine
     hostname: redis-tls
     ports:
       - "6380:6379"
@@ -24,7 +24,7 @@ services:
     entrypoint: ["redis-server","--tls-auth-clients no","--tls-port 6379", "--port 0","--tls-cert-file /tls/redis.crt","--tls-key-file /tls/redis.key","--tls-ca-cert-file /tls/ca.crt"]
 
   redis-acl:
-    image: redis:7.2.3-alpine
+    image: redis:7.2.4-alpine
     hostname: redis-acl
 
     ports:
