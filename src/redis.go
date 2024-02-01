@@ -51,6 +51,7 @@ var (
 	errorArgs = errors.New("no connection method available, UnixSocketPath or Hostname and Port should be populated")
 )
 
+// comment
 func main() {
 	i, err := createIntegration()
 	fatalIfErr(err)
