@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/gomodule/redigo v1.8.9
-	github.com/newrelic/infra-integrations-sdk v3.8.1+incompatible
+	github.com/newrelic/infra-integrations-sdk v3.8.2+incompatible
 	github.com/stretchr/testify v1.8.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 )
