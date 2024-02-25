@@ -5,6 +5,8 @@ github.com/gomodule/redigo v1.8.9 h1:Sl3u+2BI/kk+VEatbj0scLdrFhjPmbxOc1myhDP41ws
 github.com/gomodule/redigo v1.8.9/go.mod h1:7ArFNvsTjH8GMMzB4uy1snslv2BwmginuMs06a1uzZE=
 github.com/gomodule/redigo v1.9.1 h1:ovpmKwkZggHuXeoGmyEzdChdorAsnVPXjMruK8TY7wA=
 github.com/gomodule/redigo v1.9.1/go.mod h1:bcj/+tn1uhFswwmm7Cng4/TSiMemj4A+Rgxsc2mOcvY=
+github.com/gomodule/redigo v1.9.2 h1:HrutZBLhSIU8abiSfW8pj8mPhOyMYjZT/wcA4/L9L9s=
+github.com/gomodule/redigo v1.9.2/go.mod h1:KsU3hiK/Ay8U42qpaJk+kuNa3C+spxapWpM+ywhcgtw=
 github.com/newrelic/infra-integrations-sdk v3.7.3+incompatible h1:+o/MxTzFsC3BRVKpkw1pXer9Nja2mxWNbV9GfH7iKBc=
 github.com/newrelic/infra-integrations-sdk v3.7.3+incompatible/go.mod h1:tMUHRMq6mJS0YyBnbWrTXAnREnQqC1AGO6Lu45u5xAM=
 github.com/newrelic/infra-integrations-sdk v3.8.0+incompatible h1:QvwHLsgHyGw4ZULOSnnWQnVPE744K1eda+2XLp2eHtg=
