@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
 
+## v1.11.4 - 2024-02-26
+
+### ⛓️ Dependencies
+- Updated github.com/newrelic/infra-integrations-sdk to v3.8.2+incompatible
+- Updated github.com/gomodule/redigo to v1.9.2 - [Changelog 🔗](https://github.com/gomodule/redigo/releases/tag/v1.9.2)
+
 ## v1.11.3 - 2024-02-12
 
 ### ⛓️ Dependencies
