@@ -1,6 +1,6 @@
 module github.com/newrelic/nri-redis
 
-go 1.21
+go 1.22.1
 
 require (
 	github.com/gomodule/redigo v1.9.2
