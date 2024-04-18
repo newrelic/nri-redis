@@ -10,5 +10,5 @@ on:
 
 jobs:
   push-pr:
-    uses: newrelic/coreint-automation/.github/workflows/reusable_push_pr.yaml@v2
+    uses: newrelic/coreint-automation/.github/workflows/reusable_push_pr.yaml@v3
     secrets: inherit
