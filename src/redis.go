@@ -16,7 +16,6 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/infra-integrations-sdk/persist"
 )
 
 type argumentList struct {
@@ -52,7 +51,7 @@ var (
 )
 
 func main() {
-	i, err := createIntegration()
+	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	fatalIfErr(err)
 
 	if args.ShowVersion {
@@ -178,21 +177,6 @@ func metricSet(e *integration.Entity, eventType, hostname string, port int, remo
 		eventType,
 		attribute.Attr("port", strPort),
 	)
-}
-
-func createIntegration() (*integration.Integration, error) {
-	cachePath := os.Getenv("NRIA_CACHE_PATH")
-	if cachePath == "" {
-		return integration.New(integrationName, integrationVersion, integration.Args(&args))
-	}
-
-	l := log.NewStdErr(args.Verbose)
-	s, err := persist.NewFileStore(cachePath, l, persist.DefaultTTL)
-	if err != nil {
-		return nil, err
-	}
-
-	return integration.New(integrationName, integrationVersion, integration.Args(&args), integration.Storer(s), integration.Logger(l))
 }
 
 func entity(i *integration.Integration, args *argumentList) (*integration.Entity, error) {
