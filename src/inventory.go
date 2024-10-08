@@ -4,9 +4,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/newrelic/infra-integrations-sdk/data/inventory"
+	"github.com/newrelic/infra-integrations-sdk/v3/data/inventory"
 
-	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/infra-integrations-sdk/v3/log"
 )
 
 func getRawInventory(config map[string]string, metrics map[string]interface{}) map[string]interface{} {

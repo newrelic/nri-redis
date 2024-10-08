@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
 
+### dependency
+
+- Upgrade go to 1.23.2
+
+### enhancements
+
+- Upgrade integrations SDK so the interval is variable and allows intervals up to 5 minutes
+
 ## v1.11.9 - 2024-09-09
 
 ### ⛓️ Dependencies
