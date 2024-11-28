@@ -12,5 +12,6 @@ jobs:
     uses: newrelic/coreint-automation/.github/workflows/reusable_pre_release.yaml@v3
     with:
       tag: ${{ github.event.release.tag_name }}
+      upload_fips_packages: true
       integration: "redis"
     secrets: inherit
