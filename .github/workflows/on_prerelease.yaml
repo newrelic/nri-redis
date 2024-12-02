@@ -14,5 +14,5 @@ jobs:
       tag: ${{ github.event.release.tag_name }}
       upload_fips_packages: true
       integration: "redis"
-      dest_prefix: "test-pkg-action-sairaj"
+      dest_prefix: "test-pkg-action-sairaj/"
     secrets: inherit
