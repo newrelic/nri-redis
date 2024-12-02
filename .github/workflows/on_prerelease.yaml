@@ -9,9 +9,10 @@ on:
 
 jobs:
   pre-release:
-    uses: newrelic/coreint-automation/.github/workflows/reusable_pre_release.yaml@v3
+    uses: newrelic/coreint-automation/.github/workflows/reusable_pre_release.yaml@NR-340027-add-dest-prefix-input-flag-to-intg-pkg-test-action
     with:
       tag: ${{ github.event.release.tag_name }}
       upload_fips_packages: true
       integration: "redis"
+      dest_prefix: "test-pkg-action-sairaj"
     secrets: inherit
