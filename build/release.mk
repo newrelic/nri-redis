@@ -43,7 +43,7 @@ release/fix-archive:
 .PHONY : release/sign/nix
 release/sign/nix:
 	@echo "===> $(INTEGRATION) === [release/sign] signing packages"
-	@bash  ~/newrelic/coreint-automation/build/sign.sh
+	@bash  /usr/local/bin/sign.sh
 
 
 .PHONY : release/publish
