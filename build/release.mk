@@ -43,7 +43,7 @@ release/fix-archive:
 .PHONY : release/sign/nix
 release/sign/nix:
 	@echo "===> $(INTEGRATION) === [release/sign] signing packages"
-	@bash $(CURDIR)/build/nix/sign.sh
+	@bash sign.sh
 
 
 .PHONY : release/publish
