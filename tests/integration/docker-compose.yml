@@ -41,3 +41,9 @@ services:
     build:
       context: ../../
       dockerfile: tests/integration/Dockerfile
+  
+  newrelic-infra:
+    container_name: infra-agent
+    build:
+      context: ../../
+      dockerfile: tests/integration/Agent.Dockerfile

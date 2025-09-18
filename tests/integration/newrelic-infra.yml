@@ -1,0 +1,3 @@
+staging: true
+license_key: <YOUR_NEW_RELIC_LICENSE_KEY>
+display_name: sairaj-local-redis-test

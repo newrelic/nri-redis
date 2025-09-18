@@ -1,0 +1,12 @@
+integrations:
+  - name: nri-redis
+    env:
+      METRICS: true
+      HOSTNAME: redis
+      PORT: 6379
+      REMOTE_MONITORING: true
+    inventory_source: config/redis
+    interval: 15s
+    labels:
+      environment: production
+      contact: sairaj
