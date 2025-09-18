@@ -140,11 +140,21 @@ func main() {
 			}
 		}
 
-		ms = metricSet(e, "RedisKeyspaceSample", args.Hostname, args.Port, args.RemoteMonitoring)
 		for db, keyspaceMetrics := range rawKeyspaceMetrics {
+			ms := metricSet(e, "RedisKeyspaceSample", args.Hostname, args.Port, args.RemoteMonitoring)
 			fatalIfErr(populateMetrics(ms, keyspaceMetrics, keyspaceMetricsDefinition))
-			if _, ok := rawCustomKeysMetric[db]; ok && keysFlagPresent {
-				populateCustomKeysMetric(ms, rawCustomKeysMetric[db])
+			fatalIfErr(ms.SetMetric("db.keyspace", db, metric.ATTRIBUTE))
+
+			if keysFlagPresent {
+				if dbMetric, ok := rawCustomKeysMetric[db]; ok {
+					for key, keyInfo := range dbMetric {
+						populateCustomKeysMetric(ms, dbMetric)
+						if keyInfo.keyLength == -1 {
+							log.Warn("Could not get info for key %s in db %s.", key, db)
+							continue
+						}
+					}
+				}
 			}
 		}
 	}
