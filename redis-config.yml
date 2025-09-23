@@ -3,7 +3,7 @@ integrations:
     env:
       METRICS: true
       HOSTNAME: localhost
-      PORT: 6379
+      PORT: 6381
       KEYS: '{"0":["<KEY_1>"],"1":["<KEY_2>"]}'
 
       # Username is optional and available only with Redis v6+ https://redis.io/commands/auth

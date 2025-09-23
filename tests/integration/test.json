@@ -1,0 +1,697 @@
+{
+    "name": "com.newrelic.redis",
+    "protocol_version": "3",
+    "integration_version": "0.0.0",
+    "data": [
+        {
+            "metrics": [
+                {
+                    "cluster.connectedSlaves": 0,
+                    "cluster.role": "master",
+                    "db.aofLastBgrewriteStatus": "ok",
+                    "db.aofLastRewriteTimeMiliseconds": -1,
+                    "db.aofLastWriteStatus": "ok",
+                    "db.evictedKeysPerSecond": 0,
+                    "db.expiredKeysPerSecond": 0,
+                    "db.keyspaceHitsPerSecond": 0,
+                    "db.keyspaceMissesPerSecond": 0,
+                    "db.latestForkMilliseconds": 0,
+                    "db.rdbBgsaveInProgress": 0,
+                    "db.rdbChangesSinceLastSave": 6,
+                    "db.rdbLastBgsaveStatus": "ok",
+                    "db.rdbLastBgsaveTimeMilliseconds": -1,
+                    "db.rdbLastSaveTime": 1758661217,
+                    "db.syncFull": 0,
+                    "db.syncPartialErr": 0,
+                    "db.syncPartialOk": 0,
+                    "event_type": "RedisSample",
+                    "net.blockedClients": 0,
+                    "net.commandsProcessedPerSecond": 0,
+                    "net.connectedClients": 1,
+                    "net.connectionsReceivedPerSecond": 0,
+                    "net.inputBytesPerSecond": 0,
+                    "net.outputBytesPerSecond": 0,
+                    "net.pubsubChannels": 0,
+                    "net.pubsubPatterns": 0,
+                    "net.rejectedConnectionsPerSecond": 0,
+                    "port": "6379",
+                    "software.uptimeMilliseconds": 215000,
+                    "software.version": "7.4.5",
+                    "system.maxmemoryBytes": 0,
+                    "system.memFragmentationRatio": 14.02,
+                    "system.totalSystemMemoryBytes": 8217751552,
+                    "system.usedCpuSysChildrenMilliseconds": 0,
+                    "system.usedCpuSysMilliseconds": 122,
+                    "system.usedCpuUserChildrenMilliseconds": 1,
+                    "system.usedCpuUserMilliseconds": 2139,
+                    "system.usedMemoryBytes": 1094024,
+                    "system.usedMemoryLuaBytes": 31744,
+                    "system.usedMemoryPeakBytes": 1272352,
+                    "system.usedMemoryRssBytes": 14778368
+                },
+                {
+                    "db.avgTtlMilliseconds": 0,
+                    "db.expires": 0,
+                    "db.keyLength.list.my-list": 3,
+                    "db.keys": 2,
+                    "db.keyspace": "db0",
+                    "event_type": "RedisKeyspaceSample",
+                    "port": "6379"
+                }
+            ],
+            "inventory": {
+                "acl-pubsub-default": {
+                    "value": "resetchannels"
+                },
+                "aclfile": {
+                    "value": ""
+                },
+                "acllog-max-len": {
+                    "value": "128"
+                },
+                "active-defrag-cycle-max": {
+                    "value": "25"
+                },
+                "active-defrag-cycle-min": {
+                    "value": "1"
+                },
+                "active-defrag-ignore-bytes": {
+                    "value": "104857600"
+                },
+                "active-defrag-max-scan-fields": {
+                    "value": "1000"
+                },
+                "active-defrag-threshold-lower": {
+                    "value": "10"
+                },
+                "active-defrag-threshold-upper": {
+                    "value": "100"
+                },
+                "active-expire-effort": {
+                    "value": "1"
+                },
+                "activedefrag": {
+                    "value": "no"
+                },
+                "activerehashing": {
+                    "value": "yes"
+                },
+                "always-show-logo": {
+                    "value": "no"
+                },
+                "aof-load-truncated": {
+                    "value": "yes"
+                },
+                "aof-rewrite-cpulist": {
+                    "value": ""
+                },
+                "aof-rewrite-incremental-fsync": {
+                    "value": "yes"
+                },
+                "aof-timestamp-enabled": {
+                    "value": "no"
+                },
+                "aof-use-rdb-preamble": {
+                    "value": "yes"
+                },
+                "aof_rewrite_cpulist": {
+                    "value": ""
+                },
+                "appenddirname": {
+                    "value": "appendonlydir"
+                },
+                "appendfilename": {
+                    "value": "appendonly.aof"
+                },
+                "appendfsync": {
+                    "value": "everysec"
+                },
+                "appendonly": {
+                    "value": "no"
+                },
+                "auto-aof-rewrite-min-size": {
+                    "value": "67108864"
+                },
+                "auto-aof-rewrite-percentage": {
+                    "value": "100"
+                },
+                "bgsave-cpulist": {
+                    "value": ""
+                },
+                "bgsave_cpulist": {
+                    "value": ""
+                },
+                "bind": {
+                    "value": "* -::*"
+                },
+                "bind-source-addr": {
+                    "value": ""
+                },
+                "bio-cpulist": {
+                    "value": ""
+                },
+                "bio_cpulist": {
+                    "value": ""
+                },
+                "busy-reply-threshold": {
+                    "value": "5000"
+                },
+                "client-output-buffer-limit": {
+                    "normal-hard-limit": "0",
+                    "normal-soft-limit": "0",
+                    "normal-soft-seconds": "0",
+                    "pubsub-hard-limit": "33554432",
+                    "pubsub-soft-limit": "8388608",
+                    "pubsub-soft-seconds": "60",
+                    "raw-value": "normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60",
+                    "slave-hard-limit": "268435456",
+                    "slave-soft-limit": "67108864",
+                    "slave-soft-seconds": "60"
+                },
+                "client-query-buffer-limit": {
+                    "value": "1073741824"
+                },
+                "cluster-allow-pubsubshard-when-down": {
+                    "value": "yes"
+                },
+                "cluster-allow-reads-when-down": {
+                    "value": "no"
+                },
+                "cluster-allow-replica-migration": {
+                    "value": "yes"
+                },
+                "cluster-announce-bus-port": {
+                    "value": "0"
+                },
+                "cluster-announce-hostname": {
+                    "value": ""
+                },
+                "cluster-announce-human-nodename": {
+                    "value": ""
+                },
+                "cluster-announce-ip": {
+                    "value": ""
+                },
+                "cluster-announce-port": {
+                    "value": "0"
+                },
+                "cluster-announce-tls-port": {
+                    "value": "0"
+                },
+                "cluster-config-file": {
+                    "value": "nodes.conf"
+                },
+                "cluster-enabled": {
+                    "value": "no"
+                },
+                "cluster-link-sendbuf-limit": {
+                    "value": "0"
+                },
+                "cluster-migration-barrier": {
+                    "value": "1"
+                },
+                "cluster-node-timeout": {
+                    "value": "15000"
+                },
+                "cluster-port": {
+                    "value": "0"
+                },
+                "cluster-preferred-endpoint-type": {
+                    "value": "ip"
+                },
+                "cluster-replica-no-failover": {
+                    "value": "no"
+                },
+                "cluster-replica-validity-factor": {
+                    "value": "10"
+                },
+                "cluster-require-full-coverage": {
+                    "value": "yes"
+                },
+                "cluster-slave-no-failover": {
+                    "value": "no"
+                },
+                "cluster-slave-validity-factor": {
+                    "value": "10"
+                },
+                "config-file": {
+                    "value": ""
+                },
+                "crash-log-enabled": {
+                    "value": "yes"
+                },
+                "crash-memcheck-enabled": {
+                    "value": "yes"
+                },
+                "daemonize": {
+                    "value": "no"
+                },
+                "databases": {
+                    "value": "16"
+                },
+                "dbfilename": {
+                    "value": "dump.rdb"
+                },
+                "dir": {
+                    "value": "/data"
+                },
+                "disable-thp": {
+                    "value": "yes"
+                },
+                "dynamic-hz": {
+                    "value": "yes"
+                },
+                "enable-debug-command": {
+                    "value": "no"
+                },
+                "enable-module-command": {
+                    "value": "no"
+                },
+                "enable-protected-configs": {
+                    "value": "no"
+                },
+                "executable": {
+                    "value": "/data/redis-server"
+                },
+                "hash-max-listpack-entries": {
+                    "value": "512"
+                },
+                "hash-max-listpack-value": {
+                    "value": "64"
+                },
+                "hash-max-ziplist-entries": {
+                    "value": "512"
+                },
+                "hash-max-ziplist-value": {
+                    "value": "64"
+                },
+                "hide-user-data-from-log": {
+                    "value": "no"
+                },
+                "hll-sparse-max-bytes": {
+                    "value": "3000"
+                },
+                "hz": {
+                    "value": "10"
+                },
+                "ignore-warnings": {
+                    "value": ""
+                },
+                "io-threads": {
+                    "value": "1"
+                },
+                "io-threads-do-reads": {
+                    "value": "no"
+                },
+                "jemalloc-bg-thread": {
+                    "value": "yes"
+                },
+                "latency-monitor-threshold": {
+                    "value": "0"
+                },
+                "latency-tracking": {
+                    "value": "yes"
+                },
+                "latency-tracking-info-percentiles": {
+                    "value": "50 99 99.9"
+                },
+                "lazyfree-lazy-eviction": {
+                    "value": "no"
+                },
+                "lazyfree-lazy-expire": {
+                    "value": "no"
+                },
+                "lazyfree-lazy-server-del": {
+                    "value": "no"
+                },
+                "lazyfree-lazy-user-del": {
+                    "value": "no"
+                },
+                "lazyfree-lazy-user-flush": {
+                    "value": "no"
+                },
+                "lfu-decay-time": {
+                    "value": "1"
+                },
+                "lfu-log-factor": {
+                    "value": "10"
+                },
+                "list-compress-depth": {
+                    "value": "0"
+                },
+                "list-max-listpack-size": {
+                    "value": "-2"
+                },
+                "list-max-ziplist-size": {
+                    "value": "-2"
+                },
+                "locale-collate": {
+                    "value": ""
+                },
+                "logfile": {
+                    "value": ""
+                },
+                "loglevel": {
+                    "value": "notice"
+                },
+                "lua-time-limit": {
+                    "value": "5000"
+                },
+                "masterauth": {
+                    "value": "(omitted value)"
+                },
+                "masteruser": {
+                    "value": ""
+                },
+                "max-new-connections-per-cycle": {
+                    "value": "10"
+                },
+                "max-new-tls-connections-per-cycle": {
+                    "value": "1"
+                },
+                "maxclients": {
+                    "value": "10000"
+                },
+                "maxmemory": {
+                    "value": "0"
+                },
+                "maxmemory-clients": {
+                    "value": "0"
+                },
+                "maxmemory-eviction-tenacity": {
+                    "value": "10"
+                },
+                "maxmemory-policy": {
+                    "value": "noeviction"
+                },
+                "maxmemory-samples": {
+                    "value": "5"
+                },
+                "mem-allocator": {
+                    "value": "jemalloc-5.3.0"
+                },
+                "min-replicas-max-lag": {
+                    "value": "10"
+                },
+                "min-replicas-to-write": {
+                    "value": "0"
+                },
+                "min-slaves-max-lag": {
+                    "value": "10"
+                },
+                "min-slaves-to-write": {
+                    "value": "0"
+                },
+                "no-appendfsync-on-rewrite": {
+                    "value": "no"
+                },
+                "notify-keyspace-events": {
+                    "value": ""
+                },
+                "oom-score-adj": {
+                    "value": "no"
+                },
+                "oom-score-adj-values": {
+                    "value": "0 200 800"
+                },
+                "pidfile": {
+                    "value": ""
+                },
+                "port": {
+                    "value": "6379"
+                },
+                "proc-title-template": {
+                    "value": "{title} {listen-addr} {server-mode}"
+                },
+                "propagation-error-behavior": {
+                    "value": "ignore"
+                },
+                "protected-mode": {
+                    "value": "no"
+                },
+                "proto-max-bulk-len": {
+                    "value": "536870912"
+                },
+                "rdb-del-sync-files": {
+                    "value": "no"
+                },
+                "rdb-save-incremental-fsync": {
+                    "value": "yes"
+                },
+                "rdbchecksum": {
+                    "value": "yes"
+                },
+                "rdbcompression": {
+                    "value": "yes"
+                },
+                "redis_version": {
+                    "value": "7.4.5"
+                },
+                "repl-backlog-size": {
+                    "value": "1048576"
+                },
+                "repl-backlog-ttl": {
+                    "value": "3600"
+                },
+                "repl-disable-tcp-nodelay": {
+                    "value": "no"
+                },
+                "repl-diskless-load": {
+                    "value": "disabled"
+                },
+                "repl-diskless-sync": {
+                    "value": "yes"
+                },
+                "repl-diskless-sync-delay": {
+                    "value": "5"
+                },
+                "repl-diskless-sync-max-replicas": {
+                    "value": "0"
+                },
+                "repl-ping-replica-period": {
+                    "value": "10"
+                },
+                "repl-ping-slave-period": {
+                    "value": "10"
+                },
+                "repl-timeout": {
+                    "value": "60"
+                },
+                "replica-announce-ip": {
+                    "value": ""
+                },
+                "replica-announce-port": {
+                    "value": "0"
+                },
+                "replica-announced": {
+                    "value": "yes"
+                },
+                "replica-ignore-disk-write-errors": {
+                    "value": "no"
+                },
+                "replica-ignore-maxmemory": {
+                    "value": "yes"
+                },
+                "replica-lazy-flush": {
+                    "value": "no"
+                },
+                "replica-priority": {
+                    "value": "100"
+                },
+                "replica-read-only": {
+                    "value": "yes"
+                },
+                "replica-serve-stale-data": {
+                    "value": "yes"
+                },
+                "replicaof": {
+                    "value": ""
+                },
+                "requirepass": {
+                    "value": "(omitted value)"
+                },
+                "sanitize-dump-payload": {
+                    "value": "no"
+                },
+                "save": {
+                    "after-300-seconds": "at-least-100-key-changes",
+                    "after-3600-seconds": "at-least-1-key-changes",
+                    "after-60-seconds": "at-least-10000-key-changes",
+                    "raw-value": "3600 1 300 100 60 10000"
+                },
+                "server-cpulist": {
+                    "value": ""
+                },
+                "server_cpulist": {
+                    "value": ""
+                },
+                "set-max-intset-entries": {
+                    "value": "512"
+                },
+                "set-max-listpack-entries": {
+                    "value": "128"
+                },
+                "set-max-listpack-value": {
+                    "value": "64"
+                },
+                "set-proc-title": {
+                    "value": "yes"
+                },
+                "shutdown-on-sigint": {
+                    "value": "default"
+                },
+                "shutdown-on-sigterm": {
+                    "value": "default"
+                },
+                "shutdown-timeout": {
+                    "value": "10"
+                },
+                "slave-announce-ip": {
+                    "value": ""
+                },
+                "slave-announce-port": {
+                    "value": "0"
+                },
+                "slave-ignore-maxmemory": {
+                    "value": "yes"
+                },
+                "slave-lazy-flush": {
+                    "value": "no"
+                },
+                "slave-priority": {
+                    "value": "100"
+                },
+                "slave-read-only": {
+                    "value": "yes"
+                },
+                "slave-serve-stale-data": {
+                    "value": "yes"
+                },
+                "slaveof": {
+                    "value": ""
+                },
+                "slowlog-log-slower-than": {
+                    "value": "10000"
+                },
+                "slowlog-max-len": {
+                    "value": "128"
+                },
+                "socket-mark-id": {
+                    "value": "0"
+                },
+                "stop-writes-on-bgsave-error": {
+                    "value": "yes"
+                },
+                "stream-node-max-bytes": {
+                    "value": "4096"
+                },
+                "stream-node-max-entries": {
+                    "value": "100"
+                },
+                "supervised": {
+                    "value": "no"
+                },
+                "syslog-enabled": {
+                    "value": "no"
+                },
+                "syslog-facility": {
+                    "value": "local0"
+                },
+                "syslog-ident": {
+                    "value": "redis"
+                },
+                "tcp-backlog": {
+                    "value": "511"
+                },
+                "tcp-keepalive": {
+                    "value": "300"
+                },
+                "timeout": {
+                    "value": "0"
+                },
+                "tls-auth-clients": {
+                    "value": "yes"
+                },
+                "tls-ca-cert-dir": {
+                    "value": ""
+                },
+                "tls-ca-cert-file": {
+                    "value": ""
+                },
+                "tls-cert-file": {
+                    "value": ""
+                },
+                "tls-ciphers": {
+                    "value": ""
+                },
+                "tls-ciphersuites": {
+                    "value": ""
+                },
+                "tls-client-cert-file": {
+                    "value": ""
+                },
+                "tls-client-key-file": {
+                    "value": ""
+                },
+                "tls-client-key-file-pass": {
+                    "value": ""
+                },
+                "tls-cluster": {
+                    "value": "no"
+                },
+                "tls-dh-params-file": {
+                    "value": ""
+                },
+                "tls-key-file": {
+                    "value": ""
+                },
+                "tls-key-file-pass": {
+                    "value": ""
+                },
+                "tls-port": {
+                    "value": "0"
+                },
+                "tls-prefer-server-ciphers": {
+                    "value": "no"
+                },
+                "tls-protocols": {
+                    "value": ""
+                },
+                "tls-replication": {
+                    "value": "no"
+                },
+                "tls-session-cache-size": {
+                    "value": "20480"
+                },
+                "tls-session-cache-timeout": {
+                    "value": "300"
+                },
+                "tls-session-caching": {
+                    "value": "yes"
+                },
+                "tracking-table-max-keys": {
+                    "value": "1000000"
+                },
+                "unixsocket": {
+                    "value": ""
+                },
+                "unixsocketperm": {
+                    "value": "0"
+                },
+                "zset-max-listpack-entries": {
+                    "value": "128"
+                },
+                "zset-max-listpack-value": {
+                    "value": "64"
+                },
+                "zset-max-ziplist-entries": {
+                    "value": "128"
+                },
+                "zset-max-ziplist-value": {
+                    "value": "64"
+                }
+            },
+            "events": []
+        }
+    ]
+}
