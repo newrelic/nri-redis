@@ -148,13 +148,11 @@ func main() {
 			if keysFlagPresent {
 				if dbMetric, ok := rawCustomKeysMetric[db]; ok {
 					for key, keyInfo := range dbMetric {
+						populateCustomKeysMetric(ms, dbMetric)
 						if keyInfo.keyLength == -1 {
 							log.Warn("Could not get info for key %s in db %s.", key, db)
 							continue
 						}
-						prefixedKey := "key." + key
-						fatalIfErr(ms.SetMetric(prefixedKey+".length", keyInfo.keyLength, metric.GAUGE))
-						fatalIfErr(ms.SetMetric(prefixedKey+".type", keyInfo.keyType, metric.ATTRIBUTE))
 					}
 				}
 			}
