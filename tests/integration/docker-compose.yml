@@ -8,6 +8,18 @@ services:
     ports:
       - "6379:6379"
     restart: always
+    command: >
+      sh -c " \
+        redis-server & \
+        pid=\"$$!\" \
+        until redis-cli ping > /dev/null 2>&1; do \
+          sleep 1; \
+        done; \
+        sh /docker-entrypoint-initdb.d/init-redis.sh; \
+        wait \"$$pid\" \
+      "
+    volumes:
+      - ./init-redis.sh:/docker-entrypoint-initdb.d/init-redis.sh
     links:
       - nri-redis
 
