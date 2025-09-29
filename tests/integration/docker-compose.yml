@@ -8,6 +8,7 @@ services:
     ports:
       - "6379:6379"
     restart: always
+    # This would make redis-cli to wait until Redis is fully initialized before executing commands.
     command: >
       sh -c " \
         redis-server & \

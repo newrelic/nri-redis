@@ -159,7 +159,7 @@
                     "system.usedMemoryPeakBytes": {
                       "type": "number"
                     },
-                    "system.usedMemoryRssByte": {
+                    "system.usedMemoryRssBytes": {
                       "type": "number"
                     },
                     "system.maxmemoryBytes": {
