@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
 
-### bugfix
+## v1.12.4 - 2025-10-01
+
+### 🐞 Bug fixes
 - Fix RedisKeyspaceSample being dropped when multiple databases are used in the Redis Server
 
 ## v1.12.3 - 2025-08-29
