@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
 
+## v1.12.5 - 2025-10-13
+
+### ⛓️ Dependencies
+- Updated github.com/gomodule/redigo to v1.9.3 - [Changelog 🔗](https://github.com/gomodule/redigo/releases/tag/v1.9.3)
+
 ## v1.12.4 - 2025-10-01
 
 ### 🐞 Bug fixes
