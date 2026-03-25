@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
 
-### security
+## v1.13.0 - 2026-03-25
+
+### 🛡️ Security notices
 - update go to v1.25.8
 
 ## v1.12.10 - 2025-02-18
