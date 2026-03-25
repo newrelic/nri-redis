@@ -8,7 +8,7 @@ Unreleased section should follow [Release Toolkit](https://github.com/newrelic/r
 ## Unreleased
 
 ### security
-- update go to v1.25.8 (CVE-2026-25679, CVE-2026-27142, CVE-2026-27139)
+- update go to v1.25.8
 
 ## v1.12.10 - 2025-02-18
 
