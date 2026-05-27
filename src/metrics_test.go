@@ -320,9 +320,50 @@ func TestParseKeyspaceMetrics(t *testing.T) {
 	}
 }
 
+func TestParseKeyspaceMetricsDragonflyNegativeAvgTTL(t *testing.T) {
+	dbName := "db0"
+	keyspace := "keys=35504609,expires=35504098,avg_ttl=-1"
+	m, err := parseKeyspaceMetrics(dbName, keyspace)
+
+	assert.NoError(t, err)
+	assert.Equal(t, map[string]interface{}{
+		"keyspace": "db0",
+		"keys":     35504609,
+		"expires":  35504098,
+		"avg_ttl":  -1,
+	}, m)
+}
+
+func TestParseKeyspaceMetricsDragonflyExtraFields(t *testing.T) {
+	dbName := "db0"
+	keyspace := "keys=100,expires=50,key_reads=200,key_writes=150,key_deletes=10,avg_ttl=-30000"
+	m, err := parseKeyspaceMetrics(dbName, keyspace)
+
+	assert.NoError(t, err)
+	assert.Equal(t, map[string]interface{}{
+		"keyspace": "db0",
+		"keys":     100,
+		"expires":  50,
+		"avg_ttl":  -30000,
+	}, m)
+}
+
+func TestParseKeyspaceMetricsMissingAvgTTL(t *testing.T) {
+	dbName := "db0"
+	keyspace := "keys=5,expires=2"
+	m, err := parseKeyspaceMetrics(dbName, keyspace)
+
+	assert.NoError(t, err)
+	assert.Equal(t, map[string]interface{}{
+		"keyspace": "db0",
+		"keys":     5,
+		"expires":  2,
+	}, m)
+}
+
 func TestParseKeyspaceMetricsNoMatch(t *testing.T) {
 	dbName := "db0"
-	keyspace := "db0:keys=3,expires=1,"
+	keyspace := "invalid_keyspace_data"
 	metrics, err := parseKeyspaceMetrics(dbName, keyspace)
 	expectedLength := 0
 	expectedMetrics := make(map[string]interface{})
@@ -336,6 +377,18 @@ func TestParseKeyspaceMetricsNoMatch(t *testing.T) {
 	if !reflect.DeepEqual(metrics, expectedMetrics) {
 		t.Error()
 	}
+}
+
+func TestParseKeyspaceMetricsPartialMatch(t *testing.T) {
+	dbName := "db0"
+	keyspace := "expires=5,avg_ttl=1000"
+	m, err := parseKeyspaceMetrics(dbName, keyspace)
+	assert.NoError(t, err)
+	assert.Equal(t, map[string]interface{}{
+		"keyspace": "db0",
+		"expires":  5,
+		"avg_ttl":  1000,
+	}, m)
 }
 
 func TestPopulateCustomKeysMetric(t *testing.T) {

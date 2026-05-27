@@ -155,6 +155,23 @@ func TestRedisIntegration_OnlyInventory(t *testing.T) {
 	require.NotZerof(t, len(inventory), "inventory should include CONFIG data. Was %#v", inventory)
 }
 
+func TestDragonflyIntegration(t *testing.T) {
+	testName := t.Name()
+
+	envVars := []string{
+		fmt.Sprintf("NRIA_CACHE_PATH=/tmp/%v.json", testName),
+		"CONFIG_INVENTORY=false",
+	}
+	stdout, stderr := runIntegration(t, "dragonfly", defaultPort, false, "", "", envVars...)
+
+	schemaPath := filepath.Join("json-schema-files", "dragonfly-schema-metrics.json")
+
+	err := jsonschema.Validate(schemaPath, stdout)
+
+	assert.NoError(t, err, "The output of Dragonfly integration doesn't have expected format")
+	assert.NotNil(t, stderr, "unexpected stderr")
+}
+
 func TestRedisIntegration_SkipConfig(t *testing.T) {
 	testName := t.Name()
 

@@ -12,6 +12,12 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/v3/log"
 )
 
+var (
+	keysRegexp    = regexp.MustCompile(`\bkeys=(\d+)`)
+	expiresRegexp = regexp.MustCompile(`\bexpires=(\d+)`)
+	avgTTLRegexp  = regexp.MustCompile(`\bavg_ttl=(-?\d+(?:\.\d+)?)`)
+)
+
 var metricsDefinition = map[string][]interface{}{
 	// Server
 	"software.uptimeMilliseconds": {secondsToMilliseconds("uptime_in_seconds"), metric.GAUGE},
@@ -176,18 +182,34 @@ func getRawMetrics(info string) (map[string]interface{}, map[string]map[string]i
 
 func parseKeyspaceMetrics(dbName string, keyspace string) (map[string]interface{}, error) {
 	m := make(map[string]interface{})
-	re, err := regexp.Compile(`keys=(\d+),expires=(\d+),avg_ttl=(\d+\.*\d*)`)
-	if err != nil {
-		return nil, err
-	}
-	matches := re.FindStringSubmatch(keyspace)
-	if matches != nil {
-		m["keyspace"] = asValue(dbName)
-		m["keys"] = asValue(matches[1])
-		m["expires"] = asValue(matches[2])
-		m["avg_ttl"] = asValue(matches[3])
-	} else {
+
+	keysMatch := keysRegexp.FindStringSubmatch(keyspace)
+	expiresMatch := expiresRegexp.FindStringSubmatch(keyspace)
+	avgTTLMatch := avgTTLRegexp.FindStringSubmatch(keyspace)
+
+	if keysMatch == nil && expiresMatch == nil && avgTTLMatch == nil {
 		log.Warn("Keyspace metrics cannot be parsed for %s", dbName)
+		return m, nil
+	}
+
+	m["keyspace"] = asValue(dbName)
+
+	if keysMatch != nil {
+		m["keys"] = asValue(keysMatch[1])
+	} else {
+		log.Warn("keys metric cannot be parsed for %s", dbName)
+	}
+
+	if expiresMatch != nil {
+		m["expires"] = asValue(expiresMatch[1])
+	} else {
+		log.Warn("expires metric cannot be parsed for %s", dbName)
+	}
+
+	if avgTTLMatch != nil {
+		m["avg_ttl"] = asValue(avgTTLMatch[1])
+	} else {
+		log.Warn("avg_ttl metric cannot be parsed for %s", dbName)
 	}
 
 	return m, nil

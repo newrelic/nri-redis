@@ -1,0 +1,208 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "properties": {
+    "integration_version": {
+      "minLength": 1,
+      "pattern": "^\\d.\\d.\\d$",
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "items": {
+              "properties": {},
+              "required": []
+            },
+            "type": "array"
+          },
+          "inventory": {
+            "properties": {},
+            "required": [],
+            "type": "object"
+          },
+          "metrics": {
+            "items": {
+              "anyOf": [
+                {
+                  "properties": {
+                    "cluster.connectedSlaves": {
+                      "type": "number"
+                    },
+                    "cluster.role": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "db.evictedKeysPerSecond": {
+                      "type": "number"
+                    },
+                    "db.expiredKeysPerSecond": {
+                      "type": "number"
+                    },
+                    "db.keyspaceHitsPerSecond": {
+                      "type": "number"
+                    },
+                    "db.keyspaceMissesPerSecond": {
+                      "type": "number"
+                    },
+                    "event_type": {
+                      "minLength": 1,
+                      "pattern": "^RedisSample$",
+                      "type": "string"
+                    },
+                    "net.blockedClients": {
+                      "type": "number"
+                    },
+                    "net.commandsProcessedPerSecond": {
+                      "type": "number"
+                    },
+                    "net.connectedClients": {
+                      "type": "number"
+                    },
+                    "net.connectionsReceivedPerSecond": {
+                      "type": "number"
+                    },
+                    "net.inputBytesPerSecond": {
+                      "type": "number"
+                    },
+                    "net.outputBytesPerSecond": {
+                      "type": "number"
+                    },
+                    "net.rejectedConnectionsPerSecond": {
+                      "type": "number"
+                    },
+                    "port": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "software.uptimeMilliseconds": {
+                      "type": "number"
+                    },
+                    "software.version": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "system.maxmemoryBytes": {
+                      "type": "number"
+                    },
+                    "system.usedCpuSysChildrenMilliseconds": {
+                      "type": "number"
+                    },
+                    "system.usedCpuSysMilliseconds": {
+                      "type": "number"
+                    },
+                    "system.usedCpuUserChildrenMilliseconds": {
+                      "type": "number"
+                    },
+                    "system.usedCpuUserMilliseconds": {
+                      "type": "number"
+                    },
+                    "system.usedMemoryBytes": {
+                      "type": "number"
+                    },
+                    "system.usedMemoryLuaBytes": {
+                      "type": "number"
+                    },
+                    "system.usedMemoryPeakBytes": {
+                      "type": "number"
+                    },
+                    "system.usedMemoryRssBytes": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "cluster.connectedSlaves",
+                    "cluster.role",
+                    "db.evictedKeysPerSecond",
+                    "db.expiredKeysPerSecond",
+                    "db.keyspaceHitsPerSecond",
+                    "db.keyspaceMissesPerSecond",
+                    "event_type",
+                    "net.blockedClients",
+                    "net.commandsProcessedPerSecond",
+                    "net.connectedClients",
+                    "net.connectionsReceivedPerSecond",
+                    "net.inputBytesPerSecond",
+                    "net.outputBytesPerSecond",
+                    "net.rejectedConnectionsPerSecond",
+                    "port",
+                    "software.uptimeMilliseconds",
+                    "software.version",
+                    "system.maxmemoryBytes",
+                    "system.usedCpuSysChildrenMilliseconds",
+                    "system.usedCpuSysMilliseconds",
+                    "system.usedCpuUserChildrenMilliseconds",
+                    "system.usedCpuUserMilliseconds",
+                    "system.usedMemoryBytes",
+                    "system.usedMemoryLuaBytes",
+                    "system.usedMemoryPeakBytes",
+                    "system.usedMemoryRssBytes"
+                  ]
+                },
+                {
+                  "properties": {
+                    "db.avgTtlMilliseconds": {
+                      "type": "number"
+                    },
+                    "db.expires": {
+                      "type": "number"
+                    },
+                    "db.keys": {
+                      "type": "number"
+                    },
+                    "db.keyspace": {
+                      "type": "string"
+                    },
+                    "event_type": {
+                      "pattern": "^RedisKeyspaceSample$",
+                      "type": "string"
+                    },
+                    "port": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "db.avgTtlMilliseconds",
+                    "db.expires",
+                    "db.keys",
+                    "db.keyspace",
+                    "event_type",
+                    "port"
+                  ]
+                }
+              ]
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "metrics",
+          "inventory",
+          "events"
+        ]
+      }
+    },
+    "name": {
+      "minLength": 1,
+      "pattern": "^com.newrelic.redis$",
+      "type": "string"
+    },
+    "protocol_version": {
+      "minLength": 1,
+      "pattern": "^3$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "protocol_version",
+    "integration_version",
+    "data"
+  ],
+  "type": "object"
+}
