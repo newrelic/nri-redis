@@ -49,6 +49,30 @@ services:
       - nri-redis
     entrypoint: ["redis-server", "/usr/local/etc/redis/redis.conf"]
 
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
+    hostname: dragonfly
+    ports:
+      - "6382:6379"
+    restart: always
+    ulimits:
+      memlock: -1
+    entrypoint: /bin/sh
+    command: >
+      -c " \
+        dragonfly --logtostderr & \
+        pid=\"$$!\" \
+        until redis-cli ping > /dev/null 2>&1; do \
+          sleep 1; \
+        done; \
+        sh /init-dragonfly.sh; \
+        wait \"$$pid\" \
+      "
+    volumes:
+      - ./init-dragonfly.sh:/init-dragonfly.sh
+    links:
+      - nri-redis
+
   nri-redis:
     container_name: integration_nri-redis_1
     build:
