@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
 
-### enhancement
+## v1.15.0 - 2026-06-01
+
+### 🚀 Enhancements
 - add keyspace metrics support for dragonfly
 
 ## v1.14.1 - 2026-05-13
