@@ -20,11 +20,9 @@ jobs:
     with:
       tag: ${{ github.event.release.tag_name || inputs.tag }}
       agent_type: NRIRedis
-      display_name: "New Relic Redis Integration"
+      display_name: "Redis"
       monitoring_type: "INFRA"
       oci_registry: "docker.io/newrelic/nri-redis-artifacts"
-      metadata_git_ref: "master"
-      source_repo: "newrelic/nri-redis"
       artifacts: |
         [
           {"name":"linux-amd64","os":"linux","arch":"amd64","format":"tar+gzip","source_asset":"nri-redis_linux_{version}_amd64.tar.gz","source_format":"tar.gz","keep_files":["var/db/newrelic-infra/newrelic-integrations/bin/nri-redis"]},
