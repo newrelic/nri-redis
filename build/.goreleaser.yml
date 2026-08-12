@@ -158,6 +158,8 @@ archives:
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Version }}_{{ .Arch }}_dirty"
     files:
       - redis-config.yml.sample
+      - LICENSE
+      - THIRD_PARTY_NOTICES.md
       - src: 'legacy/redis-definition.yml'
         dst: .
         strip_parent: true
@@ -169,6 +171,8 @@ archives:
     name_template: "{{ .ProjectName }}-fips_{{ .Os }}_{{ .Version }}_{{ .Arch }}_dirty"
     files:
       - redis-config.yml.sample
+      - LICENSE
+      - THIRD_PARTY_NOTICES.md
       - src: 'legacy/redis-definition.yml'
         dst: .
         strip_parent: true
@@ -180,6 +184,8 @@ archives:
     name_template: "{{ .ProjectName }}-{{ .Arch }}.{{ .Version }}_dirty"
     files:
       - redis-config.yml.sample
+      - LICENSE
+      - THIRD_PARTY_NOTICES.md
       - src: 'legacy/redis-win-definition.yml'
         dst: .
         strip_parent: true
