@@ -5,7 +5,7 @@ go 1.26.5
 require (
 	github.com/gomodule/redigo v1.9.3
 	github.com/newrelic/infra-integrations-sdk/v3 v3.9.1
-	github.com/stretchr/testify v1.11.1
+	github.com/stretchr/testify v1.12.0
 	github.com/xeipuuv/gojsonschema v1.2.0
 )
 
