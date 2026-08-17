@@ -8,7 +8,7 @@ Unreleased section should follow [Release Toolkit](https://github.com/newrelic/r
 ## Unreleased
 
 ### 🐞 Bug fixes
-- Include `LICENSE` and `THIRD_PARTY_NOTICES.md` in the `.tar.gz` and `.zip` release archives, matching the `.deb`/`.rpm` packages
+- Include LICENSE and THIRD_PARTY_NOTICES.md in the .tar.gz and .zip release archives, matching the .deb/.rpm packages
 
 ## v1.15.2 - 2026-07-13
 
