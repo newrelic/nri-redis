@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
 
+### enhancement
+- Add 1.0.0 Agent Control Agent type definition.
+
 ## v1.15.3 - 2026-08-24
 
 ### 🐞 Bug fixes
