@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
 ## Unreleased
 
-### enhancement
+## v1.16.0 - 2026-09-14
+
+### 🚀 Enhancements
 - Add 1.0.0 Agent Control Agent type definition.
+
+### ⛓️ Dependencies
+- Updated golang version to v1.27.1
 
 ## v1.15.3 - 2026-08-24
 
